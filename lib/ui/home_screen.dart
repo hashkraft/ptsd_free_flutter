@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
+import 'package:ptsd_free/widgets/list_tile_more.dart';
+import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:developer' as developer;
@@ -230,6 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         }
+
         if (random) {
           appbarTitle = "Breathe Button";
           body = Center(
@@ -396,6 +399,105 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         break;
+      case 1:
+        appbarTitle = "Resolve";
+        body = Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SizedBox(),
+                Image.asset(
+                  'assets/images/stress_top_icon_min.png',
+                  scale: 1.2,
+                  alignment: Alignment.center,
+                ),
+                SizedBox(),
+              ]),
+              const SizedBox(height: 20),
+              Text("CONTENT FOR RESOLVE"),
+            ],
+          ),
+        );
+        break;
+      case 2:
+        appbarTitle = "My Meds";
+        body = Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SizedBox(),
+                Image.asset(
+                  'assets/images/stress_top_icon_min.png',
+                  scale: 1.2,
+                  alignment: Alignment.center,
+                ),
+                SizedBox(),
+              ]),
+              const SizedBox(height: 20),
+              Text("CONTENT FOR MY MEDS"),
+            ],
+          ),
+        );
+        break;
+      case 3:
+        appbarTitle = "Settings";
+        body = Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SizedBox(),
+                Image.asset(
+                  'assets/images/stress_top_icon_min.png',
+                  scale: 1.2,
+                  alignment: Alignment.center,
+                ),
+                SizedBox(),
+              ]),
+              const SizedBox(height: 20),
+              Text("CONTENT FOR SETTINGS"),
+              ListTileSettings(
+                  text: "Push Notifications",
+                  onPressed: () {
+                    developer.log("Push Notifications clicked!");
+                  }),
+            ],
+          ),
+        );
+        break;
+      case 4:
+        appbarTitle = "More";
+        body = Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SizedBox(),
+                Image.asset(
+                  'assets/images/stress_top_icon_min.png',
+                  scale: 1.2,
+                  alignment: Alignment.center,
+                ),
+                SizedBox(),
+              ]),
+              const SizedBox(height: 20),
+              Text("CONTENT FOR MORE"),
+              ListTileMore(
+                  text: "Membership",
+                  icon: Icons.wallet_membership_outlined,
+                  onPressed: () {
+                    developer.log("Membership clicked!");
+                  })
+            ],
+          ),
+        );
+        break;
       default:
     }
     return Scaffold(
@@ -453,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     BottomNavigationBarItem(
                         icon: Icon(Icons.settings), label: "Settings"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.more), label: "Settings"),
+                        icon: Icon(Icons.more), label: "More"),
                   ]),
             ),
           ),
