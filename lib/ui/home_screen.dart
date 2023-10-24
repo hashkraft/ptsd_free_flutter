@@ -177,59 +177,53 @@ class _HomeScreenState extends State<HomeScreen> {
             default:
               stepBody = const Text('ABCDEG');
           }
-          body = Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 30),
-                Expanded(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 50),
-                      stepBody,
-                    ],
-                  ),
+          body = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [stepBody],
                 ),
-                Text(
-                  "Progress: ${(((currentStep + 1) / 4) * 100).floor()}%",
-                  style: TextStyle(color: Colors.blue, fontSize: 16),
-                ),
-                LinearProgressIndicator(
-                  color: Colors.blue,
-                  value: (currentStep + 1) / 4,
-                ),
-                const SizedBox(height: 10),
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          return Colors.red;
-                        },
-                      )),
-                      onPressed: () {
-                        setState(() {
-                          if (currentStep < 3) {
-                            currentStep++;
-                          } else {
-                            currentStep = 0;
-                            question = true;
-                            routine = random = false;
-                          }
-                        });
+              ),
+              Text(
+                "Progress: ${(((currentStep + 1) / 4) * 100).floor()}%",
+                style: const TextStyle(color: Colors.blue, fontSize: 16),
+              ),
+              LinearProgressIndicator(
+                color: Colors.blue,
+                value: (currentStep + 1) / 4,
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: ElevatedButton(
+                    style: ButtonStyle(backgroundColor:
+                        MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        return Colors.red;
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+                    )),
+                    onPressed: () {
+                      setState(() {
+                        if (currentStep < 3) {
+                          currentStep++;
+                        } else {
+                          currentStep = 0;
+                          question = true;
+                          routine = random = false;
+                        }
+                      });
+                    },
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           );
         }
 
@@ -254,248 +248,184 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         if (question) {
           appbarTitle = "PTSD Stopper";
-          body = Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(),
-                      Image.asset(
-                        'assets/images/stress_top_icon_min.png',
-                        scale: 1.2,
-                        alignment: Alignment.center,
-                      ),
-                      SizedBox(),
-                    ]),
-                const SizedBox(height: 20),
-                CustomColoredText(
-                    text: "PTSD Stopper helps people:",
-                    hexColor: "#C81C01",
-                    size: 18,
-                    weight: 400),
-                const SizedBox(height: 25),
-                Row(
-                  children: [
-                    const SizedBox(width: 25),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
+          body = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              CustomColoredText(
+                  text: "PTSD Stopper helps people:",
+                  hexColor: "#C81C01",
+                  size: 18,
+                  weight: 400),
+              const SizedBox(height: 25),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
                     ),
-                    const SizedBox(width: 15),
-                    CustomColoredText(
-                        text: "Predict Stress",
-                        hexColor: "#000000",
-                        size: 16,
-                        weight: 400),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const SizedBox(width: 25),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Predict Stress",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
                     ),
-                    const SizedBox(width: 15),
-                    CustomColoredText(
-                        text: "Stop a reaction",
-                        hexColor: "#000000",
-                        size: 16,
-                        weight: 400),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const SizedBox(width: 25),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Stop a reaction",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
                     ),
-                    const SizedBox(width: 15),
-                    CustomColoredText(
-                        text: "Become Stress smart",
-                        hexColor: "#000000",
-                        size: 16,
-                        weight: 400),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                CustomColoredText(
-                    text:
-                        "Touch the Routine PTSD button to stop your most frequent stress reactions ",
-                    hexColor: "#000000",
-                    size: 16,
-                    weight: 400),
-                CustomColoredText(
-                    text:
-                        "Touch the Random PTSD button to stop unpredictable stress reactions ",
-                    hexColor: "#000000",
-                    size: 16,
-                    weight: 400),
-                const SizedBox(height: 70),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          return Colors.red;
-                        },
-                      )),
-                      onPressed: () {
-                        setState(() {
-                          routine = true;
-                          random = false;
-                          question = false;
-                        });
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Become Stress smart",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              const SizedBox(height: 25),
+              CustomColoredText(
+                  text:
+                      "Touch the Routine PTSD button to stop your most frequent stress reactions ",
+                  hexColor: "#000000",
+                  size: 16,
+                  weight: 400),
+              CustomColoredText(
+                  text:
+                      "Touch the Random PTSD button to stop unpredictable stress reactions ",
+                  hexColor: "#000000",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 70),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(backgroundColor:
+                        MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        return Colors.red;
                       },
-                      child: const Text(
-                        "Routine PTSD",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                    )),
+                    onPressed: () {
+                      setState(() {
+                        routine = true;
+                        random = false;
+                        question = false;
+                      });
+                    },
+                    child: const Text(
+                      "Routine PTSD",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton(
-                      style: ButtonStyle(backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          return Colors.red;
-                        },
-                      )),
-                      onPressed: () {
-                        setState(() {
-                          random = true;
-                          routine = false;
-                          question = false;
-                        });
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(backgroundColor:
+                        MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        return Colors.red;
                       },
-                      child: const Text(
-                        "Random PTSD",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                    )),
+                    onPressed: () {
+                      setState(() {
+                        random = true;
+                        routine = false;
+                        question = false;
+                      });
+                    },
+                    child: const Text(
+                      "Random PTSD",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           );
         }
 
         break;
       case 1:
         appbarTitle = "Resolve";
-        body = Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(),
-                Image.asset(
-                  'assets/images/stress_top_icon_min.png',
-                  scale: 1.2,
-                  alignment: Alignment.center,
-                ),
-                SizedBox(),
-              ]),
-              const SizedBox(height: 20),
-              Text("CONTENT FOR RESOLVE"),
-            ],
-          ),
+        body = const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("CONTENT FOR RESOLVE"),
+          ],
         );
         break;
       case 2:
         appbarTitle = "My Meds";
-        body = Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(),
-                Image.asset(
-                  'assets/images/stress_top_icon_min.png',
-                  scale: 1.2,
-                  alignment: Alignment.center,
-                ),
-                SizedBox(),
-              ]),
-              const SizedBox(height: 20),
-              Text("CONTENT FOR MY MEDS"),
-            ],
-          ),
+        body = const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("CONTENT FOR MY MEDS"),
+          ],
         );
         break;
       case 3:
         appbarTitle = "Settings";
-        body = Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(),
-                Image.asset(
-                  'assets/images/stress_top_icon_min.png',
-                  scale: 1.2,
-                  alignment: Alignment.center,
-                ),
-                SizedBox(),
-              ]),
-              const SizedBox(height: 20),
-              Text("CONTENT FOR SETTINGS"),
-              ListTileSettings(
-                  text: "Push Notifications",
-                  onPressed: () {
-                    developer.log("Push Notifications clicked!");
-                  }),
-            ],
-          ),
+        body = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Text("CONTENT FOR SETTINGS"),
+            ListTileSettings(
+                text: "Push Notifications",
+                onPressed: () {
+                  developer.log("Push Notifications clicked!");
+                }),
+          ],
         );
         break;
       case 4:
         appbarTitle = "More";
-        body = Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(),
-                Image.asset(
-                  'assets/images/stress_top_icon_min.png',
-                  scale: 1.2,
-                  alignment: Alignment.center,
-                ),
-                SizedBox(),
-              ]),
-              const SizedBox(height: 20),
-              Text("CONTENT FOR MORE"),
-              ListTileMore(
-                  text: "Membership",
-                  icon: Icons.wallet_membership_outlined,
-                  onPressed: () {
-                    developer.log("Membership clicked!");
-                  })
-            ],
-          ),
+        body = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Text("CONTENT FOR MORE"),
+            ListTileMore(
+                text: "Membership",
+                icon: Icons.wallet_membership_outlined,
+                onPressed: () {
+                  developer.log("Membership clicked!");
+                })
+          ],
         );
         break;
       default:
@@ -503,9 +433,23 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          Image.asset(
+            'assets/images/stopper_screen_head_bg.png',
+          ),
           Positioned(
-            child: Image.asset(
-              'assets/images/stopper_screen_head_bg.png',
+            top: 80,
+            right: MediaQuery.of(context).size.width / 2.5,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(),
+                Image.asset(
+                  'assets/images/stress_top_icon_min.png',
+                  scale: 1.2,
+                  alignment: Alignment.center,
+                ),
+                const SizedBox(),
+              ],
             ),
           ),
           Scaffold(
@@ -514,7 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 0,
               automaticallyImplyLeading: (question) ? false : true,
               backgroundColor: Colors.transparent,
-              leading: (!question)
+              leading: (random)
                   ? IconButton(
                       onPressed: () {
                         setState(() {
@@ -528,14 +472,34 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Colors.white,
                       ),
                     )
-                  : const SizedBox(),
+                  : (routine)
+                      ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (currentStep > 0) {
+                                currentStep--;
+                              } else {
+                                question = true;
+                                random = false;
+                                routine = false;
+                              }
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const SizedBox(),
               title: Text(
                 appbarTitle,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w500),
               ),
             ),
-            body: body,
+            body: Padding(
+                padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
+                child: body),
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.white),
               child: BottomNavigationBar(
