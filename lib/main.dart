@@ -1,11 +1,28 @@
 import 'dart:async';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/router/router.dart';
 
 void main() {
+  initializeNotifications();
   runApp(const MyApp());
+}
+
+Future<void> initializeNotifications() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+  final DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
 class MyApp extends StatelessWidget {
@@ -46,13 +63,6 @@ class _SplashScreenState extends State<SplashScreen> {
         image: AssetImage('assets/images/splash_screen.jpg'),
       ),
     );
-    // return Container(
-    //   width: MediaQuery.of(context).size.width,
-    //   height: MediaQuery.of(context).size.height,
-    //   child: const Image(
-    //     image: AssetImage('assets/images/splash_screen.jpg'),
-    //   ),
-    // );
   }
 }
 

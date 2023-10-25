@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:developer' as developer;
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:ptsd_free/utils/functions.dart' as func;
@@ -32,6 +36,8 @@ class _AddReminderState extends State<AddReminder> {
   String selectedReminderWhen = 'During the stress';
   TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> _saveToDatabase() async {
     var databasesPath = await getDatabasesPath();
@@ -51,11 +57,70 @@ class _AddReminderState extends State<AddReminder> {
     await database.close();
   }
 
+  Future onSelectNotification(String? payload) async {
+    developer.log("notification clicked!");
+  }
+
+  Future<void> scheduleAlarm(TimeOfDay time, List<int> daysOfWeek) async {
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      'alarm_notif',
+      'Alarm notifications',
+      playSound: true,
+      priority: Priority.high,
+      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
+      // largeIcon: DrawableResourceAndroidBitmap('sample_large_icon'),
+    );
+    var iOSPlatformChannelSpecifics = const DarwinInitializationSettings();
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: const DarwinNotificationDetails());
+
+    for (var day in daysOfWeek) {
+      var now = DateTime.now();
+      tz.initializeTimeZones();
+      var scheduledTime =
+          DateTime(now.year, now.month, now.day, time.hour, time.minute)
+              .add(Duration(days: day - now.weekday));
+
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+          0,
+          'Scheduled Notification',
+          'Your scheduled alarm notification',
+          tz.TZDateTime.from(scheduledTime, tz.local),
+          platformChannelSpecifics,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime);
+    }
+  }
+
+  List<int> convertDaysToIndices(List<String> days) {
+    final Map<String, int> dayMap = {
+      'monday': 1,
+      'tuesday': 2,
+      'wednesday': 3,
+      'thursday': 4,
+      'friday': 5,
+      'saturday': 6,
+      'sunday': 7,
+    };
+
+    List<int> indices = [];
+    for (var day in days) {
+      var lowerCaseDay = day.toLowerCase();
+      if (dayMap.containsKey(lowerCaseDay)) {
+        indices.add(dayMap[lowerCaseDay]!);
+      }
+    }
+    return indices;
+  }
+
   void _onSave() {
     print('Selected Days: $selectedDays');
     print('Reminder when: $selectedReminderWhen');
     print('Time 1: $selectedTime1');
     print('Time 2: $selectedTime2');
+    scheduleAlarm(selectedTime1, convertDaysToIndices(selectedDays));
     _saveToDatabase();
   }
 
