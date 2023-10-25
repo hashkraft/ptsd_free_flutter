@@ -1,28 +1,16 @@
 import 'dart:async';
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/router/router.dart';
 
-void main() {
-  initializeNotifications();
-  runApp(const MyApp());
-}
-
-Future<void> initializeNotifications() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
-  final DarwinInitializationSettings initializationSettingsIOS =
-      DarwinInitializationSettings();
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await Alarm.init(showDebugLogs: true);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

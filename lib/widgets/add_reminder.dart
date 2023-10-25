@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:alarm/alarm.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:developer' as developer;
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:ptsd_free/utils/functions.dart' as func;
@@ -36,8 +34,20 @@ class _AddReminderState extends State<AddReminder> {
   String selectedReminderWhen = 'During the stress';
   TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+
+  DateTime convertTimeAndDayToDateTime(TimeOfDay time, int day) {
+    DateTime now = DateTime.now();
+    int currentWeekday = now.weekday;
+    int daysToAdd = (day - currentWeekday + 7) % 7;
+    DateTime resultDateTime = DateTime(
+      now.year,
+      now.month,
+      now.day + daysToAdd,
+      time.hour,
+      time.minute,
+    );
+    return resultDateTime;
+  }
 
   Future<void> _saveToDatabase() async {
     var databasesPath = await getDatabasesPath();
@@ -62,35 +72,25 @@ class _AddReminderState extends State<AddReminder> {
   }
 
   Future<void> scheduleAlarm(TimeOfDay time, List<int> daysOfWeek) async {
-    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      'alarm_notif',
-      'Alarm notifications',
-      playSound: true,
-      priority: Priority.high,
-      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
-      // largeIcon: DrawableResourceAndroidBitmap('sample_large_icon'),
-    );
-    var iOSPlatformChannelSpecifics = const DarwinInitializationSettings();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: const DarwinNotificationDetails());
-
-    for (var day in daysOfWeek) {
-      var now = DateTime.now();
-      tz.initializeTimeZones();
-      var scheduledTime =
-          DateTime(now.year, now.month, now.day, time.hour, time.minute)
-              .add(Duration(days: day - now.weekday));
-
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-          0,
-          'Scheduled Notification',
-          'Your scheduled alarm notification',
-          tz.TZDateTime.from(scheduledTime, tz.local),
-          platformChannelSpecifics,
-          androidAllowWhileIdle: true,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime);
+    for (int weekday in daysOfWeek) {
+      developer.log(weekday.toString());
+      final alarmSettings = AlarmSettings(
+        id: weekday,
+        dateTime: convertTimeAndDayToDateTime(time, weekday),
+        assetAudioPath: 'assets/alarm.mp3',
+        loopAudio: true,
+        vibrate: true,
+        volumeMax: true,
+        fadeDuration: 3.0,
+        androidFullScreenIntent: true,
+        notificationTitle: "Breathe",
+        notificationBody: "Or not",
+        enableNotificationOnKill: true,
+        stopOnNotificationOpen: true,
+      );
+      await Alarm.set(
+        alarmSettings: alarmSettings,
+      );
     }
   }
 
