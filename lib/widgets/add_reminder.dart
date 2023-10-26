@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:alarm/alarm.dart';
 import 'package:go_router/go_router.dart';
@@ -35,18 +37,25 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
-  DateTime convertTimeAndDayToDateTime(TimeOfDay time, int day) {
-    DateTime now = DateTime.now();
-    int currentWeekday = now.weekday;
-    int daysToAdd = (day - currentWeekday + 7) % 7;
-    DateTime resultDateTime = DateTime(
-      now.year,
-      now.month,
-      now.day + daysToAdd,
-      time.hour,
-      time.minute,
-    );
-    return resultDateTime;
+  List<DateTime> convertTimeAndDayToDateTime(TimeOfDay time, int day) {
+    int year = DateTime.now().year;
+    List<DateTime> occurrences = [];
+    DateTime date = DateTime(year);
+    DateTime today = DateTime.now();
+    int currentYear = date.year;
+    int count = 0;
+    while (date.year == currentYear) {
+      if (date.weekday == day) {
+        DateTime occurrence =
+            DateTime(date.year, date.month, date.day, time.hour, time.minute);
+        if (occurrence.isAfter(today)) {
+          occurrences.add(occurrence);
+          count++;
+        }
+      }
+      date = date.add(Duration(days: 1));
+    }
+    return occurrences;
   }
 
   Future<void> _saveToDatabase() async {
@@ -73,24 +82,27 @@ class _AddReminderState extends State<AddReminder> {
 
   Future<void> scheduleAlarm(TimeOfDay time, List<int> daysOfWeek) async {
     for (int weekday in daysOfWeek) {
-      developer.log(weekday.toString());
-      final alarmSettings = AlarmSettings(
-        id: weekday,
-        dateTime: convertTimeAndDayToDateTime(time, weekday),
-        assetAudioPath: 'assets/alarm.mp3',
-        loopAudio: true,
-        vibrate: true,
-        volumeMax: true,
-        fadeDuration: 3.0,
-        androidFullScreenIntent: true,
-        notificationTitle: "Breathe",
-        notificationBody: "Or not",
-        enableNotificationOnKill: true,
-        stopOnNotificationOpen: true,
-      );
-      await Alarm.set(
-        alarmSettings: alarmSettings,
-      );
+      for (DateTime dt in convertTimeAndDayToDateTime(time, weekday)) {
+        developer.log("Alarm ID: ${dt.hashCode}");
+        final alarmSettings = AlarmSettings(
+          id: dt.hashCode,
+          dateTime: dt,
+          assetAudioPath: 'assets/alarm.mp3',
+          loopAudio: true,
+          vibrate: true,
+          volumeMax: true,
+          fadeDuration: 3.0,
+          androidFullScreenIntent: true,
+          notificationTitle: "Breathe",
+          notificationBody: "Or not",
+          enableNotificationOnKill: true,
+          stopOnNotificationOpen: true,
+        );
+
+        await Alarm.set(
+          alarmSettings: alarmSettings,
+        );
+      }
     }
   }
 
