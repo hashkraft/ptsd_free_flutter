@@ -1,12 +1,9 @@
-import 'dart:math';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:alarm/alarm.dart';
-import 'package:go_router/go_router.dart';
 import 'dart:developer' as developer;
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:ptsd_free/utils/functions.dart' as func;
+import 'package:uuid/uuid.dart';
+import 'package:ptsd_free/utils/functions.dart' as functions;
+import 'package:ptsd_free/utils/values.dart' as values;
 
 class AddReminder extends StatefulWidget {
   const AddReminder({super.key});
@@ -37,103 +34,42 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
-  List<DateTime> convertTimeAndDayToDateTime(TimeOfDay time, int day) {
-    int year = DateTime.now().year;
-    List<DateTime> occurrences = [];
-    DateTime date = DateTime(year);
-    DateTime today = DateTime.now();
-    int currentYear = date.year;
-    int count = 0;
-    while (date.year == currentYear) {
-      if (date.weekday == day) {
-        DateTime occurrence =
-            DateTime(date.year, date.month, date.day, time.hour, time.minute);
-        if (occurrence.isAfter(today)) {
-          occurrences.add(occurrence);
-          count++;
-        }
-      }
-      date = date.add(Duration(days: 1));
+  Future<void> scheduleAlarm({
+    required final TimeOfDay timeofday,
+    required final List<int> days,
+    required final String channelKey,
+  }) async {
+    for (int day in days) {
+      functions.scheduleNotification(
+        id: days.indexOf(day),
+        title: "Remember to breathe",
+        body: "This is a gentle reminder",
+        timeOfDay: timeofday,
+        channelKey: channelKey,
+        weekday: day,
+      );
     }
-    return occurrences;
-  }
-
-  Future<void> _saveToDatabase() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'reminders1.db');
-
-    Database database = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE reminders (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
-    });
-
-    await database.transaction((txn) async {
-      await txn.rawInsert(
-          'INSERT INTO reminders(days, trigger, stress_start_time, stress_end_time) VALUES("${selectedDays.join(', ')}", "$selectedReminderWhen", "${func.timeToString(selectedTime1)}", "${func.timeToString(selectedTime2)}")');
-    });
-
-    await database.close();
-  }
-
-  Future onSelectNotification(String? payload) async {
-    developer.log("notification clicked!");
-  }
-
-  Future<void> scheduleAlarm(TimeOfDay time, List<int> daysOfWeek) async {
-    for (int weekday in daysOfWeek) {
-      for (DateTime dt in convertTimeAndDayToDateTime(time, weekday)) {
-        developer.log("Alarm ID: ${dt.hashCode}");
-        final alarmSettings = AlarmSettings(
-          id: dt.hashCode,
-          dateTime: dt,
-          assetAudioPath: 'assets/alarm.mp3',
-          loopAudio: true,
-          vibrate: true,
-          volumeMax: true,
-          fadeDuration: 3.0,
-          androidFullScreenIntent: true,
-          notificationTitle: "Breathe",
-          notificationBody: "Or not",
-          enableNotificationOnKill: true,
-          stopOnNotificationOpen: true,
-        );
-
-        await Alarm.set(
-          alarmSettings: alarmSettings,
-        );
-      }
-    }
-  }
-
-  List<int> convertDaysToIndices(List<String> days) {
-    final Map<String, int> dayMap = {
-      'monday': 1,
-      'tuesday': 2,
-      'wednesday': 3,
-      'thursday': 4,
-      'friday': 5,
-      'saturday': 6,
-      'sunday': 7,
-    };
-
-    List<int> indices = [];
-    for (var day in days) {
-      var lowerCaseDay = day.toLowerCase();
-      if (dayMap.containsKey(lowerCaseDay)) {
-        indices.add(dayMap[lowerCaseDay]!);
-      }
-    }
-    return indices;
   }
 
   void _onSave() {
-    print('Selected Days: $selectedDays');
-    print('Reminder when: $selectedReminderWhen');
-    print('Time 1: $selectedTime1');
-    print('Time 2: $selectedTime2');
-    scheduleAlarm(selectedTime1, convertDaysToIndices(selectedDays));
-    _saveToDatabase();
+    developer.log('Selected Days: $selectedDays');
+    developer.log('Reminder when: $selectedReminderWhen');
+    developer.log('Time 1: $selectedTime1');
+    developer.log('Time 2: $selectedTime2');
+    List<int> days = functions.convertDaysToIndices(selectedDays);
+    final String uuid = const Uuid().v4();
+    functions.saveToDatabase(
+      selectedDays: selectedDays,
+      selectedReminderWhen: selectedReminderWhen,
+      selectedTime1: selectedTime1,
+      selectedTime2: selectedTime2,
+      uuid: uuid,
+    );
+    scheduleAlarm(
+      timeofday: selectedTime1,
+      days: days,
+      channelKey: uuid,
+    );
   }
 
   @override

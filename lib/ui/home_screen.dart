@@ -1,12 +1,15 @@
+import 'package:alarm/alarm.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/widgets/add_reminder.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/list_tile_more.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:ptsd_free/utils/values.dart' as values;
 import 'package:path/path.dart';
 import 'dart:developer' as developer;
 
@@ -40,32 +43,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future getReminders() async {
     var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'reminders1.db');
+    String path = join(databasesPath, values.dbName);
 
     Database database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE reminders (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
+          'CREATE TABLE ${values.tableName} (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
     });
 
-    return database.query('reminders');
+    return database.query(values.tableName);
+  }
+
+  Future<bool> deleteAlarmByChannelKey(String channelKey) async {
+    return await AwesomeNotifications().removeChannel(channelKey);
   }
 
   Future<int> deleteReminder(int id) async {
     var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'reminders1.db');
+    String path = join(databasesPath, values.dbName);
 
     Database database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE reminders (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
+          'CREATE TABLE ${values.tableName} (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
     });
 
     return await database.delete(
-      'reminders',
+      values.tableName,
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<void> deleteReminderByHashcodes(List<int> hashcodes) async {
+    for (int hashcode in hashcodes) {
+      await Alarm.stop(hashcode).then((value) {
+        if (value) {
+          developer.log("* Deleting alarm of $hashCode!");
+        } else {
+          developer.log("! Unable to delete alarm of $hashCode!");
+        }
+      });
+    }
   }
 
   @override
@@ -142,8 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   key: Key(reminder['id'].toString()),
                                   direction: DismissDirection.startToEnd,
                                   onDismissed: (DismissDirection dd) {
-                                    deleteReminder(reminder['id'])
-                                        .then((value) => print(value));
+                                    deleteAlarmByChannelKey(reminder['uuid']);
+                                    deleteReminder(reminder['id']).then(
+                                        (value) =>
+                                            developer.log(value.toString()));
                                   },
                                   child: ListTile(
                                     title: Row(
@@ -180,7 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Column(

@@ -72,4 +72,14 @@ class DatabaseHelper {
     );
     return maps[0]['id'];
   }
+
+  Future<List<int>> getHashcodesByID(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'reminders',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return maps[0]['hashcodes'].split(',').map((e) => int.parse(e)).toList();
+  }
 }
