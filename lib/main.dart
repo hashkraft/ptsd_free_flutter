@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/router/router.dart';
+import 'package:ptsd_free/notifications/notifications_service.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-  await Alarm.init(showDebugLogs: true);
+  await initializeNotification();
   runApp(const MyApp());
 }
 

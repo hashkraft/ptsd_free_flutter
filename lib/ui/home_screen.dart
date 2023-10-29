@@ -1,16 +1,12 @@
-import 'package:alarm/alarm.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:ptsd_free/widgets/add_reminder.dart';
+import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/list_tile_more.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:ptsd_free/utils/values.dart' as values;
-import 'package:path/path.dart';
 import 'dart:developer' as developer;
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   String appbarTitle = "Stress is gone";
   bool routine = false;
+  final db = DatabaseHelper();
   bool random = false;
   bool question = true;
   int currentStep = 0;
@@ -41,49 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> dateTimeList = [];
   bool _switchValue = false;
 
-  Future getReminders() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, values.dbName);
-
-    Database database = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE ${values.tableName} (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
-    });
-
-    return database.query(values.tableName);
-  }
-
-  Future<bool> deleteAlarmByChannelKey(String channelKey) async {
-    return await AwesomeNotifications().removeChannel(channelKey);
-  }
-
-  Future<int> deleteReminder(int id) async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, values.dbName);
-
-    Database database = await openDatabase(path, version: 1,
-        onCreate: (Database db, int version) async {
-      await db.execute(
-          'CREATE TABLE ${values.tableName} (id INTEGER PRIMARY KEY, days TEXT, trigger TEXT, stress_start_time TEXT, stress_end_time TEXT)');
-    });
-
-    return await database.delete(
-      values.tableName,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  Future<void> deleteReminderByHashcodes(List<int> hashcodes) async {
-    for (int hashcode in hashcodes) {
-      await Alarm.stop(hashcode).then((value) {
-        if (value) {
-          developer.log("* Deleting alarm of $hashCode!");
-        } else {
-          developer.log("! Unable to delete alarm of $hashCode!");
-        }
-      });
+  Future<void> removeNotifications(String uuid) async {
+    final alarmIDs = await db.alarmIdsByUUID(uuid);
+    for (int id in alarmIDs) {
+      developer.log("Deleting notification of id: $id");
+      await AwesomeNotifications().cancel(id);
     }
   }
 
@@ -148,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 10),
                   FutureBuilder(
-                      future: getReminders(),
+                      future: db.getReminders(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
@@ -161,10 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   key: Key(reminder['id'].toString()),
                                   direction: DismissDirection.startToEnd,
                                   onDismissed: (DismissDirection dd) {
-                                    deleteAlarmByChannelKey(reminder['uuid']);
-                                    deleteReminder(reminder['id']).then(
+                                    // deleteAlarmById(reminder['id']);
+                                    db.deleteReminder(reminder['id']).then(
                                         (value) =>
                                             developer.log(value.toString()));
+                                    removeNotifications(reminder['uuid']);
                                   },
                                   child: ListTile(
                                     title: Row(

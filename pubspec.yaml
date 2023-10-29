@@ -44,6 +44,7 @@ dependencies:
   alarm: ^2.1.0
   awesome_notifications: ^0.8.2
   uuid: ^4.1.0
+  unique_identifier: ^0.3.0
 
 dev_dependencies:
   flutter_test:

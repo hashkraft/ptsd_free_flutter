@@ -1,9 +1,11 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/repo/database_helpers.dart';
 import 'dart:developer' as developer;
 import 'package:uuid/uuid.dart';
 import 'package:ptsd_free/utils/functions.dart' as functions;
-import 'package:ptsd_free/utils/values.dart' as values;
+import 'package:ptsd_free/notifications/notifications_service.dart'
+    as notification_services;
 
 class AddReminder extends StatefulWidget {
   const AddReminder({super.key});
@@ -37,16 +39,16 @@ class _AddReminderState extends State<AddReminder> {
   Future<void> scheduleAlarm({
     required final TimeOfDay timeofday,
     required final List<int> days,
-    required final String channelKey,
+    required final List<int> idList,
   }) async {
-    for (int day in days) {
-      functions.scheduleNotification(
-        id: days.indexOf(day),
+    assert(days.length == idList.length);
+    for (int i = 0; i < days.length; i++) {
+      notification_services.scheduleNotification(
+        id: idList[i],
         title: "Remember to breathe",
         body: "This is a gentle reminder",
         timeOfDay: timeofday,
-        channelKey: channelKey,
-        weekday: day,
+        weekday: days[i],
       );
     }
   }
@@ -57,19 +59,24 @@ class _AddReminderState extends State<AddReminder> {
     developer.log('Time 1: $selectedTime1');
     developer.log('Time 2: $selectedTime2');
     List<int> days = functions.convertDaysToIndices(selectedDays);
+    developer.log('Days in indices: $days');
     final String uuid = const Uuid().v4();
-    functions.saveToDatabase(
+    DatabaseHelper()
+        .saveToDatabase(
       selectedDays: selectedDays,
       selectedReminderWhen: selectedReminderWhen,
       selectedTime1: selectedTime1,
       selectedTime2: selectedTime2,
       uuid: uuid,
-    );
-    scheduleAlarm(
-      timeofday: selectedTime1,
-      days: days,
-      channelKey: uuid,
-    );
+    )
+        .then((value) {
+      scheduleAlarm(
+        timeofday: selectedTime1,
+        days: days,
+        idList: value,
+      );
+    });
+    context.go("/home");
   }
 
   @override
@@ -173,8 +180,8 @@ class _AddReminderState extends State<AddReminder> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'What time does your stress usually end?',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -201,7 +208,7 @@ class _AddReminderState extends State<AddReminder> {
                       ),
                       child: Text(
                         selectedTime2.format(context),
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
