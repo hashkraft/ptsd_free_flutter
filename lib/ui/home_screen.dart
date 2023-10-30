@@ -1,28 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer' as developer;
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/list_tile_more.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
-import 'dart:developer' as developer;
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  int currentIndex = 0;
+  HomeScreen({
+    super.key,
+    required this.currentIndex,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
   String appbarTitle = "Stress is gone";
   bool routine = false;
   final db = DatabaseHelper();
   bool random = false;
   bool question = true;
+  bool myMedsInfo = true;
   int currentStep = 0;
   Widget body = Container();
   Widget stepBody = Container();
@@ -50,11 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     void _onItemTapped(int index) {
       setState(() {
-        _currentIndex = index;
+        widget.currentIndex = index;
       });
     }
 
-    switch (_currentIndex) {
+    switch (widget.currentIndex) {
       case 0:
         if (routine) {
           appbarTitle = "Stop routine PTSD";
@@ -370,13 +377,174 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
       case 2:
-        appbarTitle = "My Meds";
-        body = const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("CONTENT FOR MY MEDS"),
-          ],
-        );
+        if (myMedsInfo) {
+          appbarTitle = "My Meds";
+          body = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("CONTENT FOR MY MEDS"),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      ElevatedButton(
+                        style: ButtonStyle(backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            return Colors.red;
+                          },
+                        )),
+                        onPressed: () {
+                          setState(() {
+                            myMedsInfo = false;
+                          });
+                        },
+                        child: const Text(
+                          "Continue",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ],
+          );
+        } else {
+          appbarTitle = "Meditation times";
+          body = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  const Text('Add the date and time to wish to meditate.'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          context.go("/addmeditation");
+                        },
+                        child: const Row(
+                          children: [
+                            Icon(Icons.add_rounded),
+                            SizedBox(width: 5),
+                            Text('Add Date Time'),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text("Edit"),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  FutureBuilder(
+                      future: db.getReminders(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final reminder = snapshot.data![index];
+                                developer.log(reminder.toString());
+                                return Dismissible(
+                                  key: Key(reminder['id'].toString()),
+                                  direction: DismissDirection.startToEnd,
+                                  onDismissed: (DismissDirection dd) {
+                                    // deleteAlarmById(reminder['id']);
+                                    db.deleteReminder(reminder['id']).then(
+                                        (value) =>
+                                            developer.log(value.toString()));
+                                    removeNotifications(reminder['uuid']);
+                                  },
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(reminder['trigger']),
+                                        Text(reminder['stress_start_time'])
+                                      ],
+                                    ),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Days: ${reminder['days']}"),
+                                        Text(reminder['stress_end_time'])
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        } else {
+                          return Container();
+                        }
+                      })
+                ],
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      ElevatedButton(
+                        style: ButtonStyle(backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            return Colors.red;
+                          },
+                        )),
+                        onPressed: () {
+                          setState(() {
+                            myMedsInfo = true;
+                          });
+                        },
+                        child: const Text(
+                          "Setup Another Meditation",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            return Colors.red;
+                          },
+                        )),
+                        onPressed: () {
+                          setState(() {
+                            myMedsInfo = true;
+                          });
+                        },
+                        child: const Text(
+                          "Done",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ],
+          );
+        }
+
         break;
       case 3:
         appbarTitle = "Settings";
@@ -488,7 +656,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   unselectedItemColor: HexColor("#A3A7B7"),
                   onTap: _onItemTapped,
                   showUnselectedLabels: true,
-                  currentIndex: _currentIndex,
+                  currentIndex: widget.currentIndex,
                   elevation: 10.0,
                   items: const [
                     BottomNavigationBarItem(

@@ -128,8 +128,8 @@ class _AddReminderState extends State<AddReminder> {
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     'I want a reminder to breathe',
                     style: TextStyle(fontSize: 16),
                   ),
