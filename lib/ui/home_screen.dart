@@ -45,8 +45,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> dateTimeList = [];
   bool _switchValue = false;
 
-  Future<void> removeNotifications(String uuid) async {
+  Future<void> removeStoppers(String uuid) async {
     final alarmIDs = await db.alarmIdsByUUID(uuid);
+    for (int id in alarmIDs) {
+      developer.log("Deleting notification of id: $id");
+      await AwesomeNotifications().cancel(id);
+    }
+  }
+
+  Future<void> removeMeditation(String uuid) async {
+    final alarmIDs = await db.alarmIdsByUUID2(uuid);
     for (int id in alarmIDs) {
       developer.log("Deleting notification of id: $id");
       await AwesomeNotifications().cancel(id);
@@ -128,10 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   direction: DismissDirection.startToEnd,
                                   onDismissed: (DismissDirection dd) {
                                     // deleteAlarmById(reminder['id']);
-                                    db.deleteReminder(reminder['id']).then(
+                                    db.deleteStopper(reminder['id']).then(
                                         (value) =>
                                             developer.log(value.toString()));
-                                    removeNotifications(reminder['uuid']);
+                                    removeStoppers(reminder['uuid']);
                                   },
                                   child: ListTile(
                                     title: Row(
@@ -448,40 +456,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 10),
                   FutureBuilder(
-                      future: db.getReminders(),
+                      future: db.getMeditations(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
                               shrinkWrap: true,
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
-                                final reminder = snapshot.data![index];
-                                developer.log(reminder.toString());
+                                final meditation = snapshot.data![index];
+                                developer.log(meditation.toString());
                                 return Dismissible(
-                                  key: Key(reminder['id'].toString()),
+                                  key: Key(meditation['id'].toString()),
                                   direction: DismissDirection.startToEnd,
                                   onDismissed: (DismissDirection dd) {
-                                    // deleteAlarmById(reminder['id']);
-                                    db.deleteReminder(reminder['id']).then(
+                                    db.deleteMeditation(meditation['id']).then(
                                         (value) =>
                                             developer.log(value.toString()));
-                                    removeNotifications(reminder['uuid']);
+                                    removeMeditation(meditation['uuid']);
                                   },
                                   child: ListTile(
                                     title: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(reminder['trigger']),
-                                        Text(reminder['stress_start_time'])
+                                        Text(meditation['days']),
+                                        Text(meditation['time'].toString())
                                       ],
                                     ),
                                     subtitle: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("Days: ${reminder['days']}"),
-                                        Text(reminder['stress_end_time'])
+                                        Text(
+                                            "Duration: ${meditation['duration'].toString()} mins"),
+                                        (meditation['reminderbefore'] == 0)
+                                            ? const Text("Don't remind")
+                                            : Text(
+                                                "Remind before: ${meditation['reminderbefore'].toString()} mins")
                                       ],
                                     ),
                                   ),
@@ -507,9 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         )),
                         onPressed: () {
-                          setState(() {
-                            myMedsInfo = true;
-                          });
+                          context.go("/addmeditation");
                         },
                         child: const Text(
                           "Setup Another Meditation",
@@ -560,6 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
           ],
         );
+
         break;
       case 4:
         appbarTitle = "More";

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-
+import 'package:ptsd_free/utils/functions.dart' as functions;
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/repo/database_helpers.dart';
+import 'package:uuid/uuid.dart';
+import 'package:ptsd_free/notifications/notifications_service.dart'
+    as notification_services;
 
 class AddMeditation extends StatefulWidget {
   const AddMeditation({super.key});
@@ -250,5 +254,24 @@ class _AddMeditationState extends State<AddMeditation> {
     developer.log(sound);
     developer.log(volume.toInt().toString());
     context.go("/home", extra: 2);
+    List<int> days = functions.convertDaysToIndices(selectedDays);
+    DatabaseHelper()
+        .insertMeditation(
+      selectedDays: selectedDays,
+      selectedTime1: selectedTime1,
+      duration: (durationDouble.toInt() * 5),
+      reminderBefore: (reminderBeforeDouble.toInt() * 5),
+      sound: sound,
+      volume: volume.toInt(),
+      uuid: const Uuid().v4(),
+    )
+        .then((value) {
+      notification_services.scheduleAlarm(
+        timeofday: selectedTime1,
+        days: days,
+        idList: value,
+      );
+      if (reminderBeforeDouble.toInt() > 0) {}
+    });
   }
 }

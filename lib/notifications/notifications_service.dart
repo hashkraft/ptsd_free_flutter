@@ -110,3 +110,20 @@ Future<void> scheduleNotification({
     ),
   );
 }
+
+Future<void> scheduleAlarm({
+  required final TimeOfDay timeofday,
+  required final List<int> days,
+  required final List<int> idList,
+}) async {
+  assert(days.length == idList.length);
+  for (int i = 0; i < days.length; i++) {
+    scheduleNotification(
+      id: idList[i],
+      title: "Remember to breathe",
+      body: "This is a gentle reminder",
+      timeOfDay: timeofday,
+      weekday: days[i],
+    );
+  }
+}

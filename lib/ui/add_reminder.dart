@@ -36,23 +36,6 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
-  Future<void> scheduleAlarm({
-    required final TimeOfDay timeofday,
-    required final List<int> days,
-    required final List<int> idList,
-  }) async {
-    assert(days.length == idList.length);
-    for (int i = 0; i < days.length; i++) {
-      notification_services.scheduleNotification(
-        id: idList[i],
-        title: "Remember to breathe",
-        body: "This is a gentle reminder",
-        timeOfDay: timeofday,
-        weekday: days[i],
-      );
-    }
-  }
-
   void _onSave() {
     developer.log('Selected Days: $selectedDays');
     developer.log('Reminder when: $selectedReminderWhen');
@@ -62,7 +45,7 @@ class _AddReminderState extends State<AddReminder> {
     developer.log('Days in indices: $days');
     final String uuid = const Uuid().v4();
     DatabaseHelper()
-        .saveToDatabase(
+        .insertStopper(
       selectedDays: selectedDays,
       selectedReminderWhen: selectedReminderWhen,
       selectedTime1: selectedTime1,
@@ -70,7 +53,7 @@ class _AddReminderState extends State<AddReminder> {
       uuid: uuid,
     )
         .then((value) {
-      scheduleAlarm(
+      notification_services.scheduleAlarm(
         timeofday: selectedTime1,
         days: days,
         idList: value,
