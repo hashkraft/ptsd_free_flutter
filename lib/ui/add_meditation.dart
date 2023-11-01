@@ -270,8 +270,34 @@ class _AddMeditationState extends State<AddMeditation> {
         timeofday: selectedTime1,
         days: days,
         idList: value,
+        title: "Meditate now!",
+        body: "Close your eyes",
       );
-      if (reminderBeforeDouble.toInt() > 0) {}
+      if (reminderBeforeDouble.toInt() > 0) {
+        final minutes = reminderBeforeDouble.toInt() * 5;
+        if ((selectedTime1.minute - minutes) > 0) {
+          TimeOfDay timebefore = TimeOfDay(
+              hour: selectedTime1.hour, minute: selectedTime1.minute - minutes);
+          notification_services.scheduleAlarm(
+            timeofday: timebefore,
+            days: days,
+            idList: value,
+            title: "Reminder before meditation",
+            body: "Start in $minutes mins later",
+          );
+        } else {
+          TimeOfDay timebefore = TimeOfDay(
+              hour: 23, minute: 60 + (selectedTime1.minute - minutes));
+          final days1 = functions.daysOneDayBefore(days);
+          notification_services.scheduleAlarm(
+            timeofday: timebefore,
+            days: days1,
+            idList: value,
+            title: "Reminder before meditation",
+            body: "Start in $minutes mins later",
+          );
+        }
+      }
     });
   }
 }

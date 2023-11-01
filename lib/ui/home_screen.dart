@@ -7,6 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:ptsd_free/repo/database_helpers.dart';
+import 'package:ptsd_free/ui/bottom_tabs/more.dart';
+import 'package:ptsd_free/ui/bottom_tabs/my_meds.dart';
+import 'package:ptsd_free/ui/bottom_tabs/resolve.dart';
+import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/list_tile_more.dart';
@@ -29,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final db = DatabaseHelper();
   bool random = false;
   bool question = true;
-  bool myMedsInfo = true;
+  int resolveStep = 0;
   int currentStep = 0;
   Widget body = Container();
   Widget stepBody = Container();
@@ -44,17 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   List<String> dateTimeList = [];
   bool _switchValue = false;
-
-  Future<void> removeStoppers(String uuid) async {
-    final alarmIDs = await db.alarmIdsByUUID(uuid);
+  bool myMedsInfo = true;
+  Future<void> removeMeditation(String uuid) async {
+    final alarmIDs = await db.alarmIdsByUUID2(uuid);
     for (int id in alarmIDs) {
       developer.log("Deleting notification of id: $id");
       await AwesomeNotifications().cancel(id);
     }
   }
 
-  Future<void> removeMeditation(String uuid) async {
-    final alarmIDs = await db.alarmIdsByUUID2(uuid);
+  Future<void> removeStoppers(String uuid) async {
+    final alarmIDs = await db.alarmIdsByUUID(uuid);
     for (int id in alarmIDs) {
       developer.log("Deleting notification of id: $id");
       await AwesomeNotifications().cancel(id);
@@ -377,12 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 1:
         appbarTitle = "Resolve";
-        body = const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("CONTENT FOR RESOLVE"),
-          ],
-        );
+        body = Resolve(step: resolveStep);
         break;
       case 2:
         if (myMedsInfo) {
@@ -398,22 +397,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(),
-                      ElevatedButton(
-                        style: ButtonStyle(backgroundColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            return Colors.red;
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () {
+                            setState(() {
+                              myMedsInfo = false;
+                            });
                           },
-                        )),
-                        onPressed: () {
-                          setState(() {
-                            myMedsInfo = false;
-                          });
-                        },
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                          child: const Text(
+                            "Continue",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       const SizedBox(),
@@ -557,35 +560,12 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 3:
         appbarTitle = "Settings";
-        body = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text("CONTENT FOR SETTINGS"),
-            ListTileSettings(
-                text: "Push Notifications",
-                onPressed: () {
-                  developer.log("Push Notifications clicked!");
-                }),
-          ],
-        );
+        body = const Settings();
 
         break;
       case 4:
         appbarTitle = "More";
-        body = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text("CONTENT FOR MORE"),
-            ListTileMore(
-                text: "Membership",
-                icon: Icons.wallet_membership_outlined,
-                onPressed: () {
-                  developer.log("Membership clicked!");
-                })
-          ],
-        );
+        body = const More();
         break;
       default:
     }
@@ -649,7 +629,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.white,
                           ),
                         )
-                      : const SizedBox(),
+                      : (widget.currentIndex == 1)
+                          ? IconButton(
+                              onPressed: () {
+                                developer.log("Bitch!");
+                                setState(() {
+                                  if (resolveStep > 0) {
+                                    resolveStep--;
+                                  }
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const SizedBox(),
               title: Text(
                 appbarTitle,
                 style: const TextStyle(

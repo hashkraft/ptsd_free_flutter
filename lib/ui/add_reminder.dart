@@ -57,6 +57,8 @@ class _AddReminderState extends State<AddReminder> {
         timeofday: selectedTime1,
         days: days,
         idList: value,
+        title: "Breathe now!",
+        body: "Please relax yourself",
       );
     });
     context.go("/home");

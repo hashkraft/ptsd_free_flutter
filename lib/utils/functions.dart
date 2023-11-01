@@ -34,6 +34,18 @@ TimeOfDay stringToTime(String str) {
   return TimeOfDay(hour: hour, minute: minute);
 }
 
+List<int> daysOneDayBefore(List<int> days) {
+  List<int> d = [];
+  for (int x in days) {
+    if (x == 0) {
+      d.add(7);
+    } else {
+      d.add(x - 1);
+    }
+  }
+  return d;
+}
+
 List<int> convertDaysToIndices(List<String> days) {
   final Map<String, int> dayMap = {
     'monday': 1,
