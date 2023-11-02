@@ -45,6 +45,8 @@ dependencies:
   awesome_notifications: ^0.8.2
   uuid: ^4.1.0
   unique_identifier: ^0.3.0
+  circular_countdown_timer: ^0.2.3
+  audioplayers: ^5.2.0
 
 dev_dependencies:
   flutter_test:

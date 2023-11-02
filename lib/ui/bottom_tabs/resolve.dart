@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
 
@@ -95,7 +96,9 @@ class _ResolveState extends State<Resolve> {
                   items: triggerOptions,
                   value: trigger,
                   onChanged: (val) {
-                    trigger = val!;
+                    setState(() {
+                      trigger = val!;
+                    });
                   }),
             ],
           ),
@@ -160,7 +163,9 @@ class _ResolveState extends State<Resolve> {
                 items: emotionsOptions,
                 value: emotion,
                 onChanged: (val) {
-                  emotion = val!;
+                  setState(() {
+                    emotion = val!;
+                  });
                 },
               )
             ],
@@ -290,7 +295,9 @@ class _ResolveState extends State<Resolve> {
                 items: feelWhereOptions,
                 value: feelWhere,
                 onChanged: (val) {
-                  feelWhere = val!;
+                  setState(() {
+                    feelWhere = val!;
+                  });
                 },
               ),
             ],
@@ -484,7 +491,9 @@ class _ResolveState extends State<Resolve> {
                 items: howOldOptions,
                 value: howOld,
                 onChanged: (val) {
-                  howOld = val!;
+                  setState(() {
+                    howOld = val!;
+                  });
                 },
               )
             ],
@@ -550,7 +559,9 @@ class _ResolveState extends State<Resolve> {
                 items: feelWhereOptions,
                 value: feelWhereNow,
                 onChanged: (val) {
-                  feelWhereNow = val!;
+                  setState(() {
+                    feelWhereNow = val!;
+                  });
                 },
               )
             ],
@@ -692,6 +703,7 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         setState(() {
                           widget.step = 0;
+                          context.go("/timer");
                         });
                       },
                       child: const Text(
