@@ -9,6 +9,7 @@ class TimerScreen extends StatefulWidget {
   @override
   State<TimerScreen> createState() => _TimerScreenState();
 }
+//autostart
 
 class _TimerScreenState extends State<TimerScreen> {
   final int _duration = 10 * 60;
@@ -27,6 +28,13 @@ class _TimerScreenState extends State<TimerScreen> {
 
   Future<void> stopAudio() async {
     await player.stop();
+  }
+
+  @override
+  void initState() {
+    playAudio();
+    paused = false;
+    super.initState();
   }
 
   Widget circularButton({required String title, VoidCallback? onPressed}) {
@@ -166,7 +174,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   title: "Done!",
                   onPressed: () {
                     stopAudio();
-                    context.go("/home");
+                    context.go("/aftermeditation");
                   },
                 ),
               ],

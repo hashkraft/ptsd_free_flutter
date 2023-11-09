@@ -79,7 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
           appbarTitle = "Stop routine PTSD";
           switch (currentStep) {
             case 0:
-              stepBody = const Text('static text 1');
+              stepBody = const Text(
+                  '''Answer a few questions to identify when your stress is most likely triggered. \n
+The app helps stop the stress by automatically sending you mini-meditations when your reactions are frequent.
+The more thought you'll put into your answers the more stress you'll stop. \n
+Set-up one PTSD trigger at a time.''');
               break;
             case 1:
               stepBody = Column(
@@ -102,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
               stepBody = Column(
                 children: [
                   Text(
-                      'What time of day and days of the week does this stress triggered by $triggerType occurs most often?'),
+                      'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -173,7 +177,8 @@ class _HomeScreenState extends State<HomeScreen> {
               );
               break;
             case 3:
-              stepBody = const Text('static text 2');
+              stepBody = const Text(
+                  'Great job! \n\nNow remember to breathe along with mini-meditations that automatically appear on your phone to stop routine PTSD reactions.');
               break;
             default:
               stepBody = const Text('ABCDEG');
@@ -231,9 +236,17 @@ class _HomeScreenState extends State<HomeScreen> {
           appbarTitle = "Breathe Button";
           body = Center(
             child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150),
-                const Text("random text"),
+                const SizedBox(height: 50),
+                CustomColoredText(
+                  text:
+                      "One-touch instant stress relief on your Android Screen. Touch the PTSD Free icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
+                  hexColor: "#2C3351",
+                  size: 16,
+                  weight: 400,
+                ),
+                const SizedBox(height: 10),
                 Switch(
                   value: _switchValue,
                   onChanged: (bool value) {
@@ -390,7 +403,16 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("CONTENT FOR MY MEDS"),
+              CustomColoredText(
+                text: '''My Meds helps people:\n
+- Create a meditation practice
+- Stay consistent with meditations
+- Reduce stress symptoms\n
+Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. Military Medicine (Vol. 176, Num. 6) ''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
               Column(
                 children: [
                   Row(

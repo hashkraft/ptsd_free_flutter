@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
+import 'package:ptsd_free/widgets/image_with_text.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
 
 class Resolve extends StatefulWidget {
@@ -37,7 +39,16 @@ class _ResolveState extends State<Resolve> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("CONTENT FOR RESOLVE"),
+          CustomColoredText(
+            text: '''Resolve helps people:
+\n- Identify the memories that fuel stress
+- Heal trauma within those memories
+- Reduce the intensity of the reaction
+\nThis tab includes an assessment, as well as two tailored meditations. Use it once a week until your stress reactions have diminished.''',
+            hexColor: "#2C3351",
+            size: 16,
+            weight: 400,
+          ),
           Column(
             children: [
               Row(
@@ -82,16 +93,23 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    widget.step--;
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              const Text("Step 1"),
+                onPressed: () {
+                  widget.step--;
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text: "What triggers your most intense stress reactions?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomDropDown(
                   items: triggerOptions,
                   value: trigger,
@@ -158,7 +176,13 @@ class _ResolveState extends State<Resolve> {
                       Text("Previous step")
                     ],
                   )),
-              Text("Step2: bla bla $trigger"),
+              CustomColoredText(
+                text: "Which emotion fuels this stress triggered by $trigger ?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomDropDown(
                 items: emotionsOptions,
                 value: emotion,
@@ -226,7 +250,14 @@ class _ResolveState extends State<Resolve> {
                       Text("Previous step")
                     ],
                   )),
-              Text("Step3: bla bla $trigger"),
+              CustomColoredText(
+                text:
+                    "When $trigger triggers your stress reactions, what thought repeats in the back of your mind?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomTextFormField(
                 controller: thoughtTrigger,
                 hintText: "My thoughts here",
@@ -279,18 +310,26 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              Text("Step 4: bla bla ${thoughtTrigger.text}"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text:
+                    "While thinking of ${thoughtTrigger.text} where do you feel the tension?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomDropDown(
                 items: feelWhereOptions,
                 value: feelWhere,
@@ -347,18 +386,26 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              Text("Step 5: bla bla ${thoughtTrigger.text} $feelWhere"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text:
+                    "Look back on your life, what is the first time you can remember feeling $emotion and thinking ${thoughtTrigger.text} at the same? Who was involved?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomTextFormField(
                 controller: whoWasInvolved,
                 hintText: "Who was involved?",
@@ -411,18 +458,25 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              Text("Step 6: bla bla ${thoughtTrigger.text} $trigger"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text: "Who or what triggered that prior stress reaction?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomTextFormField(
                 controller: whoTriggered,
                 hintText: "Who triggered?",
@@ -475,18 +529,25 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              const Text("How old were you then?"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text: "Approximately how old were you?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomDropDown(
                 items: howOldOptions,
                 value: howOld,
@@ -543,18 +604,25 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              const Text("Where do you feel tension right now?"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text: "Where do you feel tension right now?",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
               CustomDropDown(
                 items: feelWhereOptions,
                 value: feelWhereNow,
@@ -611,23 +679,30 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              const Text("Static Text step 9"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text:
+                    '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your head.''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
             ],
           ),
           Column(
             children: [
-              const LinearProgressIndicator(color: Colors.blue, value: 0.9),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -670,23 +745,32 @@ class _ResolveState extends State<Resolve> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
-              const Text("Static Text step 10"),
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text:
+                    "Remember the stressful experience that happened when you were a $howOld",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
+              ImageWText(text: thoughtTrigger.text),
             ],
           ),
           Column(
             children: [
-              const LinearProgressIndicator(color: Colors.blue, value: 1),
+              // const LinearProgressIndicator(color: Colors.blue, value: 0.9),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -702,12 +786,86 @@ class _ResolveState extends State<Resolve> {
                       )),
                       onPressed: () {
                         setState(() {
+                          widget.step++;
+                        });
+                      },
+                      child: const Text(
+                        "Continue",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ],
+      );
+    } else if (widget.step == 11) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    widget.step--;
+                  });
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios, size: 16),
+                    Text("Previous step")
+                  ],
+                ),
+              ),
+              CustomColoredText(
+                text:
+                    '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying "I'm Okay" once per breath. Press continue to start Meditation.''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 400,
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: Image.asset(
+                  "assets/images/two_users_okay.png",
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              // const LinearProgressIndicator(color: Colors.blue, value: 1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return Colors.green;
+                        },
+                      )),
+                      onPressed: () {
+                        setState(() {
                           widget.step = 0;
                           context.go("/timer");
                         });
                       },
                       child: const Text(
-                        "Continue",
+                        "Start Meditation",
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
