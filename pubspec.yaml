@@ -47,6 +47,7 @@ dependencies:
   unique_identifier: ^0.3.0
   circular_countdown_timer: ^0.2.3
   audioplayers: ^5.2.0
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:

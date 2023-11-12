@@ -8,13 +8,10 @@ import 'package:hexcolor/hexcolor.dart';
 
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:ptsd_free/ui/bottom_tabs/more.dart';
-import 'package:ptsd_free/ui/bottom_tabs/my_meds.dart';
 import 'package:ptsd_free/ui/bottom_tabs/resolve.dart';
 import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
-import 'package:ptsd_free/widgets/list_tile_more.dart';
-import 'package:ptsd_free/widgets/list_tile_settings.dart';
 
 class HomeScreen extends StatefulWidget {
   int currentIndex = 0;
@@ -38,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget body = Container();
   Widget stepBody = Container();
   String triggerType = "Places";
+  String headerImage = 'assets/images/stopper_screen_head_bg.png';
+
   final List<String> _businessTypes = [
     'Places',
     'Sounds',
@@ -75,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (widget.currentIndex) {
       case 0:
+        headerImage = 'assets/images/stopper_screen_head_bg.png';
         if (routine) {
           appbarTitle = "Stop routine PTSD";
           switch (currentStep) {
@@ -227,7 +227,8 @@ Set-up one PTSD trigger at a time.''');
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 10),
             ],
           );
         }
@@ -393,10 +394,24 @@ Set-up one PTSD trigger at a time.''');
 
         break;
       case 1:
-        appbarTitle = "Resolve";
-        body = Resolve(step: resolveStep);
+        headerImage = 'assets/images/resolve_header_bg.png';
+        if (resolveStep <= 10 && resolveStep > 0) {
+          appbarTitle = "Step $resolveStep";
+        } else {
+          appbarTitle = "Resolve";
+        }
+        body = Resolve(
+          step: resolveStep,
+          onValueChanged: (newValue) {
+            developer.log(newValue.toString());
+            setState(() {
+              resolveStep = newValue;
+            });
+          },
+        );
         break;
       case 2:
+        headerImage = 'assets/images/my_meds_header_bg.png';
         if (myMedsInfo) {
           appbarTitle = "My Meds";
           body = Column(
@@ -420,7 +435,7 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
                     children: [
                       const SizedBox(),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
+                        width: MediaQuery.of(context).size.width * 0.8,
                         child: ElevatedButton(
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
@@ -581,38 +596,55 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
 
         break;
       case 3:
+        // question = false;
         appbarTitle = "Settings";
         body = const Settings();
 
         break;
       case 4:
+        // question = false;
         appbarTitle = "More";
         body = const More();
         break;
       default:
     }
+    String topImage = "";
+    double topImageScale = 1.2;
+    if (widget.currentIndex == 0 && question == true) {
+      topImage = 'assets/images/stress_top_icon_min.png';
+      topImageScale = 1.2;
+    } else if (widget.currentIndex == 2 && myMedsInfo == true) {
+      topImage = 'assets/images/meds_top_icon_min.png';
+      topImageScale = 1.5;
+    } else if (widget.currentIndex == 1 && resolveStep == 0) {
+      topImage = 'assets/images/resolve_top_icon_min.png';
+      topImageScale = 1.2;
+    }
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Image.asset(
-            'assets/images/stopper_screen_head_bg.png',
+            headerImage,
           ),
-          Positioned(
-            top: 80,
-            right: MediaQuery.of(context).size.width / 2.5,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(),
-                Image.asset(
-                  'assets/images/stress_top_icon_min.png',
-                  scale: 1.2,
-                  alignment: Alignment.center,
-                ),
-                const SizedBox(),
-              ],
-            ),
-          ),
+          (topImage.isNotEmpty)
+              ? Positioned(
+                  top: 82,
+                  right: MediaQuery.of(context).size.width / 2.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      Image.asset(
+                        topImage,
+                        scale: topImageScale,
+                        alignment: Alignment.center,
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -654,7 +686,6 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
                       : (widget.currentIndex == 1)
                           ? IconButton(
                               onPressed: () {
-                                developer.log("Bitch!");
                                 setState(() {
                                   if (resolveStep > 0) {
                                     resolveStep--;
@@ -687,7 +718,7 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
                   elevation: 10.0,
                   items: const [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.stop_circle), label: "Stopper"),
+                        icon: Icon(Icons.stop), label: "Stopper"),
                     BottomNavigationBarItem(
                         icon: Icon(Icons.hearing_outlined), label: "Resolve"),
                     BottomNavigationBarItem(

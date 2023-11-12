@@ -1,17 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/image_with_text.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
 
 class Resolve extends StatefulWidget {
+  final Function(int) onValueChanged;
   int step;
   Resolve({
-    super.key,
+    Key? key,
+    required this.onValueChanged,
     required this.step,
-  });
+  }) : super(key: key);
 
   @override
   State<Resolve> createState() => _ResolveState();
@@ -30,10 +35,15 @@ class _ResolveState extends State<Resolve> {
   TextEditingController thoughtTrigger = TextEditingController();
   TextEditingController whoWasInvolved = TextEditingController();
   TextEditingController whoTriggered = TextEditingController();
-  // String trigger2;
-  // String trigger3;
+  String title = "";
+
+  void changeTitle({required String title}) {
+    this.title = title;
+  }
+
   @override
   Widget build(BuildContext context) {
+    developer.log(widget.step.toString());
     if (widget.step == 0) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +66,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.80,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -65,9 +75,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -92,17 +105,19 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  widget.step--;
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     // widget.step--;
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text: "What triggers your most intense stress reactions?",
                 hexColor: "#2C3351",
@@ -123,12 +138,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.1),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -137,9 +153,11 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -164,18 +182,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
+              // TextButton(
+              //   onPressed: () {
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text: "Which emotion fuels this stress triggered by $trigger ?",
                 hexColor: "#2C3351",
@@ -197,12 +218,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.2),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -211,9 +233,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        // updateValue(widget.step++);
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -238,18 +263,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.step--;
-                    });
-                  },
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 16),
-                      Text("Previous step")
-                    ],
-                  )),
+              // TextButton(
+              //     onPressed: () {
+              //       // updateValue(widget.step--);
+              //       widget.step -= 1;
+              //       widget.onValueChanged(widget.step);
+              //       // setState(() {
+              //       //   widget.step--;
+              //       // });
+              //     },
+              //     child: const Row(
+              //       children: [
+              //         Icon(Icons.arrow_back_ios, size: 16),
+              //         Text("Previous step")
+              //       ],
+              //     )),
               CustomColoredText(
                 text:
                     "When $trigger triggers your stress reactions, what thought repeats in the back of your mind?",
@@ -268,12 +296,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.3),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -282,9 +311,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        // updateValue(widget.step++);
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -309,19 +341,22 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     // updateValue(widget.step--);
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text:
                     "While thinking of ${thoughtTrigger.text} where do you feel the tension?",
@@ -344,12 +379,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.4),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -358,9 +394,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        // updateValue(widget.step++);
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -385,19 +424,22 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     // updateValue(widget.step--);
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text:
                     "Look back on your life, what is the first time you can remember feeling $emotion and thinking ${thoughtTrigger.text} at the same? Who was involved?",
@@ -416,12 +458,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.5),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -430,9 +473,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        // updateValue(widget.step++);
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -457,19 +503,22 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     // updateValue(widget.step--);
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text: "Who or what triggered that prior stress reaction?",
                 hexColor: "#2C3351",
@@ -487,12 +536,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.6),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -501,9 +551,11 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -528,19 +580,22 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     // updateValue(widget.step--);
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text: "Approximately how old were you?",
                 hexColor: "#2C3351",
@@ -562,12 +617,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.7),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -576,9 +632,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        // updateValue(widget.step++);
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -603,19 +662,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text: "Where do you feel tension right now?",
                 hexColor: "#2C3351",
@@ -637,12 +698,13 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               const LinearProgressIndicator(color: Colors.blue, value: 0.8),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -651,9 +713,11 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -678,19 +742,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text:
                     '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your head.''',
@@ -708,7 +774,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -717,9 +783,11 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -744,19 +812,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text:
                     "Remember the stressful experience that happened when you were a $howOld",
@@ -765,7 +835,7 @@ class _ResolveState extends State<Resolve> {
                 weight: 400,
               ),
               const SizedBox(height: 16),
-              ImageWText(text: thoughtTrigger.text),
+              const ImageWText(text: "Bla bla"),
             ],
           ),
           Column(
@@ -776,7 +846,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -785,9 +855,11 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step++;
-                        });
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                        // setState(() {
+                        //   widget.step++;
+                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -812,19 +884,21 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.step--;
-                  });
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 16),
-                    Text("Previous step")
-                  ],
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     widget.step -= 1;
+              //     widget.onValueChanged(widget.step);
+              //     // setState(() {
+              //     //   widget.step--;
+              //     // });
+              //   },
+              //   child: const Row(
+              //     children: [
+              //       Icon(Icons.arrow_back_ios, size: 16),
+              //       Text("Previous step")
+              //     ],
+              //   ),
+              // ),
               CustomColoredText(
                 text:
                     '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying "I'm Okay" once per breath. Press continue to start Meditation.''',
@@ -850,7 +924,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(

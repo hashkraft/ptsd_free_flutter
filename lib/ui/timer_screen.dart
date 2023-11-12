@@ -2,6 +2,8 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:developer' as developer;
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -16,7 +18,7 @@ class _TimerScreenState extends State<TimerScreen> {
   final CountDownController _controller = CountDownController();
   bool paused = true;
   final player = AudioPlayer();
-
+  late VideoPlayerController _videoController;
   Future<void> playAudio() async {
     await player.play(AssetSource("alarm.mp3"));
     player.setReleaseMode(ReleaseMode.loop);
@@ -32,9 +34,24 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   void initState() {
-    playAudio();
-    paused = false;
     super.initState();
+
+    paused = false;
+    setState(() {
+      _videoController =
+          VideoPlayerController.asset("assets/images/med_vid_bg_3.mp4")
+            ..initialize().then((_) {
+              // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+              setState(() {
+                _videoController.play();
+              });
+            });
+    });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      _controller.start();
+      playAudio();
+    });
   }
 
   Widget circularButton({required String title, VoidCallback? onPressed}) {
@@ -64,9 +81,11 @@ class _TimerScreenState extends State<TimerScreen> {
               paused = !paused;
               if (paused) {
                 _controller.pause();
+                _videoController.pause();
                 pauseAudio();
               } else {
                 _controller.resume();
+                _videoController.play();
                 playAudio();
               }
             });
@@ -83,99 +102,110 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    developer.log(_videoController.value.isPlaying.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Prepare to meditate"),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: Stack(
           children: [
-            Center(
-              child: CircularCountDownTimer(
-                duration: _duration,
-                initialDuration: 0,
-                controller: _controller,
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.height / 2,
-                ringColor: Colors.grey[300]!,
-                ringGradient: null,
-                fillColor: Colors.greenAccent,
-                fillGradient: null,
-                backgroundColor: Colors.green[500],
-                backgroundGradient: null,
-                strokeWidth: 20.0,
-                strokeCap: StrokeCap.round,
-                textStyle: const TextStyle(
-                    fontSize: 33.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textFormat: CountdownTextFormat.S,
-                isReverse: false,
-                isReverseAnimation: false,
-                isTimerTextShown: true,
-                autoStart: false,
-                onStart: () {
-                  debugPrint('Countdown Started');
-                },
-                onComplete: () {
-                  debugPrint('Countdown Ended');
-                },
-                onChange: (String timeStamp) {
-                  debugPrint('Countdown Changed $timeStamp');
-                },
-                timeFormatterFunction: (defaultFormatterFunction, duration) {
-                  if (duration.inSeconds == 0) {
-                    return "Start";
-                  } else if (duration.inSeconds < 60) {
-                    return Function.apply(defaultFormatterFunction, [duration]);
-                  } else {
-                    String minutearm = (duration.inMinutes < 10)
-                        ? "0${duration.inMinutes}"
-                        : "${duration.inMinutes}";
-                    int secondarmInt =
-                        duration.inSeconds % (duration.inMinutes * 60);
-                    String secondarm = (secondarmInt < 10)
-                        ? "0$secondarmInt"
-                        : "$secondarmInt";
-                    return "$minutearm:$secondarm";
-                    // return Function.apply(defaultFormatterFunction, [duration]);
-                  }
-                },
-              ),
+            AspectRatio(
+              aspectRatio: _videoController.value.aspectRatio,
+              child: VideoPlayer(_videoController),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     circularButton(
-            //       title: "Start",
-            //       onPressed: () => _controller.start(),
-            //     ),
-            //     circularButton(
-            //       title: "Pause",
-            //       onPressed: () => _controller.pause(),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 10),
-            // circularButton(
-            //   title: "Resume",
-            //   onPressed: () => _controller.resume(),
-            // ),
-            bigButton(),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
               children: [
-                circularButton(
-                  title: "Restart",
-                  onPressed: () => _controller.restart(duration: _duration),
+                Center(
+                  child: CircularCountDownTimer(
+                    duration: _duration,
+                    initialDuration: 0,
+                    controller: _controller,
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: MediaQuery.of(context).size.height / 2,
+                    ringColor: Colors.grey[300]!,
+                    ringGradient: null,
+                    fillColor: Colors.greenAccent,
+                    fillGradient: null,
+                    backgroundColor: Colors.green[500],
+                    backgroundGradient: null,
+                    strokeWidth: 20.0,
+                    strokeCap: StrokeCap.round,
+                    textStyle: const TextStyle(
+                        fontSize: 33.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                    textFormat: CountdownTextFormat.S,
+                    isReverse: false,
+                    isReverseAnimation: false,
+                    isTimerTextShown: true,
+                    autoStart: false,
+                    onStart: () {
+                      debugPrint('Countdown Started');
+                    },
+                    onComplete: () {
+                      debugPrint('Countdown Ended');
+                    },
+                    onChange: (String timeStamp) {
+                      debugPrint('Countdown Changed $timeStamp');
+                    },
+                    timeFormatterFunction:
+                        (defaultFormatterFunction, duration) {
+                      if (duration.inSeconds == 0) {
+                        return "Start";
+                      } else if (duration.inSeconds < 60) {
+                        return Function.apply(
+                            defaultFormatterFunction, [duration]);
+                      } else {
+                        String minutearm = (duration.inMinutes < 10)
+                            ? "0${duration.inMinutes}"
+                            : "${duration.inMinutes}";
+                        int secondarmInt =
+                            duration.inSeconds % (duration.inMinutes * 60);
+                        String secondarm = (secondarmInt < 10)
+                            ? "0$secondarmInt"
+                            : "$secondarmInt";
+                        return "$minutearm:$secondarm";
+                        // return Function.apply(defaultFormatterFunction, [duration]);
+                      }
+                    },
+                  ),
                 ),
-                circularButton(
-                  title: "Done!",
-                  onPressed: () {
-                    stopAudio();
-                    context.go("/aftermeditation");
-                  },
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //   children: [
+                //     circularButton(
+                //       title: "Start",
+                //       onPressed: () => _controller.start(),
+                //     ),
+                //     circularButton(
+                //       title: "Pause",
+                //       onPressed: () => _controller.pause(),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 10),
+                // circularButton(
+                //   title: "Resume",
+                //   onPressed: () => _controller.resume(),
+                // ),
+                bigButton(),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    circularButton(
+                      title: "Restart",
+                      onPressed: () => _controller.restart(duration: _duration),
+                    ),
+                    circularButton(
+                      title: "Done!",
+                      onPressed: () {
+                        stopAudio();
+                        context.go("/aftermeditation");
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
