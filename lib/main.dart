@@ -1,12 +1,17 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/firebase_options.dart';
 import 'package:ptsd_free/router/router.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 
 Future<void> main() async {
   await initializeNotification();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

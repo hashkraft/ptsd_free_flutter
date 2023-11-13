@@ -1,6 +1,20 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
+
+Future<String?> getId() async {
+  var deviceInfo = DeviceInfoPlugin();
+  if (Platform.isIOS) {
+    var iosDeviceInfo = await deviceInfo.iosInfo;
+    return iosDeviceInfo.identifierForVendor; // unique ID on iOS
+  } else if (Platform.isAndroid) {
+    var androidDeviceInfo = await deviceInfo.androidInfo;
+    return androidDeviceInfo.id; // unique ID on Android
+  }
+}
 
 String timeToString(TimeOfDay time) {
   String hour = time.hour.toString().padLeft(2, '0');

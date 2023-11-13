@@ -48,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> dateTimeList = [];
   bool _switchValue = false;
   bool myMedsInfo = true;
+  String topImage = "";
+  double topImageScale = 1.2;
   Future<void> removeMeditation(String uuid) async {
     final alarmIDs = await db.alarmIdsByUUID2(uuid);
     for (int id in alarmIDs) {
@@ -597,19 +599,20 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
         break;
       case 3:
         // question = false;
+        // headerImage = "";
         appbarTitle = "Settings";
         body = const Settings();
 
         break;
       case 4:
         // question = false;
+        // headerImage = "";
         appbarTitle = "More";
         body = const More();
         break;
       default:
     }
-    String topImage = "";
-    double topImageScale = 1.2;
+
     if (widget.currentIndex == 0 && question == true) {
       topImage = 'assets/images/stress_top_icon_min.png';
       topImageScale = 1.2;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
@@ -18,6 +19,18 @@ class _SettingsState extends State<Settings> {
         children: [
           const SizedBox(height: 20),
           const Text("App"),
+          ListTileSettings(
+            text: "Registration",
+            onPressed: () {
+              context.go("/registration");
+            },
+          ),
+          ListTileSettings(
+            text: "Login",
+            onPressed: () {
+              context.go("/login");
+            },
+          ),
           ListTileSettings(
             text: "Push Notifications",
             onPressed: () {

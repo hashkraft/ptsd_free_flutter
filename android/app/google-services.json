@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "767551108049",
+    "project_id": "ptsd-free1",
+    "storage_bucket": "ptsd-free1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767551108049:android:bc65aedbd64e86a54ce6f0",
+        "android_client_info": {
+          "package_name": "com.example.ptsd_free"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALtul8zes_M5Etwy5j8OhWcOSDeZk1YXo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
