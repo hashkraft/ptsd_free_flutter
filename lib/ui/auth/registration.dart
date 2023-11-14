@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ptsd_free/utils/functions.dart';
@@ -82,6 +83,13 @@ class _RegistrationState extends State<Registration> {
                       developer.log(usernameController.text);
                       developer.log(zipcodeController.text);
                       await createAccount();
+                      String deviceId = (await getId()) ?? "";
+                      await FirebaseFirestore.instance.collection('users').add({
+                        "username": usernameController.text,
+                        "zipcode": zipcodeController.text,
+                        "deviceId": deviceId
+                      }).whenComplete(() => developer.log("Row Added!"));
+
                       usernameController.clear();
                       zipcodeController.clear();
                     },
