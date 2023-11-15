@@ -2,14 +2,17 @@
 import 'dart:developer' as developer;
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/models/user.dart';
 
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:ptsd_free/ui/bottom_tabs/more.dart';
 import 'package:ptsd_free/ui/bottom_tabs/resolve.dart';
 import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
+import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 
@@ -66,6 +69,38 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // @override
+  // void initState() async {
+  //   // TODO: implement initState
+
+  //   String deviceId = (await getId()) ?? "";
+  //   developer.log(deviceId);
+  //   FirebaseFirestore.instance
+  //       .collection("users-data")
+  //       .where("deviceId", isEqualTo: deviceId)
+  //       .get()
+  //       .then((value) {
+  //     developer.log("Successfully completed");
+  //     for (var docSnapshot in value.docs) {
+  //       if (docSnapshot.data().isNotEmpty) {
+  //         developer
+  //             .log('Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
+  //         UserAdd.setValues(
+  //           user: docSnapshot.data()['username'],
+  //           pass: docSnapshot.data()['password'],
+  //           zip: docSnapshot.data()['zipcode'],
+  //           deviceId: deviceId,
+  //         );
+  //         developer.log("Logged in!");
+  //       }
+
+  //       // docSnapshot.data(). update("zipcode", (value) => zipNew);
+  //       // developer.log('NEW: ${docSnapshot.id} => ${docSnapshot.data()}');
+  //     }
+  //   });
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
     void _onItemTapped(int index) {
@@ -78,6 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         headerImage = 'assets/images/stopper_screen_head_bg.png';
         if (routine) {
+          setState(() {
+            question = false;
+          });
           appbarTitle = "Stop routine PTSD";
           switch (currentStep) {
             case 0:
@@ -236,6 +274,7 @@ Set-up one PTSD trigger at a time.''');
         }
 
         if (random) {
+          question = false;
           appbarTitle = "Breathe Button";
           body = Center(
             child: Column(
@@ -397,8 +436,8 @@ Set-up one PTSD trigger at a time.''');
         break;
       case 1:
         headerImage = 'assets/images/resolve_header_bg.png';
-        if (resolveStep <= 10 && resolveStep > 0) {
-          appbarTitle = "Step $resolveStep";
+        if (resolveStep <= 10 && resolveStep > 1) {
+          appbarTitle = "Step ${resolveStep - 1}";
         } else {
           appbarTitle = "Resolve";
         }
@@ -601,7 +640,7 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
         // question = false;
         // headerImage = "";
         appbarTitle = "Settings";
-        body = const Settings();
+        body = const SettingsScreen();
 
         break;
       case 4:
@@ -613,7 +652,7 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
       default:
     }
 
-    if (widget.currentIndex == 0 && question == true) {
+    if (question && widget.currentIndex == 0) {
       topImage = 'assets/images/stress_top_icon_min.png';
       topImageScale = 1.2;
     } else if (widget.currentIndex == 2 && myMedsInfo == true) {
@@ -621,6 +660,9 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
       topImageScale = 1.5;
     } else if (widget.currentIndex == 1 && resolveStep == 0) {
       topImage = 'assets/images/resolve_top_icon_min.png';
+      topImageScale = 1.2;
+    } else {
+      topImage = '';
       topImageScale = 1.2;
     }
 

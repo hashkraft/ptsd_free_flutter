@@ -8,6 +8,7 @@ import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/ui/add_reminder.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
+import 'package:ptsd_free/ui/zipcode.dart';
 
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
@@ -85,6 +86,12 @@ final GoRouter router = GoRouter(
           path: 'aftermeditation',
           builder: (BuildContext context, GoRouterState state) {
             return const AfterMeditation();
+          },
+        ),
+        GoRoute(
+          path: 'zipcode',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ZipCode();
           },
         ),
       ],

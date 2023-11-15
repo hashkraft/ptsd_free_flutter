@@ -3,14 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsScreen> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -29,6 +29,12 @@ class _SettingsState extends State<Settings> {
             text: "Login",
             onPressed: () {
               context.go("/login");
+            },
+          ),
+          ListTileSettings(
+            text: "Zipcode",
+            onPressed: () {
+              context.go("/zipcode");
             },
           ),
           ListTileSettings(
