@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'dart:developer' as developer;
 import 'package:uuid/uuid.dart';
 import 'package:ptsd_free/utils/functions.dart' as functions;
-import 'package:ptsd_free/notifications/notifications_service.dart'
-    as notification_services;
 
 class AddReminder extends StatefulWidget {
   const AddReminder({super.key});
@@ -52,13 +51,14 @@ class _AddReminderState extends State<AddReminder> {
       selectedTime2: selectedTime2,
       uuid: uuid,
     )
-        .then((value) {
-      notification_services.scheduleAlarm(
+        .then((value) async {
+      await NotificationsService().scheduleAlarm(
         timeofday: selectedTime1,
         days: days,
         idList: value,
         title: "Breathe now!",
         body: "Please relax yourself",
+        meditate: false,
       );
     });
     context.go("/home");

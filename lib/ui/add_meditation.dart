@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'dart:developer' as developer;
 import 'package:ptsd_free/utils/functions.dart' as functions;
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:uuid/uuid.dart';
-import 'package:ptsd_free/notifications/notifications_service.dart'
-    as notification_services;
 
 class AddMeditation extends StatefulWidget {
   const AddMeditation({super.key});
@@ -266,22 +265,27 @@ class _AddMeditationState extends State<AddMeditation> {
       uuid: const Uuid().v4(),
     )
         .then((value) {
-      notification_services.scheduleAlarm(
+      NotificationsService().scheduleAlarm(
         timeofday: selectedTime1,
         days: days,
         idList: value,
+        meditate: true,
         title: "Meditate now!",
         body: "Close your eyes",
+        payload: {
+          "navigate": "true",
+        },
       );
       if (reminderBeforeDouble.toInt() > 0) {
         final minutes = reminderBeforeDouble.toInt() * 5;
         if ((selectedTime1.minute - minutes) > 0) {
           TimeOfDay timebefore = TimeOfDay(
               hour: selectedTime1.hour, minute: selectedTime1.minute - minutes);
-          notification_services.scheduleAlarm(
+          NotificationsService().scheduleAlarm(
             timeofday: timebefore,
             days: days,
             idList: value,
+            meditate: true,
             title: "Reminder before meditation",
             body: "Start in $minutes mins later",
           );
@@ -289,9 +293,10 @@ class _AddMeditationState extends State<AddMeditation> {
           TimeOfDay timebefore = TimeOfDay(
               hour: 23, minute: 60 + (selectedTime1.minute - minutes));
           final days1 = functions.daysOneDayBefore(days);
-          notification_services.scheduleAlarm(
+          NotificationsService().scheduleAlarm(
             timeofday: timebefore,
             days: days1,
+            meditate: true,
             idList: value,
             title: "Reminder before meditation",
             body: "Start in $minutes mins later",

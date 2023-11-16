@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/user.dart';
@@ -69,37 +70,57 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // @override
-  // void initState() async {
-  //   // TODO: implement initState
+  @override
+  void initState() {
+    if (UserAdd.zipcode.isEmpty) {
+      Future.delayed(const Duration(seconds: 1), () async {
+        String deviceId = (await getId()) ?? "";
+        developer.log(deviceId);
+        FirebaseFirestore.instance
+            .collection("users-data")
+            .where("deviceId", isEqualTo: deviceId)
+            .get()
+            .then((value) {
+          if (value.docs.isEmpty) {
+            context.go("/registration");
+            Fluttertoast.showToast(
+              msg: "Please register first!",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          } else {
+            for (var docSnapshot in value.docs) {
+              developer.log(
+                  'Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
+              UserAdd.setValues(
+                user: docSnapshot.data()['username'],
+                pass: docSnapshot.data()['password'],
+                zip: docSnapshot.data()['zipcode'],
+                deviceId: deviceId,
+              );
 
-  //   String deviceId = (await getId()) ?? "";
-  //   developer.log(deviceId);
-  //   FirebaseFirestore.instance
-  //       .collection("users-data")
-  //       .where("deviceId", isEqualTo: deviceId)
-  //       .get()
-  //       .then((value) {
-  //     developer.log("Successfully completed");
-  //     for (var docSnapshot in value.docs) {
-  //       if (docSnapshot.data().isNotEmpty) {
-  //         developer
-  //             .log('Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
-  //         UserAdd.setValues(
-  //           user: docSnapshot.data()['username'],
-  //           pass: docSnapshot.data()['password'],
-  //           zip: docSnapshot.data()['zipcode'],
-  //           deviceId: deviceId,
-  //         );
-  //         developer.log("Logged in!");
-  //       }
+              developer.log("Logged in!");
+              Fluttertoast.showToast(
+                msg: "Logged in!",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            }
+          }
+        });
+      });
+    }
 
-  //       // docSnapshot.data(). update("zipcode", (value) => zipNew);
-  //       // developer.log('NEW: ${docSnapshot.id} => ${docSnapshot.data()}');
-  //     }
-  //   });
-  //   super.initState();
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -459,16 +480,89 @@ Set-up one PTSD trigger at a time.''');
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CustomColoredText(
-                text: '''My Meds helps people:\n
-- Create a meditation practice
-- Stay consistent with meditations
-- Reduce stress symptoms\n
-Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. Military Medicine (Vol. 176, Num. 6) ''',
-                hexColor: "#2C3351",
-                size: 16,
-                weight: 400,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  CustomColoredText(
+                      text: "My Meds helps people:",
+                      hexColor: "#005CB8",
+                      size: 18,
+                      weight: 400),
+                  const SizedBox(height: 25),
+                  Row(
+                    children: [
+                      const SizedBox(width: 25),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      CustomColoredText(
+                          text: "Create a meditation practice",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 25),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      CustomColoredText(
+                          text: "Stay consistent with meditations",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 25),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(width: 15),
+                      CustomColoredText(
+                          text: "Reduce stress symptoms",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  CustomColoredText(
+                      text:
+                          "Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. Military Medicine (Vol. 176, Num. 6)",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                  // CustomColoredText(
+                  //     text:
+                  //         "Use it once a week until your stress reactions have diminished.",
+                  //     hexColor: "#000000",
+                  //     size: 16,
+                  //     weight: 400),
+                ],
               ),
+//
               Column(
                 children: [
                   Row(
@@ -689,66 +783,69 @@ Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. 
                     ],
                   ),
                 )
-              : const SizedBox(),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              elevation: 0,
-              automaticallyImplyLeading: (question) ? false : true,
-              backgroundColor: Colors.transparent,
-              leading: (random)
-                  ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          question = true;
-                          random = false;
-                          routine = false;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
+              : (resolveStep > 0 && resolveStep < 11)
+                  ? Positioned(
+                      top: 82,
+                      left: MediaQuery.of(context).size.width / 10,
+                      child: CustomColoredText(
+                        text: "Step $resolveStep:",
+                        hexColor: "#FFFFFF",
+                        size: 22,
+                        weight: 500,
                       ),
                     )
-                  : (routine)
-                      ? IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (currentStep > 0) {
-                                currentStep--;
-                              } else {
-                                question = true;
-                                random = false;
-                                routine = false;
-                              }
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.white,
-                          ),
-                        )
-                      : (widget.currentIndex == 1)
-                          ? IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (resolveStep > 0) {
-                                    resolveStep--;
-                                  }
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const SizedBox(),
-              title: Text(
-                appbarTitle,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w500),
-              ),
-            ),
+                  : const SizedBox(),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: (random ||
+                    routine ||
+                    (widget.currentIndex == 1 && resolveStep > 0))
+                ? AppBar(
+                    elevation: 0,
+                    automaticallyImplyLeading: (question) ? false : true,
+                    backgroundColor: Colors.transparent,
+                    leading: IconButton(
+                      onPressed: () {
+                        if (random) {
+                          setState(() {
+                            question = true;
+                            random = false;
+                            routine = false;
+                          });
+                        } else if (routine) {
+                          setState(() {
+                            if (currentStep > 0) {
+                              currentStep--;
+                            } else {
+                              question = true;
+                              random = false;
+                              routine = false;
+                            }
+                          });
+                        } else if ((widget.currentIndex == 1 &&
+                            resolveStep > 0)) {
+                          setState(() {
+                            if (resolveStep > 0) {
+                              resolveStep--;
+                            }
+                          });
+                        }
+                      },
+                      icon: const Icon(Icons.arrow_back_ios,
+                          color: Colors.white, size: 22),
+                    ),
+                    title: Text(appbarTitle,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w400)),
+                  )
+                : AppBar(
+                    elevation: 0,
+                    automaticallyImplyLeading: (question) ? false : true,
+                    backgroundColor: Colors.transparent,
+                    title: Text(appbarTitle,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w400)),
+                  ),
             body: Padding(
                 padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
                 child: body),

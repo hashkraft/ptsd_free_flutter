@@ -3,7 +3,6 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/image_with_text.dart';
@@ -49,15 +48,87 @@ class _ResolveState extends State<Resolve> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomColoredText(
-            text: '''Resolve helps people:
-\n- Identify the memories that fuel stress
-- Heal trauma within those memories
-- Reduce the intensity of the reaction
-\nThis tab includes an assessment, as well as two tailored meditations. Use it once a week until your stress reactions have diminished.''',
-            hexColor: "#2C3351",
-            size: 16,
-            weight: 400,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              CustomColoredText(
+                  text: "Resolve helps people::",
+                  hexColor: "#00B803",
+                  size: 18,
+                  weight: 400),
+              const SizedBox(height: 25),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Identify the memories that fuels stress",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Heal trauma within those memories",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              Row(
+                children: [
+                  const SizedBox(width: 25),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  CustomColoredText(
+                      text: "Reduce the intensity of the reaction",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                ],
+              ),
+              const SizedBox(height: 25),
+              CustomColoredText(
+                  text:
+                      "This tab includes an assessment, as well as two tailored meditations.",
+                  hexColor: "#000000",
+                  size: 16,
+                  weight: 400),
+              CustomColoredText(
+                  text:
+                      "Use it once a week until your stress reactions have diminished.",
+                  hexColor: "#000000",
+                  size: 16,
+                  weight: 400),
+            ],
           ),
           Column(
             children: [
@@ -118,13 +189,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "What triggers your most intense stress reactions?",
                 hexColor: "#2C3351",
@@ -204,13 +275,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Which emotion fuels this stress triggered by $trigger ?",
                 hexColor: "#2C3351",
@@ -292,13 +363,13 @@ class _ResolveState extends State<Resolve> {
               //         Text("Previous step")
               //       ],
               //     )),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "When $trigger triggers your stress reactions, what thought repeats in the back of your mind?",
@@ -378,13 +449,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "While thinking of ${thoughtTrigger.text} where do you feel the tension?",
@@ -468,13 +539,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "Look back on your life, what is the first time you can remember feeling $emotion and thinking ${thoughtTrigger.text} at the same? Who was involved?",
@@ -554,13 +625,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Who or what triggered that prior stress reaction?",
                 hexColor: "#2C3351",
@@ -638,13 +709,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Approximately how old were you?",
                 hexColor: "#2C3351",
@@ -726,13 +797,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Where do you feel tension right now?",
                 hexColor: "#2C3351",
@@ -813,13 +884,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your head.''',
@@ -890,13 +961,13 @@ class _ResolveState extends State<Resolve> {
               //     ],
               //   ),
               // ),
-              CustomColoredText(
-                text: "Step ${widget.step}",
-                hexColor: "#0F6ED8",
-                size: 20,
-                weight: 400,
-              ),
-              const SizedBox(height: 16),
+              // CustomColoredText(
+              //   text: "Step ${widget.step}",
+              //   hexColor: "#0F6ED8",
+              //   size: 20,
+              //   weight: 400,
+              // ),
+              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "Remember the stressful experience that happened when you were a $howOld",
@@ -905,7 +976,10 @@ class _ResolveState extends State<Resolve> {
                 weight: 400,
               ),
               const SizedBox(height: 16),
-              const ImageWText(text: "Bla bla"),
+              ImageWText(
+                  text: thoughtTrigger.text.isNotEmpty
+                      ? "${thoughtTrigger.text.substring(0, 12)}..."
+                      : "Bla bla"),
             ],
           ),
           Column(

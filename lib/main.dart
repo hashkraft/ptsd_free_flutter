@@ -9,7 +9,7 @@ import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 
 Future<void> main() async {
-  await initializeNotification();
+  await NotificationsService().initializeNotification();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -21,7 +21,6 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
