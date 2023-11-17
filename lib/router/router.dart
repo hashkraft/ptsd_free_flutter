@@ -7,6 +7,7 @@ import 'package:ptsd_free/ui/auth/registration.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/ui/add_reminder.dart';
+import 'package:ptsd_free/ui/hotline.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/ui/zipcode.dart';
 
@@ -80,6 +81,12 @@ final GoRouter router = GoRouter(
           path: 'registration',
           builder: (BuildContext context, GoRouterState state) {
             return const Registration();
+          },
+        ),
+        GoRoute(
+          path: 'hotline',
+          builder: (BuildContext context, GoRouterState state) {
+            return const Hotline();
           },
         ),
         GoRoute(

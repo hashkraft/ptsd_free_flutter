@@ -38,6 +38,12 @@ class _SettingsState extends State<SettingsScreen> {
             },
           ),
           ListTileSettings(
+            text: "Hotline number",
+            onPressed: () {
+              context.go("/hotline");
+            },
+          ),
+          ListTileSettings(
             text: "Push Notifications",
             onPressed: () {
               developer.log("Push Notifications clicked!");
