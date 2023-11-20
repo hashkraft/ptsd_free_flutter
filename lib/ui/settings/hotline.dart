@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -43,16 +45,45 @@ class _HotlineState extends State<Hotline> {
     });
   }
 
+  Future<void> loadFirebaseData() async {
+    FirebaseFirestore.instance
+        .collection("hotline")
+        .where("zipcode", isEqualTo: UserAdd.zipcode)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        number = "9090909090";
+        setState(() {
+          hotlinePresent = true;
+        });
+      } else {
+        for (var docSnapshot in value.docs) {
+          developer.log(docSnapshot.data().toString());
+          setState(() {
+            hotlinePresent = true;
+          });
+          number = docSnapshot.data()['hotline'];
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
-    loadData();
+    loadFirebaseData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Hotline number")),
+      appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                context.go("/home", extra: 3);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+          title: const Text("Hotline number")),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -70,7 +101,7 @@ class _HotlineState extends State<Hotline> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomColoredText(
-                        text: "Your hotline number:",
+                        text: "Your hotline number is mentioned below",
                         hexColor: "#2C3351",
                         size: 16,
                         weight: 400,

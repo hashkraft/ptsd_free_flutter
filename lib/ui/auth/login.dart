@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
 import 'package:ptsd_free/utils/functions.dart';
@@ -39,7 +40,13 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                context.go("/home", extra: 3);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+          title: const Text("Login")),
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(16),

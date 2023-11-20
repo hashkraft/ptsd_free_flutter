@@ -51,16 +51,16 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               CustomColoredText(
                   text: "Resolve helps people::",
                   hexColor: "#00B803",
                   size: 18,
                   weight: 400),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -69,7 +69,7 @@ class _ResolveState extends State<Resolve> {
                       color: Colors.green,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Identify the memories that fuels stress",
                       hexColor: "#000000",
@@ -79,7 +79,7 @@ class _ResolveState extends State<Resolve> {
               ),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -88,7 +88,7 @@ class _ResolveState extends State<Resolve> {
                       color: Colors.green,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Heal trauma within those memories",
                       hexColor: "#000000",
@@ -98,7 +98,7 @@ class _ResolveState extends State<Resolve> {
               ),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -107,7 +107,7 @@ class _ResolveState extends State<Resolve> {
                       color: Colors.green,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Reduce the intensity of the reaction",
                       hexColor: "#000000",
@@ -115,7 +115,7 @@ class _ResolveState extends State<Resolve> {
                       weight: 400),
                 ],
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               CustomColoredText(
                   text:
                       "This tab includes an assessment, as well as two tailored meditations.",

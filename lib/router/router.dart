@@ -7,9 +7,10 @@ import 'package:ptsd_free/ui/auth/registration.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/ui/add_reminder.dart';
-import 'package:ptsd_free/ui/hotline.dart';
+import 'package:ptsd_free/ui/settings/hotline.dart';
+import 'package:ptsd_free/ui/settings/push_notifications.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
-import 'package:ptsd_free/ui/zipcode.dart';
+import 'package:ptsd_free/ui/settings/zipcode.dart';
 
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
@@ -51,6 +52,12 @@ final GoRouter router = GoRouter(
           path: 'startinfo',
           builder: (BuildContext context, GoRouterState state) {
             return const StartInformation();
+          },
+        ),
+        GoRoute(
+          path: 'pushnotifications',
+          builder: (BuildContext context, GoRouterState state) {
+            return const PushNotifications();
           },
         ),
         GoRoute(

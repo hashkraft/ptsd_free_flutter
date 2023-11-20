@@ -46,6 +46,7 @@ class _SettingsState extends State<SettingsScreen> {
           ListTileSettings(
             text: "Push Notifications",
             onPressed: () {
+              context.go("/pushnotifications");
               developer.log("Push Notifications clicked!");
             },
           ),

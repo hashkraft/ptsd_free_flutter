@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/models/user.dart';
 
 import 'package:ptsd_free/repo/database_helpers.dart';
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Siblings'
   ];
   List<String> dateTimeList = [];
-  bool _switchValue = false;
+
   bool myMedsInfo = true;
   String topImage = "";
   double topImageScale = 1.2;
@@ -68,6 +69,26 @@ class _HomeScreenState extends State<HomeScreen> {
       developer.log("Deleting notification of id: $id");
       await AwesomeNotifications().cancel(id);
     }
+  }
+
+  Future<void> changeRandomPTSD() async {
+    String deviceId = (await getId()) ?? "";
+    await FirebaseFirestore.instance
+        .collection("users-data")
+        .where("deviceId", isEqualTo: deviceId)
+        .get()
+        .then((value) {
+      developer.log("Successfully completed");
+      for (var docSnapshot in value.docs) {
+        developer.log('OLD: ${docSnapshot.id} => ${docSnapshot.data()}');
+        FirebaseFirestore.instance
+            .collection('users-data')
+            .doc(docSnapshot.id)
+            .update({
+          'randomPTSD': UserAdd.randomPTSD,
+        });
+      }
+    });
   }
 
   @override
@@ -101,6 +122,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 pass: docSnapshot.data()['password'],
                 zip: docSnapshot.data()['zipcode'],
                 deviceId: deviceId,
+                push1: docSnapshot.data()['push'],
+                randomPTSD1: docSnapshot.data()['randomPTSD'],
               );
 
               developer.log("Logged in!");
@@ -118,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
     }
-
     super.initState();
   }
 
@@ -272,6 +294,14 @@ Set-up one PTSD trigger at a time.''');
                       },
                     )),
                     onPressed: () {
+                      if (currentStep == 1 &&
+                          UserAdd.push == true &&
+                          widget.currentIndex == 0) {
+                        showSnackbarWithColor(
+                            context,
+                            "Your push notifications are disabled!",
+                            Colors.red);
+                      }
                       setState(() {
                         if (currentStep < 3) {
                           currentStep++;
@@ -311,11 +341,12 @@ Set-up one PTSD trigger at a time.''');
                 ),
                 const SizedBox(height: 10),
                 Switch(
-                  value: _switchValue,
-                  onChanged: (bool value) {
+                  value: UserAdd.randomPTSD,
+                  onChanged: (bool value) async {
                     setState(() {
-                      _switchValue = value;
+                      UserAdd.randomPTSD = value;
                     });
+                    changeRandomPTSD();
                   },
                 ),
               ],
@@ -327,16 +358,16 @@ Set-up one PTSD trigger at a time.''');
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               CustomColoredText(
                   text: "PTSD Stopper helps people:",
                   hexColor: "#C81C01",
                   size: 18,
                   weight: 400),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -345,7 +376,7 @@ Set-up one PTSD trigger at a time.''');
                       color: Colors.red,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Predict Stress",
                       hexColor: "#000000",
@@ -355,7 +386,7 @@ Set-up one PTSD trigger at a time.''');
               ),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -364,7 +395,7 @@ Set-up one PTSD trigger at a time.''');
                       color: Colors.red,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Stop a reaction",
                       hexColor: "#000000",
@@ -374,7 +405,7 @@ Set-up one PTSD trigger at a time.''');
               ),
               Row(
                 children: [
-                  const SizedBox(width: 25),
+                  const SizedBox(width: 15),
                   Container(
                     width: 10,
                     height: 10,
@@ -383,7 +414,7 @@ Set-up one PTSD trigger at a time.''');
                       color: Colors.red,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 10),
                   CustomColoredText(
                       text: "Become Stress smart",
                       hexColor: "#000000",
@@ -391,7 +422,7 @@ Set-up one PTSD trigger at a time.''');
                       weight: 400),
                 ],
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 15),
               CustomColoredText(
                   text:
                       "Touch the Routine PTSD button to stop your most frequent stress reactions ",
@@ -404,7 +435,7 @@ Set-up one PTSD trigger at a time.''');
                   hexColor: "#000000",
                   size: 16,
                   weight: 400),
-              const SizedBox(height: 70),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -483,16 +514,16 @@ Set-up one PTSD trigger at a time.''');
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   CustomColoredText(
                       text: "My Meds helps people:",
                       hexColor: "#005CB8",
                       size: 18,
                       weight: 400),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
-                      const SizedBox(width: 25),
+                      const SizedBox(width: 15),
                       Container(
                         width: 10,
                         height: 10,
@@ -501,7 +532,7 @@ Set-up one PTSD trigger at a time.''');
                           color: Colors.blue,
                         ),
                       ),
-                      const SizedBox(width: 15),
+                      const SizedBox(width: 10),
                       CustomColoredText(
                           text: "Create a meditation practice",
                           hexColor: "#000000",
@@ -511,7 +542,7 @@ Set-up one PTSD trigger at a time.''');
                   ),
                   Row(
                     children: [
-                      const SizedBox(width: 25),
+                      const SizedBox(width: 15),
                       Container(
                         width: 10,
                         height: 10,
@@ -520,7 +551,7 @@ Set-up one PTSD trigger at a time.''');
                           color: Colors.blue,
                         ),
                       ),
-                      const SizedBox(width: 15),
+                      const SizedBox(width: 10),
                       CustomColoredText(
                           text: "Stay consistent with meditations",
                           hexColor: "#000000",
@@ -530,7 +561,7 @@ Set-up one PTSD trigger at a time.''');
                   ),
                   Row(
                     children: [
-                      const SizedBox(width: 25),
+                      const SizedBox(width: 15),
                       Container(
                         width: 10,
                         height: 10,
@@ -539,7 +570,7 @@ Set-up one PTSD trigger at a time.''');
                           color: Colors.blue,
                         ),
                       ),
-                      const SizedBox(width: 15),
+                      const SizedBox(width: 10),
                       CustomColoredText(
                           text: "Reduce stress symptoms",
                           hexColor: "#000000",
@@ -547,22 +578,15 @@ Set-up one PTSD trigger at a time.''');
                           weight: 400),
                     ],
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 15),
                   CustomColoredText(
                       text:
                           "Veterans showed a 50% reduction in stress symptoms after 8-weeks of meditation. Military Medicine (Vol. 176, Num. 6)",
                       hexColor: "#000000",
                       size: 16,
                       weight: 400),
-                  // CustomColoredText(
-                  //     text:
-                  //         "Use it once a week until your stress reactions have diminished.",
-                  //     hexColor: "#000000",
-                  //     size: 16,
-                  //     weight: 400),
                 ],
               ),
-//
               Column(
                 children: [
                   Row(
@@ -582,6 +606,14 @@ Set-up one PTSD trigger at a time.''');
                             setState(() {
                               myMedsInfo = false;
                             });
+                            if (UserAdd.push == true &&
+                                myMedsInfo == false &&
+                                widget.currentIndex == 2) {
+                              showSnackbarWithColor(
+                                  context,
+                                  "Your push notifications are disabled!",
+                                  Colors.red);
+                            }
                           },
                           child: const Text(
                             "Continue",
@@ -601,6 +633,7 @@ Set-up one PTSD trigger at a time.''');
           );
         } else {
           appbarTitle = "Meditation times";
+
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -783,7 +816,9 @@ Set-up one PTSD trigger at a time.''');
                     ],
                   ),
                 )
-              : (resolveStep > 0 && resolveStep < 11)
+              : (resolveStep > 0 &&
+                      resolveStep < 11 &&
+                      widget.currentIndex == 1)
                   ? Positioned(
                       top: 82,
                       left: MediaQuery.of(context).size.width / 10,

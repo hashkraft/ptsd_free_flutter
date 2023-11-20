@@ -45,7 +45,13 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Registration")),
+      appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                context.go("/home", extra: 3);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+          title: const Text("Registration")),
       body: SingleChildScrollView(
         child: Center(
           child: (UserAdd.zipcode.isNotEmpty)
@@ -139,6 +145,8 @@ class _RegistrationState extends State<Registration> {
                                   pass: password,
                                   zip: zipcode,
                                   deviceId: deviceId,
+                                  push1: false,
+                                  randomPTSD1: false,
                                 );
                                 developer.log("Values Set!");
                                 await FirebaseFirestore.instance
@@ -147,7 +155,9 @@ class _RegistrationState extends State<Registration> {
                                   "username": username,
                                   "password": password,
                                   "zipcode": zipcode,
-                                  "deviceId": deviceId
+                                  "deviceId": deviceId,
+                                  "push": false,
+                                  "randomPTSD": false,
                                 }).whenComplete(() {
                                   showSnackbarWithColor(
                                       context, "User Added!", Colors.green);

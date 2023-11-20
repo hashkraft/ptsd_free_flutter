@@ -1,12 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:ptsd_free/firebase_options.dart';
-import 'package:ptsd_free/router/router.dart';
+import 'package:ptsd_free/models/settings.dart';
+import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
+import 'package:ptsd_free/router/router.dart';
+import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
+import 'dart:developer' as developer;
 
 Future<void> main() async {
   await NotificationsService().initializeNotification();
@@ -16,6 +25,7 @@ Future<void> main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
+
   runApp(const MyApp());
 }
 
@@ -60,21 +70,22 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 class StartInformation extends StatefulWidget {
-  const StartInformation({super.key});
+  const StartInformation({
+    super.key,
+  });
 
   @override
   State<StartInformation> createState() => _StartInformationState();
 }
 
 class _StartInformationState extends State<StartInformation> {
-  bool showinfo2 = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          (showinfo2)
+          (UserAdd.randomPTSD)
               ? " 3 Keys to Live PTSD Free"
               : "Stress Stopper Breathwork",
           style: const TextStyle(color: Colors.white),
@@ -82,7 +93,7 @@ class _StartInformationState extends State<StartInformation> {
         backgroundColor: Colors.blue,
       ),
       body: Container(
-        child: (showinfo2 == false)
+        child: (UserAdd.randomPTSD == false)
             ? Column(
                 children: [
                   const SizedBox(height: 16),
@@ -153,7 +164,7 @@ class _StartInformationState extends State<StartInformation> {
                         ),
                         onPressed: () {
                           setState(() {
-                            showinfo2 = true;
+                            UserAdd.randomPTSD = true;
                           });
                         },
                         child: CustomColoredText(
