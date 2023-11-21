@@ -274,6 +274,7 @@ class _AddMeditationState extends State<AddMeditation> {
         body: "Close your eyes",
         payload: {
           "navigate": "true",
+          "duration": "${durationDouble.toInt() * 5}",
         },
       );
       if (reminderBeforeDouble.toInt() > 0) {

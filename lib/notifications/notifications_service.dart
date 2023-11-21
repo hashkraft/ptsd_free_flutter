@@ -3,6 +3,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
+import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/main.dart';
+import 'package:ptsd_free/router/router.dart';
+import 'package:ptsd_free/ui/timer_screen.dart';
+
 class NotificationsService {
   Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
@@ -65,17 +70,20 @@ class NotificationsService {
   }
 
   /// Use this method to detect when the user taps on a notification or action button
+  @pragma("vm:entry-point")
   Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
     final payload = receivedAction.payload ?? {};
+    // developer.log(payload["duration"].toString());
+    if (payload["duration"] == null) {
+      developer.log("No Duration!");
+    } else {
+      developer.log((payload["duration"]).toString());
+      int duration = int.tryParse(payload["duration"]!)!;
+      router.go("/timer", extra: duration);
+    }
     if (payload["navigate"] == "true") {
       developer.log("okay!");
-
-      // MyApp.navigatorKey.currentState?.push(
-      //   MaterialPageRoute(
-      //     builder: (_) => const TimerScreen(),
-      //   ),
-      // );
     }
   }
 

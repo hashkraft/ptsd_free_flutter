@@ -1079,7 +1079,7 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         setState(() {
                           widget.step = 0;
-                          context.go("/timer");
+                          context.go("/timer", extra: 10);
                         });
                       },
                       child: const Text(

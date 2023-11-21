@@ -75,7 +75,9 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'timer',
           builder: (BuildContext context, GoRouterState state) {
-            return const TimerScreen();
+            return TimerScreen(
+              mins: state.extra as int,
+            );
           },
         ),
         GoRoute(

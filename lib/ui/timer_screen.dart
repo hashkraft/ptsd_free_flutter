@@ -1,24 +1,30 @@
-import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer' as developer;
+
 import 'package:audioplayers/audioplayers.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
-import 'dart:developer' as developer;
 
 class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key});
+  final int mins;
+  const TimerScreen({
+    super.key,
+    required this.mins,
+  });
 
   @override
   State<TimerScreen> createState() => _TimerScreenState();
 }
-//autostart
 
 class _TimerScreenState extends State<TimerScreen> {
-  final int _duration = 10 * 60;
+  // final int _duration = widget.mins * 60;
   final CountDownController _controller = CountDownController();
   bool paused = true;
   final player = AudioPlayer();
   late VideoPlayerController _videoController;
+
   Future<void> playAudio() async {
     await player.play(AssetSource("alarm.mp3"));
     player.setReleaseMode(ReleaseMode.loop);
@@ -118,7 +124,7 @@ class _TimerScreenState extends State<TimerScreen> {
               children: [
                 Center(
                   child: CircularCountDownTimer(
-                    duration: _duration,
+                    duration: widget.mins * 60,
                     initialDuration: 0,
                     controller: _controller,
                     width: MediaQuery.of(context).size.width / 2,
@@ -196,11 +202,14 @@ class _TimerScreenState extends State<TimerScreen> {
                   children: [
                     circularButton(
                       title: "Restart",
-                      onPressed: () => _controller.restart(duration: _duration),
+                      onPressed: () =>
+                          _controller.restart(duration: widget.mins * 60),
                     ),
                     circularButton(
                       title: "Done!",
                       onPressed: () {
+                        developer.log(
+                            "Meditation sesson of ${widget.mins} mins completed!");
                         stopAudio();
                         context.go("/aftermeditation");
                       },
