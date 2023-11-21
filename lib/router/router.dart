@@ -57,7 +57,9 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'pushnotifications',
           builder: (BuildContext context, GoRouterState state) {
-            return const PushNotifications();
+            return PushNotifications(
+              push: state.extra as bool,
+            );
           },
         ),
         GoRoute(

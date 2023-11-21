@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool routine = false;
   final db = DatabaseHelper();
   bool random = false;
+  bool randomPTSD = false;
   bool question = true;
   int resolveStep = 0;
   int currentStep = 0;
@@ -71,28 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> changeRandomPTSD() async {
-    String deviceId = (await getId()) ?? "";
-    await FirebaseFirestore.instance
-        .collection("users-data")
-        .where("deviceId", isEqualTo: deviceId)
-        .get()
-        .then((value) {
-      developer.log("Successfully completed");
-      for (var docSnapshot in value.docs) {
-        developer.log('OLD: ${docSnapshot.id} => ${docSnapshot.data()}');
-        FirebaseFirestore.instance
-            .collection('users-data')
-            .doc(docSnapshot.id)
-            .update({
-          'randomPTSD': UserAdd.randomPTSD,
-        });
-      }
-    });
-  }
+  Future<void> changeRandomPTSD() async {}
 
   @override
   void initState() {
+    SettingVariables().getRandomPTSD().then((value) {
+      randomPTSD = value;
+    });
     if (UserAdd.zipcode.isEmpty) {
       Future.delayed(const Duration(seconds: 1), () async {
         String deviceId = (await getId()) ?? "";
@@ -122,8 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 pass: docSnapshot.data()['password'],
                 zip: docSnapshot.data()['zipcode'],
                 deviceId: deviceId,
-                push1: docSnapshot.data()['push'],
-                randomPTSD1: docSnapshot.data()['randomPTSD'],
               );
 
               developer.log("Logged in!");
@@ -294,14 +278,17 @@ Set-up one PTSD trigger at a time.''');
                       },
                     )),
                     onPressed: () {
-                      if (currentStep == 1 &&
-                          UserAdd.push == true &&
-                          widget.currentIndex == 0) {
-                        showSnackbarWithColor(
-                            context,
-                            "Your push notifications are disabled!",
-                            Colors.red);
-                      }
+                      SettingVariables().getPush().then((value) {
+                        if (currentStep == 2 &&
+                            value == true &&
+                            widget.currentIndex == 0) {
+                          showSnackbarWithColor(
+                              context,
+                              "Your push notifications are disabled!",
+                              Colors.red);
+                        }
+                      });
+
                       setState(() {
                         if (currentStep < 3) {
                           currentStep++;
@@ -341,12 +328,12 @@ Set-up one PTSD trigger at a time.''');
                 ),
                 const SizedBox(height: 10),
                 Switch(
-                  value: UserAdd.randomPTSD,
+                  value: randomPTSD,
                   onChanged: (bool value) async {
                     setState(() {
-                      UserAdd.randomPTSD = value;
+                      randomPTSD = value;
+                      SettingVariables().setRandomPTSD(value);
                     });
-                    changeRandomPTSD();
                   },
                 ),
               ],
@@ -606,14 +593,16 @@ Set-up one PTSD trigger at a time.''');
                             setState(() {
                               myMedsInfo = false;
                             });
-                            if (UserAdd.push == true &&
-                                myMedsInfo == false &&
-                                widget.currentIndex == 2) {
-                              showSnackbarWithColor(
-                                  context,
-                                  "Your push notifications are disabled!",
-                                  Colors.red);
-                            }
+                            SettingVariables().getPush().then((value) {
+                              if (value == true &&
+                                  myMedsInfo == false &&
+                                  widget.currentIndex == 2) {
+                                showSnackbarWithColor(
+                                    context,
+                                    "Your push notifications are disabled!",
+                                    Colors.red);
+                              }
+                            });
                           },
                           child: const Text(
                             "Continue",

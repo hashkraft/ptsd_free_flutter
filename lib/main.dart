@@ -54,7 +54,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () async {
       context.go("/startinfo");
     });
     super.initState();
@@ -84,12 +84,26 @@ class StartInformation extends StatefulWidget {
 
 class _StartInformationState extends State<StartInformation> {
   @override
+  void initState() {
+    SettingVariables().getPush().then((val) {
+      SettingVariables().push = val;
+      developer.log("Push: ${SettingVariables().push.toString()}");
+    });
+    SettingVariables().getRandomPTSD().then((val) {
+      SettingVariables().randomPTSD = val;
+      developer.log("Random PTSD: ${SettingVariables().randomPTSD.toString()}");
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          (UserAdd.randomPTSD)
+          (SettingVariables().randomPTSD)
               ? " 3 Keys to Live PTSD Free"
               : "Stress Stopper Breathwork",
           style: const TextStyle(color: Colors.white),
@@ -97,7 +111,7 @@ class _StartInformationState extends State<StartInformation> {
         backgroundColor: Colors.blue,
       ),
       body: Container(
-        child: (UserAdd.randomPTSD == false)
+        child: (SettingVariables().randomPTSD == false)
             ? Column(
                 children: [
                   const SizedBox(height: 16),
@@ -168,7 +182,7 @@ class _StartInformationState extends State<StartInformation> {
                         ),
                         onPressed: () {
                           setState(() {
-                            UserAdd.randomPTSD = true;
+                            SettingVariables().randomPTSD = true;
                           });
                         },
                         child: CustomColoredText(

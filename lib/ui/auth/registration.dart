@@ -145,8 +145,6 @@ class _RegistrationState extends State<Registration> {
                                   pass: password,
                                   zip: zipcode,
                                   deviceId: deviceId,
-                                  push1: false,
-                                  randomPTSD1: false,
                                 );
                                 developer.log("Values Set!");
                                 await FirebaseFirestore.instance
@@ -156,8 +154,6 @@ class _RegistrationState extends State<Registration> {
                                   "password": password,
                                   "zipcode": zipcode,
                                   "deviceId": deviceId,
-                                  "push": false,
-                                  "randomPTSD": false,
                                 }).whenComplete(() {
                                   showSnackbarWithColor(
                                       context, "User Added!", Colors.green);

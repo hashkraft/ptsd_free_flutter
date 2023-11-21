@@ -1,40 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer' as developer;
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
-import 'dart:developer' as developer;
 
 class PushNotifications extends StatefulWidget {
-  const PushNotifications({super.key});
+  final bool push;
+
+  const PushNotifications({
+    super.key,
+    required this.push,
+  });
 
   @override
   State<PushNotifications> createState() => _PushNotificationsState();
 }
 
 class _PushNotificationsState extends State<PushNotifications> {
-  Future<void> changePush() async {
-    String deviceId = (await getId()) ?? "";
-    await FirebaseFirestore.instance
-        .collection("users-data")
-        .where("deviceId", isEqualTo: deviceId)
-        .get()
-        .then((value) {
-      developer.log("Successfully completed");
-      for (var docSnapshot in value.docs) {
-        developer.log('OLD: ${docSnapshot.id} => ${docSnapshot.data()}');
-        FirebaseFirestore.instance
-            .collection('users-data')
-            .doc(docSnapshot.id)
-            .update({
-          'push': UserAdd.push,
-        });
-      }
-    });
+  bool push = false;
+  @override
+  void initState() {
+    push = widget.push;
+    super.initState();
   }
 
   @override
@@ -61,13 +56,14 @@ class _PushNotificationsState extends State<PushNotifications> {
             const SizedBox(height: 10),
             Center(
               child: Switch(
-                value: UserAdd.push,
+                value: push,
                 onChanged: (bool value) {
                   setState(() {
-                    UserAdd.push = value;
+                    push = value;
+
+                    SettingVariables().setPush(value);
                   });
-                  changePush();
-                  developer.log(UserAdd.push.toString());
+                  developer.log(push.toString());
                   if (value == true) {
                     AwesomeNotifications()
                         .listScheduledNotifications()

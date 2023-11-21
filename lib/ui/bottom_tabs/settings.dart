@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
@@ -46,7 +47,10 @@ class _SettingsState extends State<SettingsScreen> {
           ListTileSettings(
             text: "Push Notifications",
             onPressed: () {
-              context.go("/pushnotifications");
+              SettingVariables().getPush().then((value) {
+                context.go("/pushnotifications", extra: value);
+              });
+
               developer.log("Push Notifications clicked!");
             },
           ),
