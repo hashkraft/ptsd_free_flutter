@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/image_with_text.dart';
@@ -137,7 +138,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.80,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -214,7 +215,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "10% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.1),
               const SizedBox(height: 10),
               Row(
@@ -222,7 +230,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -301,7 +309,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "20% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.2),
               const SizedBox(height: 10),
               Row(
@@ -309,7 +324,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -386,7 +401,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "30% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.3),
               const SizedBox(height: 10),
               Row(
@@ -394,7 +416,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -404,8 +426,13 @@ class _ResolveState extends State<Resolve> {
                       )),
                       onPressed: () {
                         // updateValue(widget.step++);
-                        widget.step += 1;
-                        widget.onValueChanged(widget.step);
+                        if (thoughtTrigger.text.isEmpty) {
+                          showSnackbar(context, "Please fill required fields");
+                        } else {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        }
+
                         // setState(() {
                         //   widget.step++;
                         // });
@@ -476,7 +503,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "40% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.4),
               const SizedBox(height: 10),
               Row(
@@ -484,7 +518,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -562,7 +596,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "50% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.5),
               const SizedBox(height: 10),
               Row(
@@ -570,7 +611,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -580,8 +621,12 @@ class _ResolveState extends State<Resolve> {
                       )),
                       onPressed: () {
                         // updateValue(widget.step++);
-                        widget.step += 1;
-                        widget.onValueChanged(widget.step);
+                        if (whoWasInvolved.text.isEmpty) {
+                          showSnackbar(context, "Please fill required fields");
+                        } else {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        }
                         // setState(() {
                         //   widget.step++;
                         // });
@@ -647,7 +692,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "60% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.6),
               const SizedBox(height: 10),
               Row(
@@ -655,7 +707,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -664,8 +716,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        widget.step += 1;
-                        widget.onValueChanged(widget.step);
+                        if (whoTriggered.text.isEmpty) {
+                          showSnackbar(context, "Please fill required fields");
+                        } else {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        }
                         // setState(() {
                         //   widget.step++;
                         // });
@@ -735,7 +791,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "70% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.7),
               const SizedBox(height: 10),
               Row(
@@ -743,7 +806,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -823,7 +886,14 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "80% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
               const LinearProgressIndicator(color: Colors.blue, value: 0.8),
               const SizedBox(height: 10),
               Row(
@@ -831,7 +901,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -902,13 +972,22 @@ class _ResolveState extends State<Resolve> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              CustomColoredText(
+                  text: "90% Completed",
+                  hexColor: "#056AD6",
+                  size: 16,
+                  weight: 400),
+              const SizedBox(height: 10),
+              const LinearProgressIndicator(color: Colors.blue, value: 0.9),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -978,19 +1057,29 @@ class _ResolveState extends State<Resolve> {
               const SizedBox(height: 16),
               ImageWText(
                   text: thoughtTrigger.text.isNotEmpty
-                      ? "${thoughtTrigger.text.substring(0, 12)}..."
+                      ? (thoughtTrigger.text.length > 12)
+                          ? "${thoughtTrigger.text.substring(0, 12)}..."
+                          : thoughtTrigger.text
                       : "Bla bla"),
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // CustomColoredText(
+              //     text: "90% Completed",
+              //     hexColor: "#056AD6",
+              //     size: 16,
+              //     weight: 400),
+              // const SizedBox(height: 10),
               // const LinearProgressIndicator(color: Colors.blue, value: 0.9),
+              // const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
@@ -1068,7 +1157,7 @@ class _ResolveState extends State<Resolve> {
                 children: [
                   const SizedBox(),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(

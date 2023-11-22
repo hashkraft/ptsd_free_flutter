@@ -56,6 +56,7 @@ class _PushNotificationsState extends State<PushNotifications> {
             const SizedBox(height: 10),
             Center(
               child: Switch(
+                activeColor: Colors.blue,
                 value: push,
                 onChanged: (bool value) {
                   setState(() {

@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'package:ptsd_free/firebase_options.dart';
 import 'package:ptsd_free/models/settings.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     //   navigatorKey: navigatorKey,
     // );
     return MaterialApp.router(
+      theme: ThemeData(scaffoldBackgroundColor: HexColor("#EFF8FF")),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );
@@ -54,6 +56,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    SettingVariables().getRandomPTSD().then((val) {
+      developer.log(SettingVariables().randomPTSD.toString());
+    });
     Timer(const Duration(seconds: 3), () async {
       context.go("/startinfo");
     });
@@ -83,35 +88,37 @@ class StartInformation extends StatefulWidget {
 }
 
 class _StartInformationState extends State<StartInformation> {
-  @override
-  void initState() {
-    SettingVariables().getPush().then((val) {
-      SettingVariables().push = val;
-      developer.log("Push: ${SettingVariables().push.toString()}");
-    });
-    SettingVariables().getRandomPTSD().then((val) {
-      SettingVariables().randomPTSD = val;
-      developer.log("Random PTSD: ${SettingVariables().randomPTSD.toString()}");
-    });
+  // @override
+  // void initState() {
+  //   SettingVariables().getPush().then((val) {
+  //     SettingVariables().push = val;
+  //     developer.log("Push: ${SettingVariables().push.toString()}");
+  //   });
+  //   SettingVariables().getRandomPTSD().then((val) {
+  //     SettingVariables().randomPTSD = val;
+  //     developer.log("Random PTSD: ${SettingVariables().randomPTSD.toString()}");
+  //   });
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
-          (SettingVariables().randomPTSD)
-              ? " 3 Keys to Live PTSD Free"
-              : "Stress Stopper Breathwork",
-          style: const TextStyle(color: Colors.white),
+        title: CustomColoredText(
+          text: (SettingVariables().randomPTSD)
+              ? "Stress Stopper Breathwork"
+              : " 3 Keys to Live PTSD Free",
+          hexColor: "#FFFFFF",
+          size: 22,
+          weight: 400,
         ),
         backgroundColor: Colors.blue,
       ),
       body: Container(
-        child: (SettingVariables().randomPTSD == false)
+        child: (SettingVariables().randomPTSD)
             ? Column(
                 children: [
                   const SizedBox(height: 16),
@@ -181,9 +188,7 @@ class _StartInformationState extends State<StartInformation> {
                           ),
                         ),
                         onPressed: () {
-                          setState(() {
-                            SettingVariables().randomPTSD = true;
-                          });
+                          context.go("/home");
                         },
                         child: CustomColoredText(
                           text: "I'm Okay",
@@ -218,62 +223,125 @@ class _StartInformationState extends State<StartInformation> {
                   ),
                 ],
               )
-            : GestureDetector(
-                onTap: () {
-                  // Navigator.of(context).pop();
-                  context.go("/home");
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 32),
-                      CustomColoredText(
-                        text: "1. Stopper Tab",
-                        hexColor: "#F73C00",
-                        size: 18,
-                        weight: 500,
-                      ),
-                      CustomColoredText(
-                        text:
-                            "Will help you learn how to stop your stress reactions. Use it every time you become stressed.",
-                        hexColor: "#2C3351",
-                        size: 18,
-                        weight: 500,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomColoredText(
-                        text: "2. Resolve Tab",
-                        hexColor: "#00B73A",
-                        size: 18,
-                        weight: 500,
-                      ),
-                      CustomColoredText(
-                        text:
-                            "Will help you heal the traumatic memories fueling your stress reactions. Use it weekly.",
-                        hexColor: "#2C3351",
-                        size: 18,
-                        weight: 500,
-                      ),
-                      const SizedBox(height: 16),
-                      CustomColoredText(
-                        text: "3. My Meds",
-                        hexColor: "#0057B8",
-                        size: 18,
-                        weight: 500,
-                      ),
-                      CustomColoredText(
-                        text:
-                            "Will help you structure a meditation practice. Meditate atleast once a day for 20 minutes.",
-                        hexColor: "#2C3351",
-                        size: 18,
-                        weight: 500,
-                      ),
-                    ],
-                  ),
+            : Container(
+                padding: const EdgeInsets.all(16),
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            ImageIcon(
+                              const AssetImage(
+                                  "assets/images/stopper_inactive.png"),
+                              color: HexColor("#D12438"),
+                              size: 26,
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            CustomColoredText(
+                              text: "1. Stopper Tab",
+                              hexColor: "#D12438",
+                              size: 16,
+                              weight: 500,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        CustomColoredText(
+                          text:
+                              "Will help you learn how to stop your stress reactions. Use it every time you become stressed.",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 36),
+                        Row(
+                          children: [
+                            ImageIcon(
+                              const AssetImage(
+                                  "assets/images/resolve_inactive.png"),
+                              color: HexColor("#0B9F4F"),
+                              size: 26,
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            CustomColoredText(
+                              text: "2. Resolve Tab",
+                              hexColor: "#0B9F4F",
+                              size: 16,
+                              weight: 500,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomColoredText(
+                          text:
+                              "Will help you heal the traumatic memories fueling your stress reactions. Use it weekly.",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 36),
+                        Row(
+                          children: [
+                            ImageIcon(
+                              const AssetImage(
+                                  "assets/images/med_inactive.png"),
+                              color: HexColor("#036EB0"),
+                              size: 26,
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            CustomColoredText(
+                              text: "3. My Meds",
+                              hexColor: "#036EB0",
+                              size: 16,
+                              weight: 500,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        CustomColoredText(
+                          text:
+                              "Will help you structure a meditation practice. Meditate atleast once a day for 20 minutes.",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 36),
+                      ],
+                    ),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () {
+                            context.go("/home");
+                          },
+                          child: const Text(
+                            "Go to Home Screen",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                  ],
                 ),
               ),
       ),

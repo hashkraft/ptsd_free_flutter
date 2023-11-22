@@ -14,8 +14,12 @@ class ListTileSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 0, bottom: 0, left: 8, right: 8),
+    return Container(
+      padding: const EdgeInsets.only(top: 0, bottom: 0, left: 16, right: 16),
+      width: MediaQuery.of(context).size.width,
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey)),
+          color: Colors.white),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,7 +31,10 @@ class ListTileSettings extends StatelessWidget {
           ),
           IconButton(
             onPressed: () => onPressed(),
-            icon: const Icon(Icons.arrow_forward_ios),
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey,
+            ),
             iconSize: 16.0,
           )
         ],

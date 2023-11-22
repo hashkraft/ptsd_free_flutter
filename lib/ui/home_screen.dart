@@ -17,6 +17,7 @@ import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
+import 'package:ptsd_free/widgets/custom_text.dart';
 
 class HomeScreen extends StatefulWidget {
   int currentIndex = 0;
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool routine = false;
   final db = DatabaseHelper();
   bool random = false;
-  bool randomPTSD = false;
+  bool randomPTSD = SettingVariables().randomPTSD;
   bool question = true;
   int resolveStep = 0;
   int currentStep = 0;
@@ -146,17 +147,25 @@ class _HomeScreenState extends State<HomeScreen> {
           appbarTitle = "Stop routine PTSD";
           switch (currentStep) {
             case 0:
-              stepBody = const Text(
-                  '''Answer a few questions to identify when your stress is most likely triggered. \n
+              stepBody = CustomColoredText(
+                text:
+                    '''Answer a few questions to identify when your stress is most likely triggered. \n
 The app helps stop the stress by automatically sending you mini-meditations when your reactions are frequent.
 The more thought you'll put into your answers the more stress you'll stop. \n
-Set-up one PTSD trigger at a time.''');
+Set-up one PTSD trigger at a time.''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 500,
+              );
               break;
             case 1:
               stepBody = Column(
                 children: [
-                  const Text(
-                      "What is the one thing that triggers your stress most often?"),
+                  const CustomText(
+                      text:
+                          "What is the one thing that triggers your stress most often?",
+                      weight: 400),
+                  const SizedBox(height: 16),
                   CustomDropDown(
                     items: _businessTypes,
                     value: triggerType,
@@ -172,8 +181,11 @@ Set-up one PTSD trigger at a time.''');
             case 2:
               stepBody = Column(
                 children: [
-                  Text(
-                      'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?'),
+                  CustomText(
+                      text:
+                          'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?',
+                      weight: 400),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -181,17 +193,29 @@ Set-up one PTSD trigger at a time.''');
                         onPressed: () {
                           context.go("/addreminder");
                         },
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.add_rounded),
-                            SizedBox(width: 5),
-                            Text('Add Date Time'),
+                            Icon(
+                              Icons.add_rounded,
+                              color: HexColor("#056AD6"),
+                            ),
+                            const SizedBox(width: 5),
+                            CustomColoredText(
+                                text: "Add Days & Time",
+                                hexColor: "#056AD6",
+                                size: 14,
+                                weight: 500),
+                            // BLUE
                           ],
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text("Edit"),
+                        child: CustomColoredText(
+                            text: "Edit",
+                            hexColor: "#056AD6",
+                            size: 14,
+                            weight: 500), // BLUE
                       ),
                     ],
                   ),
@@ -244,8 +268,11 @@ Set-up one PTSD trigger at a time.''');
               );
               break;
             case 3:
-              stepBody = const Text(
-                  'Great job! \n\nNow remember to breathe along with mini-meditations that automatically appear on your phone to stop routine PTSD reactions.');
+              stepBody = const CustomText(
+                text:
+                    'Great job! \n\nNow remember to breathe along with mini-meditations that automatically appear on your phone to stop routine PTSD reactions.',
+                weight: 400,
+              );
               break;
             default:
               stepBody = const Text('ABCDEG');
@@ -259,7 +286,7 @@ Set-up one PTSD trigger at a time.''');
                 ),
               ),
               Text(
-                "Progress: ${(((currentStep + 1) / 4) * 100).floor()}%",
+                "${(((currentStep + 1) / 4) * 100).floor()}% Completed",
                 style: const TextStyle(color: Colors.blue, fontSize: 16),
               ),
               LinearProgressIndicator(
@@ -269,7 +296,7 @@ Set-up one PTSD trigger at a time.''');
               const SizedBox(height: 10),
               Center(
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   child: ElevatedButton(
                     style: ButtonStyle(backgroundColor:
                         MaterialStateProperty.resolveWith<Color?>(
@@ -299,10 +326,11 @@ Set-up one PTSD trigger at a time.''');
                         }
                       });
                     },
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: CustomColoredText(
+                        text: "Continue",
+                        hexColor: "#FFFFFF",
+                        size: 16,
+                        weight: 400),
                   ),
                 ),
               ),
@@ -318,7 +346,7 @@ Set-up one PTSD trigger at a time.''');
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                const SizedBox(height: 10),
                 CustomColoredText(
                   text:
                       "One-touch instant stress relief on your Android Screen. Touch the PTSD Free icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
@@ -327,14 +355,29 @@ Set-up one PTSD trigger at a time.''');
                   weight: 400,
                 ),
                 const SizedBox(height: 10),
-                Switch(
-                  value: randomPTSD,
-                  onChanged: (bool value) async {
-                    setState(() {
-                      randomPTSD = value;
-                      SettingVariables().setRandomPTSD(value);
-                    });
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Switch(
+                      activeColor: Colors.blue,
+                      value: randomPTSD,
+                      onChanged: (bool value) async {
+                        setState(() {
+                          developer.log("{{{{{}}}}}" + value.toString());
+                          randomPTSD = value;
+                          SettingVariables().setRandomPTSD(value).then((value) {
+                            developer.log("{{{{{}}}}}2" +
+                                SettingVariables().randomPTSD.toString());
+                          });
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 15),
+                    const CustomText(
+                      text: "Switch on to activate",
+                      weight: 500,
+                    )
+                  ],
                 ),
               ],
             ),
@@ -343,129 +386,148 @@ Set-up one PTSD trigger at a time.''');
         if (question) {
           appbarTitle = "PTSD Stopper";
           body = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const SizedBox(height: 10),
-              CustomColoredText(
-                  text: "PTSD Stopper helps people:",
-                  hexColor: "#C81C01",
-                  size: 18,
-                  weight: 400),
-              const SizedBox(height: 15),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
+                  const SizedBox(height: 10),
                   CustomColoredText(
-                      text: "Predict Stress",
+                      text: "PTSD Stopper helps people:",
+                      hexColor: "#C81C01",
+                      size: 18,
+                      weight: 400),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      CustomColoredText(
+                          text: "Predict Stress",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      CustomColoredText(
+                          text: "Stop a reaction",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(width: 15),
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      CustomColoredText(
+                          text: "Become Stress smart",
+                          hexColor: "#000000",
+                          size: 16,
+                          weight: 400),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  CustomColoredText(
+                      text:
+                          "Touch the Routine PTSD button to stop your most frequent stress reactions ",
+                      hexColor: "#000000",
+                      size: 16,
+                      weight: 400),
+                  CustomColoredText(
+                      text:
+                          "Touch the Random PTSD button to stop unpredictable stress reactions ",
                       hexColor: "#000000",
                       size: 16,
                       weight: 400),
                 ],
               ),
-              Row(
+              Column(
                 children: [
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () {
+                            setState(() {
+                              routine = true;
+                              random = false;
+                              question = false;
+                            });
+                          },
+                          child: const Text(
+                            "Routine PTSD",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () {
+                            setState(() {
+                              random = true;
+                              routine = false;
+                              question = false;
+                            });
+                            developer.log(">>>>" +
+                                SettingVariables().randomPTSD.toString());
+                          },
+                          child: const Text(
+                            "Random PTSD",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  CustomColoredText(
-                      text: "Stop a reaction",
-                      hexColor: "#000000",
-                      size: 16,
-                      weight: 400),
-                ],
-              ),
-              Row(
-                children: [
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  CustomColoredText(
-                      text: "Become Stress smart",
-                      hexColor: "#000000",
-                      size: 16,
-                      weight: 400),
-                ],
-              ),
-              const SizedBox(height: 15),
-              CustomColoredText(
-                  text:
-                      "Touch the Routine PTSD button to stop your most frequent stress reactions ",
-                  hexColor: "#000000",
-                  size: 16,
-                  weight: 400),
-              CustomColoredText(
-                  text:
-                      "Touch the Random PTSD button to stop unpredictable stress reactions ",
-                  hexColor: "#000000",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(backgroundColor:
-                        MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        return Colors.red;
-                      },
-                    )),
-                    onPressed: () {
-                      setState(() {
-                        routine = true;
-                        random = false;
-                        question = false;
-                      });
-                    },
-                    child: const Text(
-                      "Routine PTSD",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ButtonStyle(backgroundColor:
-                        MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        return Colors.red;
-                      },
-                    )),
-                    onPressed: () {
-                      setState(() {
-                        random = true;
-                        routine = false;
-                        question = false;
-                      });
-                    },
-                    child: const Text(
-                      "Random PTSD",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ],
@@ -581,7 +643,7 @@ Set-up one PTSD trigger at a time.''');
                     children: [
                       const SizedBox(),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.9,
                         child: ElevatedButton(
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
@@ -641,13 +703,13 @@ Set-up one PTSD trigger at a time.''');
                           children: [
                             Icon(Icons.add_rounded),
                             SizedBox(width: 5),
-                            Text('Add Date Time'),
+                            Text('Add Days & Time'), // blue
                           ],
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text("Edit"),
+                        child: const Text("Edit"), //blue
                       ),
                     ],
                   ),
@@ -785,9 +847,11 @@ Set-up one PTSD trigger at a time.''');
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Image.asset(
-            headerImage,
-          ),
+          (widget.currentIndex == 3 || widget.currentIndex == 4)
+              ? const SizedBox()
+              : Image.asset(
+                  headerImage,
+                ),
           (topImage.isNotEmpty)
               ? Positioned(
                   top: 82,
@@ -858,20 +922,38 @@ Set-up one PTSD trigger at a time.''');
                       icon: const Icon(Icons.arrow_back_ios,
                           color: Colors.white, size: 22),
                     ),
-                    title: Text(appbarTitle,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w400)),
+                    title: CustomColoredText(
+                        text: appbarTitle,
+                        hexColor: "#FFFFFF",
+                        size: 22,
+                        weight: 400),
                   )
-                : AppBar(
-                    elevation: 0,
-                    automaticallyImplyLeading: (question) ? false : true,
-                    backgroundColor: Colors.transparent,
-                    title: Text(appbarTitle,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w400)),
-                  ),
+                : (widget.currentIndex == 3 || widget.currentIndex == 4)
+                    ? AppBar(
+                        elevation: 0,
+                        automaticallyImplyLeading: false,
+                        backgroundColor: Colors.blue,
+                        title: CustomColoredText(
+                            text: appbarTitle,
+                            hexColor: "#FFFFFF",
+                            size: 22,
+                            weight: 400),
+                      )
+                    : AppBar(
+                        elevation: 0,
+                        automaticallyImplyLeading: (question) ? false : true,
+                        backgroundColor: Colors.transparent,
+                        title: CustomColoredText(
+                            text: appbarTitle,
+                            hexColor: "#FFFFFF",
+                            size: 22,
+                            weight: 400),
+                      ),
             body: Padding(
-                padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
+                padding: (widget.currentIndex == 3 || widget.currentIndex == 4)
+                    ? const EdgeInsets.only(top: 0, left: 0, right: 0)
+                    : const EdgeInsets.only(top: 100, left: 15, right: 15),
+                // color: HexColor("#EFF8FF"),
                 child: body),
             bottomNavigationBar: Theme(
               data: Theme.of(context).copyWith(canvasColor: Colors.white),
@@ -882,17 +964,61 @@ Set-up one PTSD trigger at a time.''');
                   showUnselectedLabels: true,
                   currentIndex: widget.currentIndex,
                   elevation: 10.0,
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.stop), label: "Stopper"),
+                        icon: const ImageIcon(
+                          AssetImage("assets/images/stopper_inactive.png"),
+                          color: Colors.grey,
+                        ),
+                        activeIcon: ImageIcon(
+                          const AssetImage(
+                              "assets/images/stopper_inactive.png"),
+                          color: HexColor("#0FA8ED"),
+                        ),
+                        label: "Stopper"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.hearing_outlined), label: "Resolve"),
+                        icon: const ImageIcon(
+                          AssetImage("assets/images/resolve_inactive.png"),
+                          color: Colors.grey,
+                        ),
+                        activeIcon: ImageIcon(
+                          const AssetImage(
+                              "assets/images/resolve_inactive.png"),
+                          color: HexColor("#0FA8ED"),
+                        ),
+                        label: "Resolve"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.mediation_outlined), label: "My Meds"),
+                        icon: const ImageIcon(
+                          AssetImage("assets/images/med_inactive.png"),
+                          color: Colors.grey,
+                        ),
+                        activeIcon: ImageIcon(
+                          const AssetImage("assets/images/med_inactive.png"),
+                          color: HexColor("#0FA8ED"),
+                        ),
+                        label: "My Meds"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.settings), label: "Settings"),
+                        icon: const ImageIcon(
+                          AssetImage("assets/images/settings_inactive.png"),
+                          color: Colors.grey,
+                        ),
+                        activeIcon: ImageIcon(
+                          const AssetImage(
+                              "assets/images/settings_inactive.png"),
+                          color: HexColor("#0FA8ED"),
+                        ),
+                        label: "Settings"),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.more), label: "More"),
+                        icon: const ImageIcon(
+                          AssetImage("assets/images/three_dots_inactive.png"),
+                          color: Colors.grey,
+                        ),
+                        activeIcon: ImageIcon(
+                          const AssetImage(
+                              "assets/images/three_dots_inactive.png"),
+                          color: HexColor("#0FA8ED"),
+                        ),
+                        label: "More"),
                   ]),
             ),
           ),

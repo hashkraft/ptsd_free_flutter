@@ -4,6 +4,8 @@ import 'dart:developer' as developer;
 import 'package:ptsd_free/utils/functions.dart' as functions;
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/repo/database_helpers.dart';
+import 'package:ptsd_free/widgets/custom_colored_text.dart';
+import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:uuid/uuid.dart';
 
 class AddMeditation extends StatefulWidget {
@@ -61,23 +63,20 @@ class _AddMeditationState extends State<AddMeditation> {
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   )),
-              title: const Text(
-                'Add Meditation',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-              ),
+              title: CustomColoredText(
+                  text: "Add Meditation",
+                  hexColor: "#FFFFFF",
+                  size: 16,
+                  weight: 500),
             ),
             body: SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 40),
-                    const Text(
-                      'Select Day(s):',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    const CustomText(text: "Days", weight: 500),
                     Wrap(
                       children: days.map((day) {
                         return Row(
@@ -95,16 +94,13 @@ class _AddMeditationState extends State<AddMeditation> {
                                 });
                               },
                             ),
-                            Text(day),
+                            CustomText(text: day, weight: 400),
                           ],
                         );
                       }).toList(),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Time',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    const CustomText(text: "Time", weight: 400),
                     const SizedBox(height: 10),
                     GestureDetector(
                       onTap: () async {
@@ -127,18 +123,15 @@ class _AddMeditationState extends State<AddMeditation> {
                             width: 2,
                           ),
                         ),
-                        child: Text(
-                          selectedTime1.format(context),
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                        child: CustomText(
+                            text: selectedTime1.format(context), weight: 400),
                       ),
                     ),
                     const SizedBox(height: 10),
+                    CustomText(
+                        text: 'Duration:  ${(durationDouble * 5).toInt()} mins',
+                        weight: 400),
 
-                    Text(
-                      'Duration:  ${(durationDouble * 5).toInt()} mins',
-                      style: TextStyle(fontSize: 16),
-                    ),
                     Slider(
                         divisions: 5,
                         min: 1,
@@ -159,12 +152,11 @@ class _AddMeditationState extends State<AddMeditation> {
                     // ),
                     const SizedBox(height: 10),
 
-                    Text(
-                      (reminderBeforeDouble == 0)
-                          ? 'Reminder before meditation: None'
-                          : 'Reminder before meditation: ${(reminderBeforeDouble * 5).toInt()} mins',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                    CustomText(
+                        text: (reminderBeforeDouble == 0)
+                            ? 'Reminder before meditation: None'
+                            : 'Reminder before meditation: ${(reminderBeforeDouble * 5).toInt()} mins',
+                        weight: 400),
                     Slider(
                         divisions: 6,
                         min: 0,
@@ -194,10 +186,7 @@ class _AddMeditationState extends State<AddMeditation> {
                     //   }).toList(),
                     // ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Sound:',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                    const CustomText(text: "Sound", weight: 400),
                     DropdownButton<String>(
                       value: sound,
                       onChanged: (String? newValue) {
@@ -209,15 +198,14 @@ class _AddMeditationState extends State<AddMeditation> {
                           sounds.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: CustomText(text: value, weight: 400),
                         );
                       }).toList(),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      'Volume:  ${volume.toInt()}%',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+
+                    CustomText(
+                        text: 'Volume:  ${volume.toInt()}%', weight: 400),
                     Slider(
                         divisions: 100,
                         min: 0,
@@ -232,7 +220,7 @@ class _AddMeditationState extends State<AddMeditation> {
                     Center(
                       child: ElevatedButton(
                         onPressed: _onSave,
-                        child: const Text('Save'),
+                        child: const CustomText(text: "Save", weight: 400),
                       ),
                     ),
                   ],

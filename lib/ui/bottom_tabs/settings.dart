@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/models/settings.dart';
+import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
@@ -19,7 +20,9 @@ class _SettingsState extends State<SettingsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          const Text("App"),
+          CustomColoredText(
+              text: "  App", hexColor: "#95999C", size: 16, weight: 400),
+          const SizedBox(height: 8),
           ListTileSettings(
             text: "Registration",
             onPressed: () {
@@ -72,8 +75,10 @@ class _SettingsState extends State<SettingsScreen> {
               developer.log("My Meds clicked!");
             },
           ),
-          const SizedBox(height: 16),
-          const Text("Support"),
+          const SizedBox(height: 20),
+          CustomColoredText(
+              text: "  Support", hexColor: "#95999C", size: 16, weight: 400),
+          const SizedBox(height: 8),
           ListTileSettings(
             text: "Website - Link",
             onPressed: () {
@@ -86,8 +91,10 @@ class _SettingsState extends State<SettingsScreen> {
               developer.log("Report a Problem - Email clicked!");
             },
           ),
-          const SizedBox(height: 16),
-          const Text("Privacy"),
+          const SizedBox(height: 20),
+          CustomColoredText(
+              text: "  Privacy", hexColor: "#95999C", size: 16, weight: 400),
+          const SizedBox(height: 8),
           ListTileSettings(
             text: "Privacy Policy",
             onPressed: () {
