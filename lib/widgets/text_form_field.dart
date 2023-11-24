@@ -35,18 +35,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               labelStyle: GoogleFonts.dmSans(fontSize: 16),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   style: BorderStyle.solid,
-                  width: 2,
-                  color: Colors.grey[300]!,
+                  width: 1,
+                  color: Colors.white,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   style: BorderStyle.solid,
-                  width: 2,
-                  color: Colors.grey[300]!,
+                  width: 1,
+                  color: Colors.white,
                 ),
               ),
               suffixIcon: IconButton(
@@ -77,18 +77,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               labelStyle: GoogleFonts.dmSans(fontSize: 16),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   style: BorderStyle.solid,
-                  width: 2,
-                  color: Colors.grey[300]!,
+                  width: 1,
+                  color: Colors.white,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(3),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   style: BorderStyle.solid,
-                  width: 2,
-                  color: Colors.grey[300]!,
+                  width: 1,
+                  color: Colors.white,
                 ),
               ),
             ),

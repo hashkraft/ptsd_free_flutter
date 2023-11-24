@@ -7,8 +7,12 @@ import 'package:ptsd_free/ui/auth/registration.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/ui/add_reminder.dart';
+import 'package:ptsd_free/ui/more/coaching.dart';
+import 'package:ptsd_free/ui/more/membership.dart';
 import 'package:ptsd_free/ui/settings/hotline.dart';
+import 'package:ptsd_free/ui/settings/privacy_policy.dart';
 import 'package:ptsd_free/ui/settings/push_notifications.dart';
+import 'package:ptsd_free/ui/start_information.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/ui/settings/zipcode.dart';
 
@@ -49,9 +53,15 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: 'startinfo',
+          path: 'startinfo1',
           builder: (BuildContext context, GoRouterState state) {
-            return const StartInformation();
+            return const StartInfo1();
+          },
+        ),
+        GoRoute(
+          path: 'startinfo2',
+          builder: (BuildContext context, GoRouterState state) {
+            return const StartInfo2();
           },
         ),
         GoRoute(
@@ -77,9 +87,29 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'timer',
           builder: (BuildContext context, GoRouterState state) {
+            var val = state.extra as List;
             return TimerScreen(
-              mins: state.extra as int,
+              mins: val[0],
+              sound: val[1],
             );
+          },
+        ),
+        GoRoute(
+          path: 'membership',
+          builder: (BuildContext context, GoRouterState state) {
+            return const Membership();
+          },
+        ),
+        GoRoute(
+          path: 'coaching',
+          builder: (BuildContext context, GoRouterState state) {
+            return Coaching();
+          },
+        ),
+        GoRoute(
+          path: 'privacypolicy',
+          builder: (BuildContext context, GoRouterState state) {
+            return const PrivacyPolicy();
           },
         ),
         GoRoute(

@@ -6,15 +6,18 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:video_player/video_player.dart';
+
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
-import 'package:video_player/video_player.dart';
 
 class TimerScreen extends StatefulWidget {
   final int mins;
+  final String sound;
   const TimerScreen({
     super.key,
     required this.mins,
+    required this.sound,
   });
 
   @override
@@ -29,16 +32,35 @@ class _TimerScreenState extends State<TimerScreen> {
   late VideoPlayerController _videoController;
 
   Future<void> playAudio() async {
-    await player.play(AssetSource("iamokay.mp3"));
-    player.setReleaseMode(ReleaseMode.loop);
+    switch (widget.sound) {
+      case "Silence":
+        break;
+      case "I'm Okay":
+        await player.play(AssetSource("iamokay.mp3"));
+        player.setReleaseMode(ReleaseMode.loop);
+        break;
+      case "sound3":
+        break;
+      case "sound4":
+        break;
+      default:
+        break;
+    }
+
+    // await player.play(AssetSource("iamokay.mp3"));
+    // player.setReleaseMode(ReleaseMode.loop);
   }
 
   Future<void> pauseAudio() async {
-    await player.pause();
+    if (widget.sound != "Silence") {
+      await player.pause();
+    }
   }
 
   Future<void> stopAudio() async {
-    await player.stop();
+    if (widget.sound != "Silence") {
+      await player.stop();
+    }
   }
 
   @override
@@ -54,14 +76,21 @@ class _TimerScreenState extends State<TimerScreen> {
 
               _videoController.initialize();
               _videoController.play();
+              _videoController.setLooping(true);
             });
     });
 
     Future.delayed(const Duration(milliseconds: 50), () {
       _controller.start();
       playAudio();
-      _videoController.play();
+      // _videoController.play();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _videoController.dispose();
   }
 
   Widget circularButton({required String title, VoidCallback? onPressed}) {
@@ -83,13 +112,20 @@ class _TimerScreenState extends State<TimerScreen> {
           onPressed: () {
             setState(() {
               paused = !paused;
+              // if (_videoController.value.isPlaying) {
+              //   _videoController.pause();
+              // } else {
+              //   _videoController.play();
+              // }
+
               if (paused) {
                 _controller.pause();
-                _videoController.pause();
+
                 pauseAudio();
               } else {
+                developer.log("hit");
                 _controller.resume();
-                _videoController.play();
+
                 playAudio();
               }
             });
@@ -106,6 +142,12 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (paused) {
+      _videoController.pause();
+    } else {
+      _videoController.play();
+      _videoController.setLooping(true);
+    }
     developer.log(_videoController.value.isPlaying.toString());
     return Scaffold(
       appBar: AppBar(
@@ -120,7 +162,9 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Stack(
           children: [
             AspectRatio(
-              aspectRatio: _videoController.value.aspectRatio,
+              // aspectRatio: _videoController.value.aspectRatio,
+              aspectRatio: (MediaQuery.of(context).size.width) /
+                  (MediaQuery.of(context).size.height),
               child: VideoPlayer(_videoController),
             ),
             Column(
@@ -130,27 +174,17 @@ class _TimerScreenState extends State<TimerScreen> {
                     const SizedBox(height: 20),
                     const CustomText(
                         text: "Total Meditation Time", weight: 500),
-                    // CustomText(text: "${widget.mins} mins", weight: 500),
-                    // CustomColoredText(
-                    //     text: "Total Meditation Time",
-                    //     hexColor: "#FFFFFF",
-                    //     size: 16,
-                    //     weight: 500),
                     CustomColoredText(
                         text: "${widget.mins} mins",
                         hexColor: "#2C3351",
                         size: 26,
                         weight: 500),
-                    // Row(
-                    //   children: [],
-                    // ),
                   ],
                 ),
                 Center(
                   child: CircularCountDownTimer(
                     duration: widget.mins * 60, // 10
-                    initialDuration:
-                        0, //0       (10*60 - seconds) -> 08:00 -> 7:59
+                    initialDuration: 0,
                     controller: _controller,
                     width: MediaQuery.of(context).size.width / 2,
                     height: MediaQuery.of(context).size.height / 2.5,
@@ -203,63 +237,39 @@ class _TimerScreenState extends State<TimerScreen> {
                         }
                         return "$minStr:$secStr";
                       }
-                      //  else if (duration.inSeconds < 60) {
-                      //   return Function.apply(
-                      //       defaultFormatterFunction, [duration]);
-                      // } else {
-                      //   String minutearm = (duration.inMinutes < 10)
-                      //       ? "0${duration.inMinutes}"
-                      //       : "${duration.inMinutes}";
-                      //   int secondarmInt =
-                      //       duration.inSeconds % (duration.inMinutes * 60);
-                      //   String secondarm = (secondarmInt < 10)
-                      //       ? "0$secondarmInt"
-                      //       : "$secondarmInt";
-                      //   return "$minutearm:$secondarm";
-                      //   // return Function.apply(defaultFormatterFunction, [duration]);
-                      // }
                     },
                   ),
+                ),
+                bigButton(),
+                const SizedBox(height: 10),
+                circularButton(
+                  title: "Done",
+                  onPressed: () {
+                    developer.log(
+                        "Meditation sesson of ${widget.mins} mins completed!");
+                    stopAudio();
+                    context.go("/aftermeditation");
+                  },
                 ),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 //   children: [
                 //     circularButton(
-                //       title: "Start",
-                //       onPressed: () => _controller.start(),
+                //       title: "Restart",
+                //       onPressed: () =>
+                //           _controller.restart(duration: widget.mins * 60),
                 //     ),
                 //     circularButton(
-                //       title: "Pause",
-                //       onPressed: () => _controller.pause(),
+                //       title: "Done",
+                //       onPressed: () {
+                //         developer.log(
+                //             "Meditation sesson of ${widget.mins} mins completed!");
+                //         stopAudio();
+                //         context.go("/aftermeditation");
+                //       },
                 //     ),
                 //   ],
                 // ),
-                // const SizedBox(height: 10),
-                // circularButton(
-                //   title: "Resume",
-                //   onPressed: () => _controller.resume(),
-                // ),
-                bigButton(),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    circularButton(
-                      title: "Restart",
-                      onPressed: () =>
-                          _controller.restart(duration: widget.mins * 60),
-                    ),
-                    circularButton(
-                      title: "Done",
-                      onPressed: () {
-                        developer.log(
-                            "Meditation sesson of ${widget.mins} mins completed!");
-                        stopAudio();
-                        context.go("/aftermeditation");
-                      },
-                    ),
-                  ],
-                ),
               ],
             ),
           ],

@@ -2,6 +2,7 @@ import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/widgets/custom_text.dart';
 
 class CustomDropDown extends StatelessWidget {
   final List<String> items;
@@ -21,11 +22,11 @@ class CustomDropDown extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
         color: HexColor("#FCFCFC"),
-        border: Border.all(
-          color: Colors.grey[300]!,
-          style: BorderStyle.solid,
-          width: 1,
-        ),
+        // border: Border.all(
+        //   color: Colors.grey[300]!,
+        //   style: BorderStyle.solid,
+        //   width: 1,
+        // ),
       ),
       child: DropdownButton<String>(
         value: value,
@@ -49,7 +50,7 @@ class CustomDropDown extends StatelessWidget {
             value: item,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              child: Text(item),
+              child: CustomText(text: item, weight: 400),
             ),
           );
         }).toList(),

@@ -11,7 +11,7 @@ class AfterMeditation extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Image.asset(
-            'assets/images/stopper_screen_head_bg.png',
+            'assets/images/resolve_header_bg.png',
           ),
           Positioned(
             top: 80,
@@ -21,7 +21,7 @@ class AfterMeditation extends StatelessWidget {
               children: [
                 const SizedBox(),
                 Image.asset(
-                  'assets/images/stress_top_icon_min.png',
+                  'assets/images/resolve_top_icon_min.png',
                   scale: 1.2,
                   alignment: Alignment.center,
                 ),
@@ -35,14 +35,14 @@ class AfterMeditation extends StatelessWidget {
               elevation: 0,
               backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
-              title: const Text(
-                "Congratulations",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-              ),
+              title: CustomColoredText(
+                  text: "Congratulations",
+                  hexColor: "#FFFFFF",
+                  size: 22,
+                  weight: 400),
             ),
             body: Padding(
-              padding: EdgeInsets.only(top: 100, left: 15, right: 15),
+              padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -52,7 +52,7 @@ class AfterMeditation extends StatelessWidget {
                         text: '''Congratulations!\n
 You faced your stress head on with PTSD Free. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
                         hexColor: "#2C3351",
-                        size: 14,
+                        size: 16,
                         weight: 400,
                       ),
                       const SizedBox(height: 20),
@@ -70,7 +70,7 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                         children: [
                           const SizedBox(),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.7,
+                            width: MediaQuery.of(context).size.width * 0.9,
                             child: ElevatedButton(
                               style: ButtonStyle(backgroundColor:
                                   MaterialStateProperty.resolveWith<Color?>(
@@ -81,11 +81,11 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                               onPressed: () {
                                 context.go("/home");
                               },
-                              child: Text(
-                                "Continue",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                              child: CustomColoredText(
+                                text: "Continue",
+                                hexColor: "#FFFFFF",
+                                size: 16,
+                                weight: 500,
                               ),
                             ),
                           ),

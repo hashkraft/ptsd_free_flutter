@@ -1168,7 +1168,7 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         setState(() {
                           widget.step = 0;
-                          context.go("/timer", extra: 10);
+                          context.go("/timer", extra: [10, "I'm Okay"]);
                         });
                       },
                       child: const Text(

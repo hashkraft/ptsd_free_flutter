@@ -5,6 +5,8 @@ import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
+import 'package:url_launcher/url_launcher.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -61,18 +63,21 @@ class _SettingsState extends State<SettingsScreen> {
             text: "Stopper Breathe Button",
             onPressed: () {
               developer.log("Stopper Breathe Button clicked!");
+              context.go("/home", extra: 0);
             },
           ),
           ListTileSettings(
             text: "Stopper Mini Meds",
             onPressed: () {
               developer.log("Stopper Mini Meds clicked!");
+              context.go("/home", extra: 0);
             },
           ),
           ListTileSettings(
             text: "My Meds",
             onPressed: () {
               developer.log("My Meds clicked!");
+              context.go("/home", extra: 2);
             },
           ),
           const SizedBox(height: 20),
@@ -81,14 +86,23 @@ class _SettingsState extends State<SettingsScreen> {
           const SizedBox(height: 8),
           ListTileSettings(
             text: "Website - Link",
-            onPressed: () {
+            onPressed: () async {
               developer.log("Website - Link clicked!");
+              final Uri url = Uri.parse('https://flutter.dev');
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
             },
           ),
           ListTileSettings(
             text: "Report a Problem - Email",
-            onPressed: () {
+            onPressed: () async {
               developer.log("Report a Problem - Email clicked!");
+              final Uri url = Uri.parse(
+                  'mailto:developer@hashkraft.com?subject=News&body=New%20plugin');
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
             },
           ),
           const SizedBox(height: 20),
@@ -99,6 +113,7 @@ class _SettingsState extends State<SettingsScreen> {
             text: "Privacy Policy",
             onPressed: () {
               developer.log("Privacy Policy clicked!");
+              context.go("/privacypolicy");
             },
           ),
         ],

@@ -5,6 +5,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/models/user.dart';
@@ -36,45 +37,56 @@ class _PushNotificationsState extends State<PushNotifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: HexColor("#23C4F1"),
         leading: IconButton(
             onPressed: () {
               context.go("/home", extra: 3);
             },
-            icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-        title: const Text("Zipcode"),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_sharp,
+              color: Colors.white,
+            )),
+        title: CustomColoredText(
+            text: "Push Notifications",
+            hexColor: "#FFFFFF",
+            size: 22,
+            weight: 500),
       ),
       body: Container(
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            CustomColoredText(
-              text: "Push Notifications",
-              hexColor: "#2C3351",
-              size: 16,
-              weight: 500,
-            ),
             const SizedBox(height: 10),
-            Center(
-              child: Switch(
-                activeColor: Colors.blue,
-                value: push,
-                onChanged: (bool value) {
-                  setState(() {
-                    push = value;
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomColoredText(
+                  text: "Enable Push Notifications",
+                  hexColor: "#2C3351",
+                  size: 16,
+                  weight: 500,
+                ),
+                Switch(
+                  activeColor: Colors.blue,
+                  value: push,
+                  onChanged: (bool value) {
+                    setState(() {
+                      push = value;
 
-                    SettingVariables().setPush(value);
-                  });
-                  developer.log(push.toString());
-                  if (value == true) {
-                    AwesomeNotifications()
-                        .listScheduledNotifications()
-                        .then((value) {
-                      developer.log(value.toString());
-                      developer.log(value.length.toString());
+                      SettingVariables().setPush(value);
                     });
-                  } else {}
-                },
-              ),
+                    developer.log(push.toString());
+                    if (value == true) {
+                      AwesomeNotifications()
+                          .listScheduledNotifications()
+                          .then((value) {
+                        developer.log(value.toString());
+                        developer.log(value.length.toString());
+                      });
+                    } else {}
+                  },
+                ),
+              ],
             ),
           ],
         ),

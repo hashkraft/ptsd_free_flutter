@@ -74,17 +74,24 @@ class NotificationsService {
   Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
     final payload = receivedAction.payload ?? {};
-    // developer.log(payload["duration"].toString());
     if (payload["duration"] == null) {
       developer.log("No Duration!");
     } else {
-      developer.log((payload["duration"]).toString());
+      developer.log("Duration: ${(payload["duration"]).toString()}");
+      developer.log("Sound: ${payload["sound"].toString()}");
       int duration = int.tryParse(payload["duration"]!)!;
-      router.go("/timer", extra: duration);
+      router.go("/timer", extra: [duration, payload["sound"]]);
     }
-    if (payload["navigate"] == "true") {
-      developer.log("okay!");
-    }
+    // if (payload["navigate"] == "true") {
+    //   developer.log("okay!");
+    // }
+    // if (payload["sound"] == null) {
+    //   developer.log("okay!");
+    // } else if (payload["sound"] == "Silence") {
+    //   developer.log(payload["sound"].toString());
+    // } else {
+    //   developer.log(payload["sound"].toString());
+    // }
   }
 
   Future<void> scheduleNotification({

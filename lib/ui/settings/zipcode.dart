@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
@@ -46,12 +47,17 @@ class _ZipcodeState extends State<ZipCode> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: HexColor("#23C4F1"),
         leading: IconButton(
             onPressed: () {
               context.go("/home", extra: 3);
             },
-            icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-        title: const Text("Zipcode"),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_sharp,
+              color: Colors.white,
+            )),
+        title: CustomColoredText(
+            text: "Zipcode", hexColor: "#FFFFFF", size: 22, weight: 500),
       ),
       body: (UserAdd.zipcode.isEmpty)
           ? const Center(child: Text("Please register or login to continue"))

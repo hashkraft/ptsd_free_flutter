@@ -50,12 +50,24 @@ class _HotlineState extends State<Hotline> {
         .collection("hotline")
         .where("zipcode", isEqualTo: UserAdd.zipcode)
         .get()
-        .then((value) {
+        .then((value) async {
       if (value.docs.isEmpty) {
-        number = "9090909090";
-        setState(() {
-          hotlinePresent = true;
-        });
+        // final document = FirebaseFirestore.instance.doc("hotline/default");
+        var collection = FirebaseFirestore.instance.collection('hotline');
+        var docSnapshot = await collection.doc('default').get();
+        if (docSnapshot.exists) {
+          Map<String, dynamic>? data = docSnapshot.data();
+          var value = data?['default-hotline'];
+          developer.log(value);
+
+          setState(() {
+            number = value;
+          });
+        }
+        // number = "9090909090";
+        // setState(() {
+        //   hotlinePresent = true;
+        // });
       } else {
         for (var docSnapshot in value.docs) {
           developer.log(docSnapshot.data().toString());
@@ -78,12 +90,18 @@ class _HotlineState extends State<Hotline> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                context.go("/home", extra: 3);
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-          title: const Text("Hotline number")),
+        backgroundColor: HexColor("#23C4F1"),
+        leading: IconButton(
+            onPressed: () {
+              context.go("/home", extra: 3);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new_sharp,
+              color: Colors.white,
+            )),
+        title: CustomColoredText(
+            text: "Hotline Number", hexColor: "#FFFFFF", size: 22, weight: 500),
+      ),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -96,47 +114,40 @@ class _HotlineState extends State<Hotline> {
               weight: 400,
             ),
             const SizedBox(height: 16),
-            (hotlinePresent)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomColoredText(
-                        text: "Your hotline number is mentioned below",
-                        hexColor: "#2C3351",
-                        size: 16,
-                        weight: 400,
-                      ),
-                      const SizedBox(height: 24),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            launchDialer();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: HexColor("#848684"),
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.all(16),
-                            child: CustomColoredText(
-                              text: number,
-                              hexColor: "#27A000",
-                              size: 18,
-                              weight: 500,
-                            ),
-                          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomColoredText(
+                  text: "Your hotline number is mentioned below",
+                  hexColor: "#2C3351",
+                  size: 16,
+                  weight: 400,
+                ),
+                const SizedBox(height: 24),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      launchDialer();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: HexColor("#848684"),
                         ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
-                  )
-                : CustomColoredText(
-                    text: "No hotlines available for your zipcode",
-                    hexColor: "#2C3351",
-                    size: 16,
-                    weight: 400,
+                      padding: const EdgeInsets.all(16),
+                      child: CustomColoredText(
+                        text: number,
+                        hexColor: "#27A000",
+                        size: 18,
+                        weight: 500,
+                      ),
+                    ),
                   ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

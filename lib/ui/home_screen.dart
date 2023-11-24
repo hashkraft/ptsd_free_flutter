@@ -155,7 +155,7 @@ The more thought you'll put into your answers the more stress you'll stop. \n
 Set-up one PTSD trigger at a time.''',
                 hexColor: "#2C3351",
                 size: 16,
-                weight: 500,
+                weight: 400,
               );
               break;
             case 1:
@@ -691,7 +691,11 @@ Set-up one PTSD trigger at a time.''',
             children: [
               Column(
                 children: [
-                  const Text('Add the date and time to wish to meditate.'),
+                  const CustomText(
+                    text: "Add the date and time to wish to meditate.",
+                    weight: 400,
+                  ),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -699,17 +703,28 @@ Set-up one PTSD trigger at a time.''',
                         onPressed: () {
                           context.go("/addmeditation");
                         },
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.add_rounded),
-                            SizedBox(width: 5),
-                            Text('Add Days & Time'), // blue
+                            Icon(
+                              Icons.add_rounded,
+                              color: HexColor("#056AD6"),
+                            ),
+                            const SizedBox(width: 5),
+                            CustomColoredText(
+                                text: "Add Days & Time",
+                                hexColor: "#056AD6",
+                                size: 14,
+                                weight: 500), // blue
                           ],
                         ),
                       ),
                       TextButton(
                         onPressed: () {},
-                        child: const Text("Edit"), //blue
+                        child: CustomColoredText(
+                            text: "Edit",
+                            hexColor: "#056AD6",
+                            size: 14,
+                            weight: 500), //blue
                       ),
                     ],
                   ),
@@ -848,9 +863,23 @@ Set-up one PTSD trigger at a time.''',
       body: Stack(
         children: <Widget>[
           (widget.currentIndex == 3 || widget.currentIndex == 4)
-              ? const SizedBox()
+              ? Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).viewPadding.top,
+                      color: HexColor("#23C4F1"),
+                    ),
+                    Image.asset(
+                      "assets/images/header_bg.png",
+                      // scale: 1.5,
+                      // height: 150,
+                      // width: MediaQuery.of(context).size.width,
+                    ),
+                  ],
+                )
               : Image.asset(
                   headerImage,
+                  fit: BoxFit.fitWidth,
                 ),
           (topImage.isNotEmpty)
               ? Positioned(
@@ -876,9 +905,9 @@ Set-up one PTSD trigger at a time.''',
                       top: 82,
                       left: MediaQuery.of(context).size.width / 10,
                       child: CustomColoredText(
-                        text: "Step $resolveStep:",
+                        text: "Step $resolveStep",
                         hexColor: "#FFFFFF",
-                        size: 22,
+                        size: 18,
                         weight: 500,
                       ),
                     )
@@ -932,7 +961,8 @@ Set-up one PTSD trigger at a time.''',
                     ? AppBar(
                         elevation: 0,
                         automaticallyImplyLeading: false,
-                        backgroundColor: Colors.blue,
+                        // backgroundColor: HexColor("#23C4F1"),
+                        backgroundColor: Colors.transparent,
                         title: CustomColoredText(
                             text: appbarTitle,
                             hexColor: "#FFFFFF",
