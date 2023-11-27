@@ -47,141 +47,146 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
   Future<void> _onSave() async {
-    if (day1) {
-      selectedDays.add("Monday");
-    }
-    if (day2) {
-      selectedDays.add("Tuesday");
-    }
-    if (day3) {
-      selectedDays.add("Wednesday");
-    }
-    if (day4) {
-      selectedDays.add("Thursday");
-    }
-    if (day5) {
-      selectedDays.add("Friday");
-    }
-    if (day6) {
-      selectedDays.add("Saturday");
-    }
-    if (day7) {
-      selectedDays.add("Sunday");
-    }
-    final String uuid = const Uuid().v4();
-    List<int> days = functions.convertDaysToIndices(selectedDays);
-    developer.log('Days in indices: $days');
-    DatabaseHelper()
-        .insertStopper(
-      selectedDays: selectedDays,
-      selectedReminderWhen: selectedReminderWhen,
-      selectedTime1: selectedTime1,
-      selectedTime2: selectedTime2,
-      uuid: uuid,
-    )
-        .then((value) async {
-      switch (selectedReminderWhen) {
-        case "During the stress":
-          await NotificationsService().scheduleAlarm(
-            timeofday: selectedTime1,
-            days: days,
-            idList: value,
-            title: "Breathe now!",
-            body: "Please relax yourself",
-            meditate: false,
-          );
-
-          break;
-        case "3 minutes before":
-          if ((selectedTime1.minute - 3) > 0) {
-            TimeOfDay timebefore = TimeOfDay(
-                hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
-
-            await NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days,
-              idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
-              meditate: false,
-            );
-          } else {
-            TimeOfDay timebefore =
-                TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
-            final days1 = functions.daysOneDayBefore(days);
-
-            await NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days1,
-              idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
-              meditate: false,
-            );
-          }
-          break;
-        case "Both":
-          await NotificationsService().scheduleAlarm(
-            timeofday: selectedTime1,
-            days: days,
-            idList: value,
-            title: "Breathe now!",
-            body: "Please relax yourself",
-            meditate: false,
-          );
-          if ((selectedTime1.minute - 3) > 0) {
-            TimeOfDay timebefore = TimeOfDay(
-                hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
-
-            await NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days,
-              idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
-              meditate: false,
-            );
-          } else {
-            TimeOfDay timebefore =
-                TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
-            final days1 = functions.daysOneDayBefore(days);
-
-            await NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days1,
-              idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
-              meditate: false,
-            );
-          }
-          break;
-        default:
-          await NotificationsService().scheduleAlarm(
-            timeofday: selectedTime1,
-            days: days,
-            idList: value,
-            title: "Breathe now!",
-            body: "Please relax yourself",
-            meditate: false,
-          );
-          break;
+    if (selectedDays.isEmpty) {
+      functions.showSnackbarWithColor(
+          context, "Please select day(s)", Colors.red);
+    } else {
+      if (day1) {
+        selectedDays.add("Monday");
       }
-      // await NotificationsService().scheduleAlarm(
-      //   timeofday: selectedTime1,
-      //   days: days,
-      //   idList: value,
-      //   title: "Breathe now!",
-      //   body: "Please relax yourself",
-      //   meditate: false,
-      // );
-    });
+      if (day2) {
+        selectedDays.add("Tuesday");
+      }
+      if (day3) {
+        selectedDays.add("Wednesday");
+      }
+      if (day4) {
+        selectedDays.add("Thursday");
+      }
+      if (day5) {
+        selectedDays.add("Friday");
+      }
+      if (day6) {
+        selectedDays.add("Saturday");
+      }
+      if (day7) {
+        selectedDays.add("Sunday");
+      }
+      final String uuid = const Uuid().v4();
+      List<int> days = functions.convertDaysToIndices(selectedDays);
+      developer.log('Days in indices: $days');
+      DatabaseHelper()
+          .insertStopper(
+        selectedDays: selectedDays,
+        selectedReminderWhen: selectedReminderWhen,
+        selectedTime1: selectedTime1,
+        selectedTime2: selectedTime2,
+        uuid: uuid,
+      )
+          .then((value) async {
+        switch (selectedReminderWhen) {
+          case "During the stress":
+            await NotificationsService().scheduleAlarm(
+              timeofday: selectedTime1,
+              days: days,
+              idList: value,
+              title: "Breathe now!",
+              body: "Please relax yourself",
+              meditate: false,
+            );
 
-    developer.log('Selected Days: $selectedDays');
-    developer.log('Reminder when: $selectedReminderWhen');
-    developer.log('Time 1: $selectedTime1');
-    developer.log('Time 2: $selectedTime2');
-    context.go("/home");
+            break;
+          case "3 minutes before":
+            if ((selectedTime1.minute - 3) > 0) {
+              TimeOfDay timebefore = TimeOfDay(
+                  hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
+
+              await NotificationsService().scheduleAlarm(
+                timeofday: timebefore,
+                days: days,
+                idList: value,
+                title: "Breathe now!",
+                body: "Please relax yourself",
+                meditate: false,
+              );
+            } else {
+              TimeOfDay timebefore =
+                  TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
+              final days1 = functions.daysOneDayBefore(days);
+
+              await NotificationsService().scheduleAlarm(
+                timeofday: timebefore,
+                days: days1,
+                idList: value,
+                title: "Breathe now!",
+                body: "Please relax yourself",
+                meditate: false,
+              );
+            }
+            break;
+          case "Both":
+            await NotificationsService().scheduleAlarm(
+              timeofday: selectedTime1,
+              days: days,
+              idList: value,
+              title: "Breathe now!",
+              body: "Please relax yourself",
+              meditate: false,
+            );
+            if ((selectedTime1.minute - 3) > 0) {
+              TimeOfDay timebefore = TimeOfDay(
+                  hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
+
+              await NotificationsService().scheduleAlarm(
+                timeofday: timebefore,
+                days: days,
+                idList: value,
+                title: "Breathe now!",
+                body: "Please relax yourself",
+                meditate: false,
+              );
+            } else {
+              TimeOfDay timebefore =
+                  TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
+              final days1 = functions.daysOneDayBefore(days);
+
+              await NotificationsService().scheduleAlarm(
+                timeofday: timebefore,
+                days: days1,
+                idList: value,
+                title: "Breathe now!",
+                body: "Please relax yourself",
+                meditate: false,
+              );
+            }
+            break;
+          default:
+            await NotificationsService().scheduleAlarm(
+              timeofday: selectedTime1,
+              days: days,
+              idList: value,
+              title: "Breathe now!",
+              body: "Please relax yourself",
+              meditate: false,
+            );
+            break;
+        }
+        // await NotificationsService().scheduleAlarm(
+        //   timeofday: selectedTime1,
+        //   days: days,
+        //   idList: value,
+        //   title: "Breathe now!",
+        //   body: "Please relax yourself",
+        //   meditate: false,
+        // );
+      });
+
+      developer.log('Selected Days: $selectedDays');
+      developer.log('Reminder when: $selectedReminderWhen');
+      developer.log('Time 1: $selectedTime1');
+      developer.log('Time 2: $selectedTime2');
+      context.go("/home");
+    }
   }
 
   @override

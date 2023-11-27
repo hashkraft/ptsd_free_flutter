@@ -275,86 +275,92 @@ class _AddMeditationState extends State<AddMeditation> {
   }
 
   void _onSave() {
-    if (day1) {
-      selectedDays.add("Monday");
-    }
-    if (day2) {
-      selectedDays.add("Tuesday");
-    }
-    if (day3) {
-      selectedDays.add("Wednesday");
-    }
-    if (day4) {
-      selectedDays.add("Thursday");
-    }
-    if (day5) {
-      selectedDays.add("Friday");
-    }
-    if (day6) {
-      selectedDays.add("Saturday");
-    }
-    if (day7) {
-      selectedDays.add("Sunday");
-    }
-    developer.log(selectedDays.toString());
-    developer.log(selectedTime1.toString());
-    developer.log((durationDouble.toInt() * 5).toString());
-    developer.log((reminderBeforeDouble.toInt() * 5).toString());
-    developer.log(sound);
-    developer.log(volume.toInt().toString());
-    context.go("/home", extra: 2);
-    List<int> days = functions.convertDaysToIndices(selectedDays);
-    DatabaseHelper()
-        .insertMeditation(
-      selectedDays: selectedDays,
-      selectedTime1: selectedTime1,
-      duration: (durationDouble.toInt() * 5),
-      reminderBefore: (reminderBeforeDouble.toInt() * 5),
-      sound: sound,
-      volume: volume.toInt(),
-      uuid: const Uuid().v4(),
-    )
-        .then((value) {
-      NotificationsService().scheduleAlarm(
-        timeofday: selectedTime1,
-        days: days,
-        idList: value,
-        meditate: true,
-        title: "Meditate now!",
-        body: "Close your eyes",
-        payload: {
-          "navigate": "true",
-          "duration": "${durationDouble.toInt() * 5}",
-          "sound": sound
-        },
-      );
-      if (reminderBeforeDouble.toInt() > 0) {
-        final minutes = reminderBeforeDouble.toInt() * 5;
-        if ((selectedTime1.minute - minutes) > 0) {
-          TimeOfDay timebefore = TimeOfDay(
-              hour: selectedTime1.hour, minute: selectedTime1.minute - minutes);
-          NotificationsService().scheduleAlarm(
-            timeofday: timebefore,
-            days: days,
-            idList: value,
-            meditate: true,
-            title: "Reminder before meditation",
-            body: "Start in $minutes mins later",
-          );
-        } else {
-          TimeOfDay timebefore = TimeOfDay(
-              hour: 23, minute: 60 + (selectedTime1.minute - minutes));
-          final days1 = functions.daysOneDayBefore(days);
-          NotificationsService().scheduleAlarm(
-            timeofday: timebefore,
-            days: days1,
-            meditate: true,
-            idList: value,
-            title: "Reminder before meditation",
-            body: "Start in $minutes mins later",
-          );
-        }
+    if (selectedDays.isEmpty) {
+      functions.showSnackbarWithColor(
+          context, "Please select day(s)", Colors.red);
+    } else {
+      if (day1) {
+        selectedDays.add("Monday");
       }
-    });
+      if (day2) {
+        selectedDays.add("Tuesday");
+      }
+      if (day3) {
+        selectedDays.add("Wednesday");
+      }
+      if (day4) {
+        selectedDays.add("Thursday");
+      }
+      if (day5) {
+        selectedDays.add("Friday");
+      }
+      if (day6) {
+        selectedDays.add("Saturday");
+      }
+      if (day7) {
+        selectedDays.add("Sunday");
+      }
+      developer.log(selectedDays.toString());
+      developer.log(selectedTime1.toString());
+      developer.log((durationDouble.toInt() * 5).toString());
+      developer.log((reminderBeforeDouble.toInt() * 5).toString());
+      developer.log(sound);
+      developer.log(volume.toInt().toString());
+      context.go("/home", extra: 2);
+      List<int> days = functions.convertDaysToIndices(selectedDays);
+      DatabaseHelper()
+          .insertMeditation(
+        selectedDays: selectedDays,
+        selectedTime1: selectedTime1,
+        duration: (durationDouble.toInt() * 5),
+        reminderBefore: (reminderBeforeDouble.toInt() * 5),
+        sound: sound,
+        volume: volume.toInt(),
+        uuid: const Uuid().v4(),
+      )
+          .then((value) {
+        NotificationsService().scheduleAlarm(
+          timeofday: selectedTime1,
+          days: days,
+          idList: value,
+          meditate: true,
+          title: "Meditate now!",
+          body: "Close your eyes",
+          payload: {
+            "navigate": "true",
+            "duration": "${durationDouble.toInt() * 5}",
+            "sound": sound
+          },
+        );
+        if (reminderBeforeDouble.toInt() > 0) {
+          final minutes = reminderBeforeDouble.toInt() * 5;
+          if ((selectedTime1.minute - minutes) > 0) {
+            TimeOfDay timebefore = TimeOfDay(
+                hour: selectedTime1.hour,
+                minute: selectedTime1.minute - minutes);
+            NotificationsService().scheduleAlarm(
+              timeofday: timebefore,
+              days: days,
+              idList: value,
+              meditate: true,
+              title: "Reminder before meditation",
+              body: "Start in $minutes mins later",
+            );
+          } else {
+            TimeOfDay timebefore = TimeOfDay(
+                hour: 23, minute: 60 + (selectedTime1.minute - minutes));
+            final days1 = functions.daysOneDayBefore(days);
+            NotificationsService().scheduleAlarm(
+              timeofday: timebefore,
+              days: days1,
+              meditate: true,
+              idList: value,
+              title: "Reminder before meditation",
+              body: "Start in $minutes mins later",
+            );
+          }
+        }
+      });
+    }
   }
 }

@@ -146,7 +146,8 @@ class _ResolveState extends State<Resolve> {
                           return Colors.red;
                         },
                       )),
-                      onPressed: () {
+                      onPressed: () async {
+                        // await setPincodeRange(10301, 10314, "3477673889");
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
 
@@ -1168,7 +1169,8 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         setState(() {
                           widget.step = 0;
-                          context.go("/timer", extra: [10, "I'm Okay"]);
+                          context.go("/timer",
+                              extra: [10, "I'm Okay", thoughtTrigger.text]);
                         });
                       },
                       child: const Text(

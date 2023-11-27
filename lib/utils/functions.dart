@@ -1,9 +1,28 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
+import 'dart:developer' as developer;
+
+Future<void> setPincodeRange(int lb, int ub, String num) async {
+  for (int pin = lb; pin <= ub; pin++) {
+    await FirebaseFirestore.instance
+        .collection("hotline")
+        .add({"zipcode": pin.toString(), "hotline": num}).then((value) {
+      developer.log("$pin Added");
+    });
+  }
+}
+
+Future<void> setSinglePincode(String pin, String num) async {
+  await FirebaseFirestore.instance
+      .collection("hotline")
+      .add({"zipcode": pin, "hotline": num});
+}
 
 Future<String?> getId() async {
   var deviceInfo = DeviceInfoPlugin();

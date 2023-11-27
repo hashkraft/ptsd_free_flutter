@@ -407,7 +407,9 @@ class _StartInfo1State extends State<StartInfo1> {
                     },
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.go("/coaching");
+                },
                 child: CustomColoredText(
                   text: "Help me",
                   hexColor: "#FFFFFF",

@@ -14,10 +14,12 @@ import 'package:ptsd_free/widgets/custom_text.dart';
 class TimerScreen extends StatefulWidget {
   final int mins;
   final String sound;
-  const TimerScreen({
+  String imageText;
+  TimerScreen({
     super.key,
     required this.mins,
     required this.sound,
+    this.imageText = "",
   });
 
   @override
@@ -248,7 +250,7 @@ class _TimerScreenState extends State<TimerScreen> {
                     developer.log(
                         "Meditation sesson of ${widget.mins} mins completed!");
                     stopAudio();
-                    context.go("/aftermeditation");
+                    context.go("/aftermeditation", extra: widget.imageText);
                   },
                 ),
                 // Row(

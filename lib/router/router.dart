@@ -88,10 +88,18 @@ final GoRouter router = GoRouter(
           path: 'timer',
           builder: (BuildContext context, GoRouterState state) {
             var val = state.extra as List;
-            return TimerScreen(
-              mins: val[0],
-              sound: val[1],
-            );
+            if (val.length == 3) {
+              return TimerScreen(
+                mins: val[0],
+                sound: val[1],
+                imageText: val[2],
+              );
+            } else {
+              return TimerScreen(
+                mins: val[0],
+                sound: val[1],
+              );
+            }
           },
         ),
         GoRoute(
@@ -133,7 +141,13 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'aftermeditation',
           builder: (BuildContext context, GoRouterState state) {
-            return const AfterMeditation();
+            if (state.extra == null) {
+              return AfterMeditation();
+            } else {
+              return AfterMeditation(
+                imageText: state.extra as String,
+              );
+            }
           },
         ),
         GoRoute(

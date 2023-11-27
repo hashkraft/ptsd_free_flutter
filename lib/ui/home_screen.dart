@@ -1005,7 +1005,7 @@ Set-up one PTSD trigger at a time.''',
                               "assets/images/stopper_inactive.png"),
                           color: HexColor("#0FA8ED"),
                         ),
-                        label: "Stopper"),
+                        label: "Breathe"),
                     BottomNavigationBarItem(
                         icon: const ImageIcon(
                           AssetImage("assets/images/resolve_inactive.png"),
@@ -1016,7 +1016,7 @@ Set-up one PTSD trigger at a time.''',
                               "assets/images/resolve_inactive.png"),
                           color: HexColor("#0FA8ED"),
                         ),
-                        label: "Resolve"),
+                        label: "Heal"),
                     BottomNavigationBarItem(
                         icon: const ImageIcon(
                           AssetImage("assets/images/med_inactive.png"),
@@ -1026,7 +1026,7 @@ Set-up one PTSD trigger at a time.''',
                           const AssetImage("assets/images/med_inactive.png"),
                           color: HexColor("#0FA8ED"),
                         ),
-                        label: "My Meds"),
+                        label: "Meditate"),
                     BottomNavigationBarItem(
                         icon: const ImageIcon(
                           AssetImage("assets/images/settings_inactive.png"),
