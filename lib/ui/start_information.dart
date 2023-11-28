@@ -468,7 +468,7 @@ class StartInfo2 extends StatelessWidget {
                       width: 16,
                     ),
                     CustomColoredText(
-                      text: "1. Stopper Tab",
+                      text: "1. Breathe Tab",
                       hexColor: "#D12438",
                       size: 16,
                       weight: 500,
@@ -497,7 +497,7 @@ class StartInfo2 extends StatelessWidget {
                       width: 16,
                     ),
                     CustomColoredText(
-                      text: "2. Resolve Tab",
+                      text: "2. Heal Tab",
                       hexColor: "#0B9F4F",
                       size: 16,
                       weight: 500,
@@ -524,7 +524,7 @@ class StartInfo2 extends StatelessWidget {
                       width: 16,
                     ),
                     CustomColoredText(
-                      text: "3. My Meds",
+                      text: "3. Meditate",
                       hexColor: "#036EB0",
                       size: 16,
                       weight: 500,

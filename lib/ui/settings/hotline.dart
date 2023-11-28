@@ -111,19 +111,27 @@ class _HotlineState extends State<Hotline> {
               text: "Your current zipcode: ${UserAdd.zipcode}",
               hexColor: "#2C3351",
               size: 16,
-              weight: 400,
+              weight: 700,
             ),
             const SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomColoredText(
-                  text: "Your hotline number is mentioned below",
+                  text:
+                      "Please contact the hotline number provided below for assistance if needed.",
                   hexColor: "#2C3351",
                   size: 16,
                   weight: 400,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+                CustomColoredText(
+                  text: "Tap on the number below to initial a direct call.",
+                  hexColor: "#2C3351",
+                  size: 16,
+                  weight: 400,
+                ),
+                const SizedBox(height: 32),
                 Center(
                   child: GestureDetector(
                     onTap: () {
@@ -131,17 +139,28 @@ class _HotlineState extends State<Hotline> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         border: Border.all(
-                          color: HexColor("#848684"),
+                          color: HexColor("#BBBBBB"),
                         ),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       padding: const EdgeInsets.all(16),
-                      child: CustomColoredText(
-                        text: number,
-                        hexColor: "#27A000",
-                        size: 18,
-                        weight: 500,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.call,
+                            color: HexColor("#0E9E50"),
+                          ),
+                          const SizedBox(width: 16),
+                          CustomColoredText(
+                            text: number,
+                            hexColor: "#0E9E50",
+                            size: 18,
+                            weight: 500,
+                          ),
+                        ],
                       ),
                     ),
                   ),

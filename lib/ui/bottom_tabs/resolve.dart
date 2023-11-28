@@ -24,14 +24,84 @@ class Resolve extends StatefulWidget {
 
 class _ResolveState extends State<Resolve> {
   String trigger = "Places";
-  List<String> triggerOptions = ["Places", "Sounds"];
+  List<String> triggerOptions = [
+    "Places",
+    "Sounds",
+    "Smell",
+    "People",
+    "Family",
+    "Siblings",
+    "Your Parents",
+    "Your Spouse",
+    "Your Relationship",
+    "Children",
+    "Work",
+    "Your Boss",
+    "Co-workers",
+    "Strangers",
+    "Neighbours",
+    "Worries",
+    "Recurring Memories",
+    "Your Commute",
+    "School",
+    "Teachers",
+    "Peers",
+    "Finances",
+    "Situations",
+    "Waiting In Line",
+    "Personal Health Issues",
+    "Authority Figures",
+    "Others"
+  ];
   String emotion = "Anger";
-  List<String> emotionsOptions = ["Anger", "Anxiety"];
+  List<String> emotionsOptions = [
+    "Anger",
+    "Frustrated",
+    "Confused",
+    "Hatred",
+    "Rage",
+    "Irritable",
+    "Guilt",
+    "Shame",
+    "Mistrust",
+    "Betrayal",
+    "Depressed",
+    "Sad",
+    "Hopeless",
+    "Overwhelmed",
+    "Lonely",
+    "Alienated",
+    "Jealous",
+    "Anxiety",
+    "Panic",
+    "Others"
+  ];
   String feelWhere = "Head";
   String feelWhereNow = "Head";
-  List<String> feelWhereOptions = ["Head", "Stomach"];
-  String howOld = "Child";
-  List<String> howOldOptions = ["Child", "Teen"];
+  List<String> feelWhereOptions = [
+    "Head",
+    "Neck",
+    "Throat",
+    "Shoulders",
+    "Chest",
+    "Stomach",
+    "Solar Plexus",
+    "Back",
+    "Waist",
+    "Hips",
+    "Lower Body"
+  ];
+
+  String howOld = "A Child";
+  List<String> howOldOptions = [
+    "A Child",
+    "A Teenager",
+    "In your 20s",
+    "In your 30s",
+    "In your 40s",
+    "In your 50s",
+    "60+"
+  ];
   TextEditingController thoughtTrigger = TextEditingController();
   TextEditingController whoWasInvolved = TextEditingController();
   TextEditingController whoTriggered = TextEditingController();
@@ -54,7 +124,7 @@ class _ResolveState extends State<Resolve> {
             children: [
               const SizedBox(height: 10),
               CustomColoredText(
-                  text: "Resolve helps people::",
+                  text: "Heal helps people:",
                   hexColor: "#00B803",
                   size: 18,
                   weight: 400),
@@ -147,7 +217,7 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () async {
-                        // await setPincodeRange(10301, 10314, "3477673889");
+                        // await setPincodeRange(10399, 10409, "3477673889");
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
 
@@ -396,7 +466,7 @@ class _ResolveState extends State<Resolve> {
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: thoughtTrigger,
-                hintText: "My thoughts here",
+                hintText: "I have to get out of here",
                 obscureText: false,
               ),
             ],
@@ -591,7 +661,7 @@ class _ResolveState extends State<Resolve> {
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: whoWasInvolved,
-                hintText: "Who was involved?",
+                hintText: "Please write openly",
                 obscureText: false,
               ),
             ],
@@ -687,7 +757,7 @@ class _ResolveState extends State<Resolve> {
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: whoTriggered,
-                hintText: "Who triggered?",
+                hintText: "My Father, A Violent Crime, etc.",
                 obscureText: false,
               ),
             ],
@@ -970,6 +1040,10 @@ class _ResolveState extends State<Resolve> {
                 weight: 400,
               ),
               const SizedBox(height: 16),
+              Center(
+                child: Image.asset("assets/images/stress_stopper_breath.png",
+                    width: MediaQuery.of(context).size.width * 0.60),
+              )
             ],
           ),
           Column(

@@ -25,18 +25,18 @@ class _SettingsState extends State<SettingsScreen> {
           CustomColoredText(
               text: "  App", hexColor: "#95999C", size: 16, weight: 400),
           const SizedBox(height: 8),
-          ListTileSettings(
-            text: "Registration",
-            onPressed: () {
-              context.go("/registration");
-            },
-          ),
-          ListTileSettings(
-            text: "Login",
-            onPressed: () {
-              context.go("/login");
-            },
-          ),
+          // ListTileSettings(
+          //   text: "Registration",
+          //   onPressed: () {
+          //     context.go("/registration");
+          //   },
+          // ),
+          // ListTileSettings(
+          //   text: "Login",
+          //   onPressed: () {
+          //     context.go("/login");
+          //   },
+          // ),
           ListTileSettings(
             text: "Zipcode",
             onPressed: () {
@@ -44,21 +44,21 @@ class _SettingsState extends State<SettingsScreen> {
             },
           ),
           ListTileSettings(
-            text: "Hotline number",
+            text: "Hotline Number",
             onPressed: () {
               context.go("/hotline");
             },
           ),
-          ListTileSettings(
-            text: "Push Notifications",
-            onPressed: () {
-              SettingVariables().getPush().then((value) {
-                context.go("/pushnotifications", extra: value);
-              });
+          // ListTileSettings(
+          //   text: "Push Notifications",
+          //   onPressed: () {
+          //     SettingVariables().getPush().then((value) {
+          //       context.go("/pushnotifications", extra: value);
+          //     });
 
-              developer.log("Push Notifications clicked!");
-            },
-          ),
+          //     developer.log("Push Notifications clicked!");
+          //   },
+          // ),
           ListTileSettings(
             text: "Stopper Breathe Button",
             onPressed: () {
@@ -74,7 +74,7 @@ class _SettingsState extends State<SettingsScreen> {
             },
           ),
           ListTileSettings(
-            text: "My Meds",
+            text: "Meditate",
             onPressed: () {
               developer.log("My Meds clicked!");
               context.go("/home", extra: 2);
@@ -85,21 +85,21 @@ class _SettingsState extends State<SettingsScreen> {
               text: "  Support", hexColor: "#95999C", size: 16, weight: 400),
           const SizedBox(height: 8),
           ListTileSettings(
-            text: "Website - Link",
+            text: "Website",
             onPressed: () async {
               developer.log("Website - Link clicked!");
-              final Uri url = Uri.parse('https://flutter.dev');
+              final Uri url = Uri.parse('https://www.stressisgone.com/');
               if (!await launchUrl(url)) {
                 throw Exception('Could not launch $url');
               }
             },
           ),
           ListTileSettings(
-            text: "Report a Problem - Email",
+            text: "Report a Problem",
             onPressed: () async {
               developer.log("Report a Problem - Email clicked!");
               final Uri url = Uri.parse(
-                  'mailto:developer@hashkraft.com?subject=News&body=New%20plugin');
+                  'mailto:info@stressisgone.com?subject=News&body=New%20plugin');
               if (!await launchUrl(url)) {
                 throw Exception('Could not launch $url');
               }
@@ -116,6 +116,7 @@ class _SettingsState extends State<SettingsScreen> {
               context.go("/privacypolicy");
             },
           ),
+          const SizedBox(height: 32),
         ],
       ),
     );

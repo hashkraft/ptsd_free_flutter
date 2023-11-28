@@ -48,14 +48,15 @@ class _RegistrationState extends State<Registration> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: HexColor("#23C4F1"),
-        leading: IconButton(
-            onPressed: () {
-              context.go("/home", extra: 3);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new_sharp,
-              color: Colors.white,
-            )),
+        automaticallyImplyLeading: false,
+        // leading: IconButton(
+        //     onPressed: () {
+        //       context.go("/home", extra: 3);
+        //     },
+        //     icon: const Icon(
+        //       Icons.arrow_back_ios_new_sharp,
+        //       color: Colors.white,
+        //     )),
         title: CustomColoredText(
             text: "Registration", hexColor: "#FFFFFF", size: 22, weight: 500),
       ),
@@ -69,7 +70,7 @@ class _RegistrationState extends State<Registration> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomColoredText(
-                        text: "Username: ",
+                        text: "Email: ",
                         hexColor: "#2C3351",
                         size: 16,
                         weight: 500,
@@ -77,7 +78,7 @@ class _RegistrationState extends State<Registration> {
                       const SizedBox(height: 8),
                       CustomTextFormField(
                         controller: usernameController,
-                        hintText: "Username",
+                        hintText: "Email",
                         obscureText: false,
                       ),
                       const SizedBox(height: 16),
@@ -124,59 +125,75 @@ class _RegistrationState extends State<Registration> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const SizedBox(),
-                          ElevatedButton(
-                            onPressed: () async {
-                              developer.log(usernameController.text);
-                              developer.log(zipcodeController.text);
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: ElevatedButton(
+                              style: ButtonStyle(backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                                  return Colors.blue;
+                                },
+                              )),
+                              onPressed: () async {
+                                developer.log(usernameController.text);
+                                developer.log(zipcodeController.text);
 
-                              if (passwordController.text !=
-                                  cPasswordController.text) {
-                                showSnackbarWithColor(
-                                    context,
-                                    "Passwords do not match!",
-                                    Colors.redAccent);
-                              } else if (usernameController.text.isEmpty ||
-                                  passwordController.text.isEmpty ||
-                                  cPasswordController.text.isEmpty ||
-                                  zipcodeController.text.isEmpty) {
-                                showSnackbarWithColor(context,
-                                    "Please fill fields!", Colors.redAccent);
-                              } else {
-                                String username = usernameController.text;
-                                String password = passwordController.text;
-                                String zipcode = zipcodeController.text;
-                                String deviceId = (await getId()) ?? "";
-                                // await createAccount();
-                                UserAdd.setValues(
-                                  user: username,
-                                  pass: password,
-                                  zip: zipcode,
-                                  deviceId: deviceId,
-                                );
-                                developer.log("Values Set!");
-                                await FirebaseFirestore.instance
-                                    .collection('users-data')
-                                    .add({
-                                  "username": username,
-                                  "password": password,
-                                  "zipcode": zipcode,
-                                  "deviceId": deviceId,
-                                }).whenComplete(() {
+                                if (passwordController.text !=
+                                    cPasswordController.text) {
                                   showSnackbarWithColor(
-                                      context, "User Added!", Colors.green);
-                                  developer.log("Row Added!");
-                                  usernameController.clear();
-                                  passwordController.clear();
-                                  cPasswordController.clear();
-                                  zipcodeController.clear();
-                                  Future.delayed(const Duration(seconds: 1),
-                                      () {
-                                    context.go("/home");
+                                      context,
+                                      "Passwords do not match!",
+                                      Colors.redAccent);
+                                } else if (usernameController.text.isEmpty ||
+                                    passwordController.text.isEmpty ||
+                                    cPasswordController.text.isEmpty ||
+                                    zipcodeController.text.isEmpty) {
+                                  showSnackbarWithColor(context,
+                                      "Please fill fields!", Colors.redAccent);
+                                } else {
+                                  String username = usernameController.text;
+                                  String password = passwordController.text;
+                                  String zipcode = zipcodeController.text;
+                                  String deviceId = (await getId()) ?? "";
+                                  // await createAccount();
+                                  UserAdd.setValues(
+                                    user: username,
+                                    pass: password,
+                                    zip: zipcode,
+                                    deviceId: deviceId,
+                                  );
+                                  developer.log("Values Set!");
+                                  await FirebaseFirestore.instance
+                                      .collection('users-data')
+                                      .add({
+                                    "username": username,
+                                    "password": password,
+                                    "zipcode": zipcode,
+                                    "deviceId": deviceId,
+                                  }).whenComplete(() {
+                                    showSnackbarWithColor(
+                                        context,
+                                        "User Successfully Registered",
+                                        Colors.green);
+                                    developer.log("Row Added!");
+                                    usernameController.clear();
+                                    passwordController.clear();
+                                    cPasswordController.clear();
+                                    zipcodeController.clear();
+                                    Future.delayed(const Duration(seconds: 1),
+                                        () {
+                                      context.go("/home");
+                                    });
                                   });
-                                });
-                              }
-                            },
-                            child: const Text("Submit"),
+                                }
+                              },
+                              child: CustomColoredText(
+                                text: "Register",
+                                hexColor: "#FFFFFF",
+                                size: 16,
+                                weight: 500,
+                              ),
+                            ),
                           ),
                           const SizedBox(),
                         ],

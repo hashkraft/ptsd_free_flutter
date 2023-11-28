@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool question = true;
   int resolveStep = 0;
   int currentStep = 0;
+  bool swipeinfo = false;
   Widget body = Container();
   Widget stepBody = Container();
   String triggerType = "Places";
@@ -144,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             question = false;
           });
-          appbarTitle = "Stop routine PTSD";
+          appbarTitle = "Back";
           switch (currentStep) {
             case 0:
               stepBody = CustomColoredText(
@@ -159,6 +160,7 @@ Set-up one PTSD trigger at a time.''',
               );
               break;
             case 1:
+              appbarTitle = "Stop Routine PTSD";
               stepBody = Column(
                 children: [
                   const CustomText(
@@ -179,13 +181,21 @@ Set-up one PTSD trigger at a time.''',
               );
               break;
             case 2:
+              appbarTitle = "Step 1";
               stepBody = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
                       text:
                           'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?',
                       weight: 400),
                   const SizedBox(height: 16),
+                  CustomColoredText(
+                      text: "Note: Swipe right to delete the saved reminder",
+                      hexColor: "#969696",
+                      size: 14,
+                      weight: 400),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -268,6 +278,7 @@ Set-up one PTSD trigger at a time.''',
               );
               break;
             case 3:
+              appbarTitle = "Step 2";
               stepBody = const CustomText(
                 text:
                     'Great job! \n\nNow remember to breathe along with mini-meditations that automatically appear on your phone to stop routine PTSD reactions.',
@@ -384,7 +395,7 @@ Set-up one PTSD trigger at a time.''',
           );
         }
         if (question) {
-          appbarTitle = "PTSD Stopper";
+          appbarTitle = "Breathe";
           body = Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -393,7 +404,7 @@ Set-up one PTSD trigger at a time.''',
                 children: [
                   const SizedBox(height: 10),
                   CustomColoredText(
-                      text: "PTSD Stopper helps people:",
+                      text: "Breathe helps people:",
                       hexColor: "#C81C01",
                       size: 18,
                       weight: 400),
@@ -537,10 +548,16 @@ Set-up one PTSD trigger at a time.''',
         break;
       case 1:
         headerImage = 'assets/images/resolve_header_bg.png';
-        if (resolveStep <= 10 && resolveStep > 1) {
+        if (resolveStep <= 9 && resolveStep > 1) {
           appbarTitle = "Step ${resolveStep - 1}";
+        } else if (resolveStep == 10) {
+          appbarTitle = "Let's Get Started";
+        } else if (resolveStep == 11) {
+          appbarTitle = "Think Back";
+        } else if (resolveStep == 12) {
+          appbarTitle = "Prepare To Meditate";
         } else {
-          appbarTitle = "Resolve";
+          appbarTitle = "Heal";
         }
         body = Resolve(
           step: resolveStep,
@@ -555,7 +572,7 @@ Set-up one PTSD trigger at a time.''',
       case 2:
         headerImage = 'assets/images/my_meds_header_bg.png';
         if (myMedsInfo) {
-          appbarTitle = "My Meds";
+          appbarTitle = "Meditate";
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -565,7 +582,7 @@ Set-up one PTSD trigger at a time.''',
                 children: [
                   const SizedBox(height: 10),
                   CustomColoredText(
-                      text: "My Meds helps people:",
+                      text: "Meditate helps people:",
                       hexColor: "#005CB8",
                       size: 18,
                       weight: 400),
@@ -683,19 +700,26 @@ Set-up one PTSD trigger at a time.''',
             ],
           );
         } else {
-          appbarTitle = "Meditation times";
+          appbarTitle = "Meditate";
 
           body = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CustomText(
                     text: "Add the date and time to wish to meditate.",
                     weight: 400,
                   ),
                   const SizedBox(height: 16),
+                  CustomColoredText(
+                      text: "Note: Swipe right to delete the saved meditation",
+                      hexColor: "#969696",
+                      size: 14,
+                      weight: 400),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -730,52 +754,64 @@ Set-up one PTSD trigger at a time.''',
                   ),
                   const SizedBox(height: 10),
                   FutureBuilder(
-                      future: db.getMeditations(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                final meditation = snapshot.data![index];
-                                developer.log(meditation.toString());
-                                return Dismissible(
-                                  key: Key(meditation['id'].toString()),
-                                  direction: DismissDirection.startToEnd,
-                                  onDismissed: (DismissDirection dd) {
-                                    db.deleteMeditation(meditation['id']).then(
-                                        (value) =>
-                                            developer.log(value.toString()));
-                                    removeMeditation(meditation['uuid']);
-                                  },
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(meditation['days']),
-                                        Text(meditation['time'].toString())
-                                      ],
-                                    ),
-                                    subtitle: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            "Duration: ${meditation['duration'].toString()} mins"),
-                                        (meditation['reminderbefore'] == 0)
-                                            ? const Text("Don't remind")
-                                            : Text(
-                                                "Remind before: ${meditation['reminderbefore'].toString()} mins")
-                                      ],
-                                    ),
+                    future: db.getMeditations(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        // Future.delayed(const Duration(seconds: 1), () {
+                        //   Fluttertoast.showToast(
+                        //       msg: "Swipe to dismiss",
+                        //       toastLength: Toast.LENGTH_SHORT,
+                        //       gravity: ToastGravity.CENTER,
+                        //       timeInSecForIosWeb: 1,
+                        //       backgroundColor: Colors.red,
+                        //       textColor: Colors.white,
+                        //       fontSize: 16.0);
+                        // });
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final meditation = snapshot.data![index];
+                              developer.log(meditation.toString());
+                              swipeinfo = true;
+                              return Dismissible(
+                                key: Key(meditation['id'].toString()),
+                                direction: DismissDirection.startToEnd,
+                                onDismissed: (DismissDirection dd) {
+                                  db.deleteMeditation(meditation['id']).then(
+                                      (value) =>
+                                          developer.log(value.toString()));
+                                  removeMeditation(meditation['uuid']);
+                                },
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(meditation['days']),
+                                      Text(meditation['time'].toString())
+                                    ],
                                   ),
-                                );
-                              });
-                        } else {
-                          return Container();
-                        }
-                      })
+                                  subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          "Duration: ${meditation['duration'].toString()} mins"),
+                                      (meditation['reminderbefore'] == 0)
+                                          ? const Text("Don't remind")
+                                          : Text(
+                                              "Remind before: ${meditation['reminderbefore'].toString()} mins")
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                 ],
               ),
               Column(
@@ -879,11 +915,13 @@ Set-up one PTSD trigger at a time.''',
                 )
               : Image.asset(
                   headerImage,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fitHeight,
+                  // width: MediaQuery.of(context).size.width * 1,
+                  height: MediaQuery.of(context).size.height * 0.2,
                 ),
           (topImage.isNotEmpty)
               ? Positioned(
-                  top: 82,
+                  top: MediaQuery.of(context).size.height * 0.125,
                   right: MediaQuery.of(context).size.width / 2.5,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -898,20 +936,75 @@ Set-up one PTSD trigger at a time.''',
                     ],
                   ),
                 )
-              : (resolveStep > 0 &&
-                      resolveStep < 11 &&
-                      widget.currentIndex == 1)
+              : (widget.currentIndex == 2 && myMedsInfo == false)
                   ? Positioned(
-                      top: 82,
-                      left: MediaQuery.of(context).size.width / 10,
+                      top: MediaQuery.of(context).size.height * 0.11,
+                      left: 20,
                       child: CustomColoredText(
-                        text: "Step $resolveStep",
+                        text: "Meditation Times",
                         hexColor: "#FFFFFF",
-                        size: 18,
-                        weight: 500,
+                        size: 22,
+                        weight: 700,
                       ),
                     )
-                  : const SizedBox(),
+                  : (resolveStep > 0 &&
+                          resolveStep <= 11 &&
+                          widget.currentIndex == 1)
+                      ? Positioned(
+                          top: MediaQuery.of(context).size.height * 0.11,
+                          // left: MediaQuery.of(context).size.width / 18,
+                          left: 20,
+                          child: (resolveStep == 9)
+                              ? CustomColoredText(
+                                  text: "Let's Get Started",
+                                  hexColor: "#FFFFFF",
+                                  size: 22,
+                                  weight: 700,
+                                )
+                              : (resolveStep == 10)
+                                  ? CustomColoredText(
+                                      text: "Think Back",
+                                      hexColor: "#FFFFFF",
+                                      size: 22,
+                                      weight: 700,
+                                    )
+                                  : (resolveStep == 11)
+                                      ? CustomColoredText(
+                                          text: "Prepare To Meditate",
+                                          hexColor: "#FFFFFF",
+                                          size: 22,
+                                          weight: 700,
+                                        )
+                                      : CustomColoredText(
+                                          text: "Step $resolveStep",
+                                          hexColor: "#FFFFFF",
+                                          size: 22,
+                                          weight: 700,
+                                        ),
+                        )
+                      : (widget.currentIndex == 0 &&
+                              currentStep >= 0 &&
+                              currentStep <= 3 &&
+                              routine)
+                          ? Positioned(
+                              top: MediaQuery.of(context).size.height * 0.11,
+                              left: 20,
+                              child: CustomColoredText(
+                                text: (currentStep == 0)
+                                    ? "Stop Routine PTSD"
+                                    : (currentStep == 1)
+                                        ? "Step 1"
+                                        : (currentStep == 2)
+                                            ? "Step 2"
+                                            : (currentStep == 3)
+                                                ? "Finished"
+                                                : "",
+                                hexColor: "#FFFFFF",
+                                size: 22,
+                                weight: 700,
+                              ),
+                            )
+                          : const SizedBox(),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: (random ||
@@ -969,20 +1062,41 @@ Set-up one PTSD trigger at a time.''',
                             size: 22,
                             weight: 400),
                       )
-                    : AppBar(
-                        elevation: 0,
-                        automaticallyImplyLeading: (question) ? false : true,
-                        backgroundColor: Colors.transparent,
-                        title: CustomColoredText(
-                            text: appbarTitle,
-                            hexColor: "#FFFFFF",
-                            size: 22,
-                            weight: 400),
-                      ),
+                    : (widget.currentIndex == 2 && myMedsInfo == false)
+                        ? AppBar(
+                            elevation: 0,
+                            leading: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    myMedsInfo = true;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_back_ios_sharp,
+                                  color: Colors.white,
+                                )),
+                            backgroundColor: Colors.transparent,
+                            title: CustomColoredText(
+                                text: appbarTitle,
+                                hexColor: "#FFFFFF",
+                                size: 22,
+                                weight: 400),
+                          )
+                        : AppBar(
+                            elevation: 0,
+                            automaticallyImplyLeading:
+                                (question) ? false : true,
+                            backgroundColor: Colors.transparent,
+                            title: CustomColoredText(
+                                text: appbarTitle,
+                                hexColor: "#FFFFFF",
+                                size: 22,
+                                weight: 400),
+                          ),
             body: Padding(
                 padding: (widget.currentIndex == 3 || widget.currentIndex == 4)
                     ? const EdgeInsets.only(top: 0, left: 0, right: 0)
-                    : const EdgeInsets.only(top: 100, left: 15, right: 15),
+                    : const EdgeInsets.only(top: 110, left: 15, right: 15),
                 // color: HexColor("#EFF8FF"),
                 child: body),
             bottomNavigationBar: Theme(

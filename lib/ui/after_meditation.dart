@@ -23,7 +23,22 @@ class _AfterMeditationState extends State<AfterMeditation> {
         children: <Widget>[
           Image.asset(
             'assets/images/resolve_header_bg.png',
+            fit: BoxFit.fitHeight,
+            // width: MediaQuery.of(context).size.width * 1,
+            height: MediaQuery.of(context).size.height * 0.2,
           ),
+          if (screen != 1) ...[
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.11,
+              left: 20,
+              child: CustomColoredText(
+                text: (screen == 2) ? "Meditate" : "You did it!",
+                hexColor: "#FFFFFF",
+                size: 22,
+                weight: 700,
+              ),
+            )
+          ],
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: (screen == 1)
@@ -31,18 +46,11 @@ class _AfterMeditationState extends State<AfterMeditation> {
                     elevation: 0,
                     backgroundColor: Colors.transparent,
                     automaticallyImplyLeading: false,
-                    // leading: IconButton(
-                    //   onPressed: () {},
-                    //   icon: const Icon(
-                    //     Icons.arrow_back_ios_new_sharp,
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                     title: CustomColoredText(
                         text: "Great Job",
                         hexColor: "#FFFFFF",
                         size: 22,
-                        weight: 400),
+                        weight: 700),
                   )
                 : (screen == 2)
                     ? AppBar(
@@ -60,7 +68,7 @@ class _AfterMeditationState extends State<AfterMeditation> {
                           ),
                         ),
                         title: CustomColoredText(
-                            text: "Meditate",
+                            text: "Great Job",
                             hexColor: "#FFFFFF",
                             size: 22,
                             weight: 400),
@@ -80,49 +88,69 @@ class _AfterMeditationState extends State<AfterMeditation> {
                           ),
                         ),
                         title: CustomColoredText(
-                            text: "You did it!",
+                            text: "Meditate",
                             hexColor: "#FFFFFF",
                             size: 22,
                             weight: 400),
                       ),
             body: Padding(
               padding: EdgeInsets.only(
-                  top: (screen == 3) ? 100 : 70, left: 15, right: 15),
+                  top: (screen == 3) ? 110 : 100, left: 15, right: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      (screen == 3)
+                          ? Column(
+                              children: [
+                                CustomColoredText(
+                                    text: "Congratulations!",
+                                    hexColor: "#0E9E50",
+                                    size: 20,
+                                    weight: 500),
+                                const SizedBox(height: 15)
+                              ],
+                            )
+                          : const SizedBox(),
                       CustomColoredText(
                         text: (screen == 1)
                             ? '''Great job! Now use Stress Stopper Breathwork to reduce present day stress. Think about a recent reaction triggered by places.'''
                             : (screen == 2)
                                 ? '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying, \"I\'m okay\" once per breath. Press Start Meditation.'''
-                                : '''Congratulations!\n
+                                : '''
 You faced your stress head on with PTSD Free. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
                         hexColor: "#2C3351",
-                        size: 18,
+                        size: 16,
                         weight: 500,
                       ),
                       const SizedBox(height: 30),
                       (screen == 3)
-                          ? Image.asset(
-                              "assets/images/smile_ill.png",
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              height: MediaQuery.of(context).size.height * 0.3,
+                          ? Center(
+                              child: Image.asset(
+                                "assets/images/smile_ill.png",
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.3,
+                              ),
                             )
                           : (screen == 2)
-                              ? Image.asset(
-                                  "assets/images/two_users_okay.png",
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
+                              ? Center(
+                                  child: Image.asset(
+                                    "assets/images/two_users_okay.png",
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
+                                  ),
                                 )
-                              : ImageWText(
-                                  text: widget.imageText.isEmpty
-                                      ? "I feel better"
-                                      : widget.imageText),
+                              : Center(
+                                  child: ImageWText(
+                                      text: widget.imageText.isEmpty
+                                          ? "I feel better"
+                                          : widget.imageText),
+                                ),
                     ],
                   ),
                   Column(
@@ -190,7 +218,9 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                                       }
                                     },
                                     child: CustomColoredText(
-                                      text: "Continue",
+                                      text: (screen == 3)
+                                          ? "Start Over"
+                                          : "Continue",
                                       hexColor: "#FFFFFF",
                                       size: 16,
                                       weight: 500,

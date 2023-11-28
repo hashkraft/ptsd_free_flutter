@@ -49,7 +49,7 @@ class _AddMeditationState extends State<AddMeditation> {
   Widget build(BuildContext context) {
     List<Widget> daysWidget = days.map((day) {
       return DayBox(
-        text: day.substring(0, 3),
+        text: day.substring(0, 2),
         whenTapped: (val) {
           if (days.indexOf(day) == 0) {
             setState(() {
@@ -275,31 +275,32 @@ class _AddMeditationState extends State<AddMeditation> {
   }
 
   void _onSave() {
+    if (day1) {
+      selectedDays.add("Monday");
+    }
+    if (day2) {
+      selectedDays.add("Tuesday");
+    }
+    if (day3) {
+      selectedDays.add("Wednesday");
+    }
+    if (day4) {
+      selectedDays.add("Thursday");
+    }
+    if (day5) {
+      selectedDays.add("Friday");
+    }
+    if (day6) {
+      selectedDays.add("Saturday");
+    }
+    if (day7) {
+      selectedDays.add("Sunday");
+    }
+    developer.log(selectedDays.toString());
     if (selectedDays.isEmpty) {
       functions.showSnackbarWithColor(
           context, "Please select day(s)", Colors.red);
     } else {
-      if (day1) {
-        selectedDays.add("Monday");
-      }
-      if (day2) {
-        selectedDays.add("Tuesday");
-      }
-      if (day3) {
-        selectedDays.add("Wednesday");
-      }
-      if (day4) {
-        selectedDays.add("Thursday");
-      }
-      if (day5) {
-        selectedDays.add("Friday");
-      }
-      if (day6) {
-        selectedDays.add("Saturday");
-      }
-      if (day7) {
-        selectedDays.add("Sunday");
-      }
       developer.log(selectedDays.toString());
       developer.log(selectedTime1.toString());
       developer.log((durationDouble.toInt() * 5).toString());

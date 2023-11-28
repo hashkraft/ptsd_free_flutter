@@ -70,17 +70,26 @@ class NotificationsService {
   }
 
   /// Use this method to detect when the user taps on a notification or action button
-  @pragma("vm:entry-point")
+  // @pragma("vm:entry-point")
   Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
+
     final payload = receivedAction.payload ?? {};
     if (payload["duration"] == null) {
       developer.log("No Duration!");
     } else {
-      developer.log("Duration: ${(payload["duration"]).toString()}");
-      developer.log("Sound: ${payload["sound"].toString()}");
-      int duration = int.tryParse(payload["duration"]!)!;
-      router.go("/timer", extra: [duration, payload["sound"]]);
+      await AwesomeNotifications().getAppLifeCycle().then((value) {
+        if (value == NotificationLifeCycle.Foreground) {
+          developer.log("Duration: ${(payload["duration"]).toString()}");
+          developer.log("Sound: ${payload["sound"].toString()}");
+          int duration = int.tryParse(payload["duration"]!)!;
+          router.go("/timer", extra: [duration, payload["sound"]]);
+          Future.delayed(const Duration(seconds: 1), () {
+            router.go("/timer", extra: [duration, payload["sound"]]);
+          });
+        }
+        developer.log(value.toString());
+      });
     }
     // if (payload["navigate"] == "true") {
     //   developer.log("okay!");

@@ -40,7 +40,8 @@ class _MoreState extends State<More> {
           icon: "assets/images/feedback_icon.png",
           onPressed: () async {
             developer.log("Feedback clicked!");
-            final Uri url = Uri.parse('https://flutter.dev');
+            final Uri url = Uri.parse(
+                'http://www.stressisgone.com/new_mobile_feedback.php');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }
@@ -51,7 +52,7 @@ class _MoreState extends State<More> {
           icon: "assets/images/website_icon.png",
           onPressed: () async {
             developer.log("Website clicked!");
-            final Uri url = Uri.parse('https://flutter.dev');
+            final Uri url = Uri.parse('https://www.stressisgone.com/');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }
@@ -62,7 +63,8 @@ class _MoreState extends State<More> {
           icon: "assets/images/ebook_icon.png",
           onPressed: () async {
             developer.log("Free E-Book  clicked!");
-            final Uri url = Uri.parse('https://flutter.dev');
+            final Uri url = Uri.parse(
+                'http://www.stressisgone.com/wordpress/wp-content/uploads/2015/05/3-Keys-to-Managing-PTSD-The-Warriors-Guide.pdf');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }
@@ -73,7 +75,7 @@ class _MoreState extends State<More> {
           icon: "assets/images/about_icon.png",
           onPressed: () async {
             developer.log("About clicked!");
-            final Uri url = Uri.parse('https://flutter.dev');
+            final Uri url = Uri.parse('https://www.stressisgone.com/about');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }

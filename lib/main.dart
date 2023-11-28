@@ -20,6 +20,7 @@ import 'dart:developer' as developer;
 
 Future<void> main() async {
   await NotificationsService().initializeNotification();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     // return MaterialApp(
     //   navigatorKey: navigatorKey,
     // );
+
     return MaterialApp.router(
       theme: ThemeData(scaffoldBackgroundColor: HexColor("#EFF8FF")),
       debugShowCheckedModeBanner: false,

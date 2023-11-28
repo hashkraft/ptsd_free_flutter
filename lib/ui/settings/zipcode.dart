@@ -64,41 +64,65 @@ class _ZipcodeState extends State<ZipCode> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomColoredText(
-                    text:
-                        "If you wish to update your zipcode enter the new one here:",
-                    hexColor: "#2C3351",
-                    size: 16,
-                    weight: 500,
-                  ),
-                  const SizedBox(height: 8),
-                  CustomColoredText(
-                    text: "Your current zipcode : ${UserAdd.zipcode}",
-                    hexColor: "#2C3351",
-                    size: 16,
-                    weight: 500,
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextFormField(
-                    controller: tec,
-                    hintText: "Zipcode",
-                    obscureText: false,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(),
-                      ElevatedButton(
-                        onPressed: () {
-                          print(tec.text);
-                          changeZipCode(tec.text);
-                        },
-                        child: Text("Submit"),
+                      CustomColoredText(
+                        text: "Your current zipcode : ${UserAdd.zipcode}",
+                        hexColor: "#2C3351",
+                        size: 16,
+                        weight: 700,
                       ),
-                      const SizedBox(),
+                      const SizedBox(height: 16),
+                      CustomColoredText(
+                        text:
+                            "Kindly update your zipcode if you have permanently relocated to ensure connection to the appropriate hotline number for help.",
+                        hexColor: "#2C3351",
+                        size: 16,
+                        weight: 500,
+                      ),
+                      const SizedBox(height: 16),
+                      CustomTextFormField(
+                        controller: tec,
+                        hintText: "Zipcode",
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: ElevatedButton(
+                              style: ButtonStyle(backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                                  return Colors.blue;
+                                },
+                              )),
+                              onPressed: () {
+                                print(tec.text);
+                                changeZipCode(tec.text);
+                              },
+                              child: CustomColoredText(
+                                text: "Update Zipcode",
+                                hexColor: "#FFFFFF",
+                                size: 16,
+                                weight: 500,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(),
+                        ],
+                      ),
+                      const SizedBox(height: 8)
                     ],
                   ),
                 ],

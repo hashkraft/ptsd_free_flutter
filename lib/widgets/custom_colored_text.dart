@@ -28,7 +28,9 @@ class CustomColoredText extends StatelessWidget {
               ? FontWeight.w500
               : (weight == 400)
                   ? FontWeight.w400
-                  : FontWeight.w300,
+                  : (weight == 700)
+                      ? FontWeight.w700
+                      : FontWeight.w300,
         ),
       ),
     );
