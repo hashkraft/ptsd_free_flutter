@@ -98,8 +98,8 @@ class _SplashScreenState extends State<SplashScreen>
     switch (state) {
       case AppLifecycleState.resumed:
         developer.log("RESUMED");
-        Restart.restartApp();
-        // context.go("/");
+        // Restart.restartApp();
+        // context.go("/startinfo2");
         break;
       case AppLifecycleState.inactive:
         developer.log("INACTIVE");

@@ -408,7 +408,9 @@ class _StartInfo1State extends State<StartInfo1> {
                   ),
                 ),
                 onPressed: () {
-                  context.go("/coaching");
+                  stopAudio().then((value) {
+                    context.go("/coaching");
+                  });
                 },
                 child: CustomColoredText(
                   text: "Help me",

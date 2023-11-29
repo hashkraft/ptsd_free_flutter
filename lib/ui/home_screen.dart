@@ -398,31 +398,50 @@ Set-up one PTSD trigger at a time.''',
                   size: 16,
                   weight: 400,
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Switch(
-                      activeColor: Colors.blue,
-                      value: randomPTSD,
-                      onChanged: (bool value) async {
-                        setState(() {
-                          developer.log("{{{{{}}}}}" + value.toString());
-                          randomPTSD = value;
-                          SettingVariables().setRandomPTSD(value).then((value) {
-                            developer.log("{{{{{}}}}}2" +
-                                SettingVariables().randomPTSD.toString());
-                          });
-                        });
+                // const SizedBox(height: 10),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Switch(
+                //       activeColor: Colors.blue,
+                //       value: randomPTSD,
+                //       onChanged: (bool value) async {
+                //         setState(() {
+                //           developer.log("{{{{{}}}}}" + value.toString());
+                //           randomPTSD = value;
+                //           SettingVariables().setRandomPTSD(value).then((value) {
+                //             developer.log("{{{{{}}}}}2" +
+                //                 SettingVariables().randomPTSD.toString());
+                //           });
+                //         });
+                //       },
+                //     ),
+                //     const SizedBox(width: 15),
+                //     const CustomText(
+                //       text: "Switch on to activate",
+                //       weight: 500,
+                //     )
+                //   ],
+                // ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return Colors.red;
+                        },
+                      )),
+                      onPressed: () {
+                        context.go("/startinfo1");
                       },
-                    ),
-                    const SizedBox(width: 15),
-                    const CustomText(
-                      text: "Switch on to activate",
-                      weight: 500,
-                    )
-                  ],
-                ),
+                      child: CustomColoredText(
+                          text: "Start Meditation",
+                          hexColor: "#FFFFFF",
+                          size: 18,
+                          weight: 500)),
+                )
               ],
             ),
           );
@@ -746,8 +765,8 @@ Set-up one PTSD trigger at a time.''',
                             },
                           )),
                           onPressed: () async {
-                            final Uri url =
-                                Uri.parse('https://www.stressisgone.com/');
+                            final Uri url = Uri.parse(
+                                'https://youtube.com/playlist?list=PLMdl_IAL3B6DLNaArZvRMAUdAcrG_Qnex&si=saSZd_9cnNqiakeM');
                             if (!await launchUrl(url)) {
                               throw Exception('Could not launch $url');
                             }
@@ -772,8 +791,8 @@ Set-up one PTSD trigger at a time.''',
                         width: MediaQuery.of(context).size.width * 0.9,
                         child: TextButton(
                             onPressed: () async {
-                              final Uri url =
-                                  Uri.parse('https://www.stressisgone.com/');
+                              final Uri url = Uri.parse(
+                                  'https://www.stressisgone.com/membership');
                               if (!await launchUrl(url)) {
                                 throw Exception('Could not launch $url');
                               }

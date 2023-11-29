@@ -91,9 +91,12 @@ class _AddReminderState extends State<AddReminder> {
               timeofday: selectedTime1,
               days: days,
               idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
+              title: "Touch here to breathe and let go.",
+              // body: "Please relax yourself",
               meditate: false,
+              payload: {
+                "torandom": "true",
+              },
             );
             break;
           case "3 minutes before":
@@ -105,8 +108,8 @@ class _AddReminderState extends State<AddReminder> {
                 timeofday: timebefore,
                 days: days,
                 idList: value,
-                title: "Breathe now!",
-                body: "Please relax yourself",
+                title: "Breathing exercise starts in 3 mins",
+                // body: "Please relax yourself",
                 meditate: false,
               );
             } else {
@@ -118,8 +121,8 @@ class _AddReminderState extends State<AddReminder> {
                 timeofday: timebefore,
                 days: days1,
                 idList: value,
-                title: "Breathe now!",
-                body: "Please relax yourself",
+                title: "Breathing exercise starts in 3 mins",
+                // body: "Please relax yourself",
                 meditate: false,
               );
             }
@@ -129,9 +132,12 @@ class _AddReminderState extends State<AddReminder> {
               timeofday: selectedTime1,
               days: days,
               idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
+              title: "Touch here to breathe and let go.",
+              // body: "Touch here to breathe and let go.",
               meditate: false,
+              payload: {
+                "torandom": "true",
+              },
             );
             if ((selectedTime1.minute - 3) > 0) {
               TimeOfDay timebefore = TimeOfDay(
@@ -141,8 +147,9 @@ class _AddReminderState extends State<AddReminder> {
                 timeofday: timebefore,
                 days: days,
                 idList: value,
-                title: "Breathe now!",
-                body: "Please relax yourself",
+                title: "Breathing exercise starts in 3 mins",
+
+                // body: "Please relax yourself",
                 meditate: false,
               );
             } else {
@@ -154,8 +161,8 @@ class _AddReminderState extends State<AddReminder> {
                 timeofday: timebefore,
                 days: days1,
                 idList: value,
-                title: "Breathe now!",
-                body: "Please relax yourself",
+                title: "Breathing exercise starts in 3 mins",
+                // body: "Please relax yourself",
                 meditate: false,
               );
             }
@@ -165,9 +172,12 @@ class _AddReminderState extends State<AddReminder> {
               timeofday: selectedTime1,
               days: days,
               idList: value,
-              title: "Breathe now!",
-              body: "Please relax yourself",
+              title: "Touch here to breathe and let go.",
+              // body: "Please relax yourself",
               meditate: false,
+              payload: {
+                "torandom": "true",
+              },
             );
             break;
         }

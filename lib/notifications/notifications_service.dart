@@ -76,6 +76,10 @@ class NotificationsService {
     debugPrint('onActionReceivedMethod');
 
     final payload = receivedAction.payload ?? {};
+    if (payload['torandom'] != null) {
+      developer.log("randomgo");
+      router.go("/startinfo1");
+    }
     if (payload["duration"] == null) {
       developer.log("No Duration!");
     } else {
@@ -102,7 +106,7 @@ class NotificationsService {
 
   Future<void> scheduleNotification({
     required final String title,
-    required final String body,
+    // required final String body,
     required final TimeOfDay timeOfDay,
     required final int id,
     required final bool meditate,
@@ -121,7 +125,7 @@ class NotificationsService {
           id: id,
           channelKey: "type1",
           title: title,
-          body: body,
+          // body: body,
           actionType: actionType,
           notificationLayout: notificationLayout,
           summary: summary,
@@ -145,7 +149,7 @@ class NotificationsService {
           id: id,
           channelKey: "type1",
           title: title,
-          body: body,
+          // body: body,
           actionType: actionType,
           notificationLayout: notificationLayout,
           summary: summary,
@@ -171,7 +175,7 @@ class NotificationsService {
     required final List<int> days,
     required final List<int> idList,
     required final String title,
-    required final String body,
+    // required final String body,
     required final bool meditate,
     final Map<String, String>? payload,
   }) async {
@@ -180,7 +184,7 @@ class NotificationsService {
       scheduleNotification(
         id: idList[i],
         title: title,
-        body: body,
+        // body: body,
         timeOfDay: timeofday,
         weekday: days[i],
         meditate: meditate,

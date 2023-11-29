@@ -328,8 +328,8 @@ class _AddMeditationState extends State<AddMeditation> {
           days: days,
           idList: value,
           meditate: true,
-          title: "Meditate now!",
-          body: "Close your eyes",
+          title: "Tap here to start the meditation",
+          // body: "Close your eyes",
           payload: {
             "navigate": "true",
             "duration": "${durationDouble.toInt() * 5}",
@@ -347,8 +347,8 @@ class _AddMeditationState extends State<AddMeditation> {
               days: days,
               idList: value,
               meditate: true,
-              title: "Reminder before meditation",
-              body: "Start in $minutes mins later",
+              title: "Meditation starts in $minutes mins",
+              // body: "Start in $minutes mins later",
             );
           } else {
             TimeOfDay timebefore = TimeOfDay(
@@ -359,8 +359,8 @@ class _AddMeditationState extends State<AddMeditation> {
               days: days1,
               meditate: true,
               idList: value,
-              title: "Reminder before meditation",
-              body: "Start in $minutes mins later",
+              title: "Meditation starts in $minutes mins",
+              // body: "Start in $minutes mins later",
             );
           }
         }

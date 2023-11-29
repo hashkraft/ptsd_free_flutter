@@ -9,21 +9,21 @@ class Membership extends StatelessWidget {
   const Membership({super.key});
 
   Future<void> _launchMemberUrl() async {
-    final Uri url = Uri.parse('https://flutter.dev');
+    final Uri url = Uri.parse('https://www.stressisgone.com/membership');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
   }
 
   Future<void> _launchFacebookUrl() async {
-    final Uri url = Uri.parse('https://facebook.com');
+    final Uri url = Uri.parse('https://www.facebook.com/StressIsGone');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
   }
 
   Future<void> _launchXUrl() async {
-    final Uri url = Uri.parse('https://x.com');
+    final Uri url = Uri.parse('https://x.com/stressisgone');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
