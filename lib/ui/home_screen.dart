@@ -18,12 +18,15 @@ import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   int currentIndex = 0;
+  int extraInfo = 0;
   HomeScreen({
     super.key,
     required this.currentIndex,
+    this.extraInfo = 0,
   });
 
   @override
@@ -39,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool question = true;
   int resolveStep = 0;
   int currentStep = 0;
-  bool swipeinfo = false;
   Widget body = Container();
   Widget stepBody = Container();
   String triggerType = "Places";
@@ -78,6 +80,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // AwesomeNotifications().getAppLifeCycle().then((value) {
+    //   if (value == NotificationLifeCycle.Foreground) {
+    //     context.go("/");
+    //   }
+    // });
+
+    if (widget.extraInfo != 0 && widget.currentIndex == 2) {
+      setState(() {
+        myMedsInfo = false;
+        widget.extraInfo = 0;
+      });
+    } else if (widget.extraInfo > 0 && widget.currentIndex == 0) {
+      setState(() {
+        currentStep = widget.extraInfo;
+        routine = true;
+        question = false;
+        widget.extraInfo = 0;
+      });
+    } else if (widget.extraInfo == -1 && widget.currentIndex == 0) {
+      setState(() {
+        random = true;
+        question = false;
+        widget.extraInfo = 0;
+      });
+    } else if (widget.extraInfo != 0 && widget.currentIndex == 1) {
+      setState(() {
+        resolveStep = widget.extraInfo;
+        widget.extraInfo = 0;
+      });
+    }
+
     SettingVariables().getRandomPTSD().then((value) {
       randomPTSD = value;
     });
@@ -556,6 +589,10 @@ Set-up one PTSD trigger at a time.''',
           appbarTitle = "Think Back";
         } else if (resolveStep == 12) {
           appbarTitle = "Prepare To Meditate";
+        } else if (resolveStep == 13) {
+          appbarTitle = "Good Job";
+        } else if (resolveStep == 14) {
+          appbarTitle = "Meditate";
         } else {
           appbarTitle = "Heal";
         }
@@ -684,7 +721,7 @@ Set-up one PTSD trigger at a time.''',
                             });
                           },
                           child: const Text(
-                            "Continue",
+                            "My Practice",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -694,7 +731,64 @@ Set-up one PTSD trigger at a time.''',
                       const SizedBox(),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () async {
+                            final Uri url =
+                                Uri.parse('https://www.stressisgone.com/');
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
+                          child: const Text(
+                            "YouTube Meditations",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: TextButton(
+                            onPressed: () async {
+                              final Uri url =
+                                  Uri.parse('https://www.stressisgone.com/');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                            child: CustomColoredText(
+                              text: "Join Media Group",
+                              size: 16,
+                              weight: 500,
+                              hexColor: "#F03608",
+                            )),
+                      ),
+                      const SizedBox(),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
                 ],
               ),
             ],
@@ -773,7 +867,7 @@ Set-up one PTSD trigger at a time.''',
                             itemBuilder: (context, index) {
                               final meditation = snapshot.data![index];
                               developer.log(meditation.toString());
-                              swipeinfo = true;
+
                               return Dismissible(
                                 key: Key(meditation['id'].toString()),
                                 direction: DismissDirection.startToEnd,
@@ -907,9 +1001,6 @@ Set-up one PTSD trigger at a time.''',
                     ),
                     Image.asset(
                       "assets/images/header_bg.png",
-                      // scale: 1.5,
-                      // height: 150,
-                      // width: MediaQuery.of(context).size.width,
                     ),
                   ],
                 )
@@ -982,29 +1073,63 @@ Set-up one PTSD trigger at a time.''',
                                           weight: 700,
                                         ),
                         )
-                      : (widget.currentIndex == 0 &&
-                              currentStep >= 0 &&
-                              currentStep <= 3 &&
-                              routine)
+                      : (resolveStep > 11 && resolveStep < 15)
                           ? Positioned(
                               top: MediaQuery.of(context).size.height * 0.11,
+                              // left: MediaQuery.of(context).size.width / 18,
                               left: 20,
-                              child: CustomColoredText(
-                                text: (currentStep == 0)
-                                    ? "Stop Routine PTSD"
-                                    : (currentStep == 1)
-                                        ? "Step 1"
-                                        : (currentStep == 2)
-                                            ? "Step 2"
-                                            : (currentStep == 3)
-                                                ? "Finished"
-                                                : "",
-                                hexColor: "#FFFFFF",
-                                size: 22,
-                                weight: 700,
-                              ),
+                              child: (resolveStep == 12)
+                                  ? CustomColoredText(
+                                      text: "Great Job",
+                                      hexColor: "#FFFFFF",
+                                      size: 22,
+                                      weight: 700,
+                                    )
+                                  : (resolveStep == 13)
+                                      ? CustomColoredText(
+                                          text: "Meditate",
+                                          hexColor: "#FFFFFF",
+                                          size: 22,
+                                          weight: 700,
+                                        )
+                                      : (resolveStep == 14)
+                                          ? CustomColoredText(
+                                              text: "You did it!",
+                                              hexColor: "#FFFFFF",
+                                              size: 22,
+                                              weight: 700,
+                                            )
+                                          : CustomColoredText(
+                                              text: "Step $resolveStep",
+                                              hexColor: "#FFFFFF",
+                                              size: 22,
+                                              weight: 700,
+                                            ),
                             )
-                          : const SizedBox(),
+                          : (widget.currentIndex == 0 &&
+                                  currentStep >= 0 &&
+                                  currentStep <= 3 &&
+                                  routine)
+                              ? Positioned(
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.11,
+                                  left: 20,
+                                  child: CustomColoredText(
+                                    text: (currentStep == 0)
+                                        ? "Stop Routine PTSD"
+                                        : (currentStep == 1)
+                                            ? "Step 1"
+                                            : (currentStep == 2)
+                                                ? "Step 2"
+                                                : (currentStep == 3)
+                                                    ? "Finished"
+                                                    : "",
+                                    hexColor: "#FFFFFF",
+                                    size: 22,
+                                    weight: 700,
+                                  ),
+                                )
+                              : const SizedBox(),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: (random ||

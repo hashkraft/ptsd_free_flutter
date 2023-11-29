@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
 import 'package:ptsd_free/repo/database_helpers.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
@@ -47,31 +48,31 @@ class _AddReminderState extends State<AddReminder> {
   TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
 
   Future<void> _onSave() async {
+    if (day1) {
+      selectedDays.add("Monday");
+    }
+    if (day2) {
+      selectedDays.add("Tuesday");
+    }
+    if (day3) {
+      selectedDays.add("Wednesday");
+    }
+    if (day4) {
+      selectedDays.add("Thursday");
+    }
+    if (day5) {
+      selectedDays.add("Friday");
+    }
+    if (day6) {
+      selectedDays.add("Saturday");
+    }
+    if (day7) {
+      selectedDays.add("Sunday");
+    }
     if (selectedDays.isEmpty) {
       functions.showSnackbarWithColor(
           context, "Please select day(s)", Colors.red);
     } else {
-      if (day1) {
-        selectedDays.add("Monday");
-      }
-      if (day2) {
-        selectedDays.add("Tuesday");
-      }
-      if (day3) {
-        selectedDays.add("Wednesday");
-      }
-      if (day4) {
-        selectedDays.add("Thursday");
-      }
-      if (day5) {
-        selectedDays.add("Friday");
-      }
-      if (day6) {
-        selectedDays.add("Saturday");
-      }
-      if (day7) {
-        selectedDays.add("Sunday");
-      }
       final String uuid = const Uuid().v4();
       List<int> days = functions.convertDaysToIndices(selectedDays);
       developer.log('Days in indices: $days');
@@ -94,7 +95,6 @@ class _AddReminderState extends State<AddReminder> {
               body: "Please relax yourself",
               meditate: false,
             );
-
             break;
           case "3 minutes before":
             if ((selectedTime1.minute - 3) > 0) {
@@ -185,7 +185,12 @@ class _AddReminderState extends State<AddReminder> {
       developer.log('Reminder when: $selectedReminderWhen');
       developer.log('Time 1: $selectedTime1');
       developer.log('Time 2: $selectedTime2');
-      context.go("/home");
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HomeScreen(
+                currentIndex: 0,
+                extraInfo: 2,
+              )));
+      // context.go("/home");
     }
   }
 
@@ -193,7 +198,7 @@ class _AddReminderState extends State<AddReminder> {
   Widget build(BuildContext context) {
     List<Widget> daysWidget = days.map((day) {
       return DayBox(
-        text: day.substring(0, 3),
+        text: day.substring(0, 2),
         whenTapped: (val) {
           if (days.indexOf(day) == 0) {
             setState(() {

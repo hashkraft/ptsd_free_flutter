@@ -6,6 +6,7 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
@@ -15,11 +16,13 @@ class TimerScreen extends StatefulWidget {
   final int mins;
   final String sound;
   String imageText;
+  String source;
   TimerScreen({
     super.key,
     required this.mins,
     required this.sound,
     this.imageText = "",
+    this.source = "",
   });
 
   @override
@@ -250,7 +253,27 @@ class _TimerScreenState extends State<TimerScreen> {
                     developer.log(
                         "Meditation sesson of ${widget.mins} mins completed!");
                     stopAudio();
-                    context.go("/aftermeditation", extra: widget.imageText);
+                    if (widget.source == "resolve") {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(
+                            currentIndex: 1,
+                            extraInfo: 12,
+                          ),
+                        ),
+                      );
+                    } else if (widget.source == "step") {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(
+                            currentIndex: 1,
+                            extraInfo: 14,
+                          ),
+                        ),
+                      );
+                    } else {
+                      context.go("/home", extra: 2);
+                    }
                   },
                 ),
                 // Row(

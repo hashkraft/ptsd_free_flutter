@@ -18,6 +18,8 @@ import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'dart:developer' as developer;
 
+import 'package:restart_app/restart_app.dart';
+
 Future<void> main() async {
   await NotificationsService().initializeNotification();
 
@@ -55,17 +57,23 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
+    // AwesomeNotifications().getAppLifeCycle().then((value) {
+    //   // didChangeAppLifecycleState(value as AppLifecycleState);
+    //   developer.log(value.toString());
+    // });
+    WidgetsBinding.instance.addObserver(this);
     SettingVariables().getRandomPTSD().then((val) {
       developer.log(SettingVariables().randomPTSD.toString());
       if (val) {
-        Timer(const Duration(seconds: 3), () async {
+        Timer(const Duration(seconds: 1), () async {
           context.go("/startinfo1");
         });
       } else {
-        Timer(const Duration(seconds: 3), () async {
+        Timer(const Duration(seconds: 1), () async {
           context.go("/startinfo2");
         });
       }
@@ -73,16 +81,46 @@ class _SplashScreenState extends State<SplashScreen> {
 
     super.initState();
   }
+  // @override
+  //   void initState() {
+  //     WidgetsBinding.instance.addObserver(this);
+  //     super.initState();
+  //   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        developer.log("RESUMED");
+        Restart.restartApp();
+        // context.go("/");
+        break;
+      case AppLifecycleState.inactive:
+        developer.log("INACTIVE");
+        break;
+      case AppLifecycleState.paused:
+        developer.log("PAUSED");
+        break;
+      case AppLifecycleState.detached:
+        developer.log("DETACHED");
+        break;
+      case AppLifecycleState.hidden:
+        developer.log("HIDDEN");
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.go("/home", extra: [0, 1, 2, 3]);
-      },
-      child: const Image(
-        image: AssetImage('assets/images/splash_bg.jpg'),
-      ),
+    return const Image(
+      image: AssetImage('assets/images/splash_bg.jpg'),
     );
+    ;
   }
 }

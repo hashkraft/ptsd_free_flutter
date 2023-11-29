@@ -27,7 +27,7 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'home',
           builder: (BuildContext context, GoRouterState state) {
-            var index = 0;
+            int index = 0;
             switch (state.extra) {
               case 0:
                 index = 0;

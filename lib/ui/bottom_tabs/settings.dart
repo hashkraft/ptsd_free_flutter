@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/models/settings.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
@@ -63,21 +64,33 @@ class _SettingsState extends State<SettingsScreen> {
             text: "Stopper Breathe Button",
             onPressed: () {
               developer.log("Stopper Breathe Button clicked!");
-              context.go("/home", extra: 0);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        currentIndex: 0,
+                        extraInfo: -1,
+                      )));
             },
           ),
           ListTileSettings(
             text: "Stopper Mini Meds",
             onPressed: () {
               developer.log("Stopper Mini Meds clicked!");
-              context.go("/home", extra: 0);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        currentIndex: 0,
+                        extraInfo: 2,
+                      )));
             },
           ),
           ListTileSettings(
             text: "Meditate",
             onPressed: () {
               developer.log("My Meds clicked!");
-              context.go("/home", extra: 2);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        currentIndex: 2,
+                        extraInfo: 1,
+                      )));
             },
           ),
           const SizedBox(height: 20),

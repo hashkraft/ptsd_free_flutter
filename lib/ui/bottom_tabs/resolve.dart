@@ -3,6 +3,8 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
@@ -598,12 +600,8 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        // updateValue(widget.step++);
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -628,29 +626,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     // updateValue(widget.step--);
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "Look back on your life, what is the first time you can remember feeling $emotion and thinking ${thoughtTrigger.text} at the same? Who was involved?",
@@ -691,16 +666,12 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        // updateValue(widget.step++);
                         if (whoWasInvolved.text.isEmpty) {
                           showSnackbar(context, "Please fill required fields");
                         } else {
                           widget.step += 1;
                           widget.onValueChanged(widget.step);
                         }
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -725,29 +696,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     // updateValue(widget.step--);
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Who or what triggered that prior stress reaction?",
                 hexColor: "#2C3351",
@@ -793,9 +741,6 @@ class _ResolveState extends State<Resolve> {
                           widget.step += 1;
                           widget.onValueChanged(widget.step);
                         }
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -820,29 +765,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     // updateValue(widget.step--);
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Approximately how old were you?",
                 hexColor: "#2C3351",
@@ -886,12 +808,8 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        // updateValue(widget.step++);
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -916,28 +834,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text: "Where do you feel tension right now?",
                 hexColor: "#2C3351",
@@ -983,9 +879,6 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -1010,28 +903,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your head.''',
@@ -1073,9 +944,6 @@ class _ResolveState extends State<Resolve> {
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
-                        // setState(() {
-                        //   widget.step++;
-                        // });
                       },
                       child: const Text(
                         "Continue",
@@ -1100,28 +968,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
-              // CustomColoredText(
-              //   text: "Step ${widget.step}",
-              //   hexColor: "#0F6ED8",
-              //   size: 20,
-              //   weight: 400,
-              // ),
-              // const SizedBox(height: 16),
               CustomColoredText(
                 text:
                     "Remember the stressful experience that happened when you were a $howOld",
@@ -1141,14 +987,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // CustomColoredText(
-              //     text: "90% Completed",
-              //     hexColor: "#056AD6",
-              //     size: 16,
-              //     weight: 400),
-              // const SizedBox(height: 10),
-              // const LinearProgressIndicator(color: Colors.blue, value: 0.9),
-              // const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1163,11 +1001,10 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        widget.step += 1;
-                        widget.onValueChanged(widget.step);
-                        // setState(() {
-                        //   widget.step++;
-                        // });
+                        setState(() {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        });
                       },
                       child: const Text(
                         "Continue",
@@ -1192,21 +1029,6 @@ class _ResolveState extends State<Resolve> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     widget.step -= 1;
-              //     widget.onValueChanged(widget.step);
-              //     // setState(() {
-              //     //   widget.step--;
-              //     // });
-              //   },
-              //   child: const Row(
-              //     children: [
-              //       Icon(Icons.arrow_back_ios, size: 16),
-              //       Text("Previous step")
-              //     ],
-              //   ),
-              // ),
               CustomColoredText(
                 text:
                     '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying "I'm Okay" once per breath. Press continue to start Meditation.''',
@@ -1226,7 +1048,6 @@ class _ResolveState extends State<Resolve> {
           ),
           Column(
             children: [
-              // const LinearProgressIndicator(color: Colors.blue, value: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1241,16 +1062,232 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        setState(() {
-                          widget.step = 0;
-                          context.go("/timer",
-                              extra: [10, "I'm Okay", thoughtTrigger.text]);
-                        });
+                        // setState(() {
+                        //   widget.step += 1;
+                        //   widget.onValueChanged(widget.step);
+                        // });
+                        // context.go("/timer", extra: [10, "I'm Okay"]);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => TimerScreen(
+                              mins: 10,
+                              sound: "I'm Okay",
+                              source: "resolve",
+                            ),
+                          ),
+                        );
                       },
                       child: const Text(
                         "Start Meditation",
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ],
+      );
+    } else if (widget.step == 12) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomColoredText(
+                text:
+                    '''Great job! Now use Stress Stopper Breathwork to reduce present day stress. Think about a recent reaction triggered by places.''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 500,
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: ImageWText(
+                    text: thoughtTrigger.text.isNotEmpty
+                        ? (thoughtTrigger.text.length > 12)
+                            ? "${thoughtTrigger.text.substring(0, 12)}..."
+                            : thoughtTrigger.text
+                        : "Bla bla"),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return Colors.red;
+                        },
+                      )),
+                      onPressed: () {
+                        setState(() {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        });
+                      },
+                      child: CustomColoredText(
+                        text: "Continue",
+                        hexColor: "#FFFFFF",
+                        size: 16,
+                        weight: 500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ],
+      );
+    } else if (widget.step == 13) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomColoredText(
+                text:
+                    '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying, \"I\'m okay\" once per breath. Press Start Meditation.''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 500,
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: Image.asset(
+                  "assets/images/two_users_okay.png",
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                              (Set<MaterialState> states) {
+                        return HexColor("#308B06");
+                      }),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TimerScreen(
+                            mins: 10,
+                            sound: "I'm Okay",
+                            source: "step",
+                          ),
+                        ),
+                      );
+                    },
+                    child: CustomColoredText(
+                        text: "Start Meditation",
+                        hexColor: "#FFFFFF",
+                        size: 18,
+                        weight: 400),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.step += 1;
+                        widget.onValueChanged(widget.step);
+                      });
+                    },
+                    child: CustomColoredText(
+                        text: "Continue",
+                        hexColor: "#308B06",
+                        size: 18,
+                        weight: 400),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ],
+      );
+    } else if (widget.step == 14) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  CustomColoredText(
+                      text: "Congratulations!",
+                      hexColor: "#0E9E50",
+                      size: 20,
+                      weight: 500),
+                  const SizedBox(height: 15)
+                ],
+              ),
+              CustomColoredText(
+                text: '''
+You faced your stress head on with PTSD Free. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 500,
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: Image.asset(
+                  "assets/images/smile_ill.png",
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor:
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return Colors.red;
+                        },
+                      )),
+                      onPressed: () {
+                        setState(() {
+                          widget.step = 0;
+                          widget.onValueChanged(widget.step);
+                        });
+                      },
+                      child: CustomColoredText(
+                        text: "Start Over",
+                        hexColor: "#FFFFFF",
+                        size: 16,
+                        weight: 500,
                       ),
                     ),
                   ),

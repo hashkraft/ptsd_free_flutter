@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'dart:developer' as developer;
 import 'package:ptsd_free/utils/functions.dart' as functions;
 import 'package:go_router/go_router.dart';
@@ -307,8 +309,9 @@ class _AddMeditationState extends State<AddMeditation> {
       developer.log((reminderBeforeDouble.toInt() * 5).toString());
       developer.log(sound);
       developer.log(volume.toInt().toString());
-      context.go("/home", extra: 2);
+
       List<int> days = functions.convertDaysToIndices(selectedDays);
+      developer.log('Days in indices: $days');
       DatabaseHelper()
           .insertMeditation(
         selectedDays: selectedDays,
@@ -361,6 +364,12 @@ class _AddMeditationState extends State<AddMeditation> {
             );
           }
         }
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  currentIndex: 2,
+                  extraInfo: 1,
+                )));
+        // context.go("/home", extra: 2);
       });
     }
   }

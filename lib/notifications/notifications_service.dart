@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 
@@ -78,18 +79,14 @@ class NotificationsService {
     if (payload["duration"] == null) {
       developer.log("No Duration!");
     } else {
-      await AwesomeNotifications().getAppLifeCycle().then((value) {
-        if (value == NotificationLifeCycle.Foreground) {
-          developer.log("Duration: ${(payload["duration"]).toString()}");
-          developer.log("Sound: ${payload["sound"].toString()}");
-          int duration = int.tryParse(payload["duration"]!)!;
-          router.go("/timer", extra: [duration, payload["sound"]]);
-          Future.delayed(const Duration(seconds: 1), () {
-            router.go("/timer", extra: [duration, payload["sound"]]);
-          });
-        }
-        developer.log(value.toString());
-      });
+      developer.log("Duration: ${(payload["duration"]).toString()}");
+      developer.log("Sound: ${payload["sound"].toString()}");
+      int duration = int.tryParse(payload["duration"]!)!;
+      router.go("/timer", extra: [duration, payload["sound"]]);
+
+      // Future.delayed(const Duration(seconds: 1), () {
+      //   router.go("/timer", extra: [duration, payload["sound"]]);
+      // });
     }
     // if (payload["navigate"] == "true") {
     //   developer.log("okay!");
