@@ -102,7 +102,11 @@ class _AddMeditationState extends State<AddMeditation> {
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
-              context.go("/home", extra: 2);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                        currentIndex: 2,
+                        extraInfo: 1,
+                      )));
             },
             child: CustomColoredText(
                 text: "Cancel", hexColor: "#FFFFFF", size: 14, weight: 400),

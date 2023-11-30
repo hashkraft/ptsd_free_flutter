@@ -252,67 +252,75 @@ Set-up one PTSD trigger at a time.''',
                           ],
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: CustomColoredText(
-                            text: "Edit",
-                            hexColor: "#056AD6",
-                            size: 14,
-                            weight: 500), // BLUE
-                      ),
+                      const SizedBox()
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   child: CustomColoredText(
+                      //       text: "Edit",
+                      //       hexColor: "#056AD6",
+                      //       size: 14,
+                      //       weight: 500), // BLUE
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   FutureBuilder(
-                      future: db.getReminders(),
-                      key: UniqueKey(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                final reminder = snapshot.data![index];
-                                developer.log(reminder.toString());
-                                developer.log(reminder['id'].toString());
+                    future: db.getReminders(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final reminder = snapshot.data![index];
+                              developer.log(reminder.toString());
+                              developer.log(reminder['id'].toString());
 
-                                return Dismissible(
-                                    key: Key(reminder['id'].toString()),
-                                    // key: UniqueKey(),
-                                    direction: DismissDirection.startToEnd,
-                                    onDismissed: (DismissDirection dd) {
-                                      // deleteAlarmById(reminder['id']);
+                              return Dismissible(
+                                  // key: Key(reminder['id']),
+                                  key: UniqueKey(),
+                                  direction: DismissDirection.startToEnd,
+                                  onDismissed: (DismissDirection dd) {
+                                    // deleteAlarmById(reminder['id']);
 
-                                      setState(() {
-                                        db.deleteStopper(reminder['id']).then(
-                                            (value) => developer
-                                                .log(value.toString()));
-                                        removeStoppers(reminder['uuid']);
-                                      });
-                                    },
-                                    child: ListTile(
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(reminder['trigger']),
-                                          Text(reminder['stress_start_time']),
-                                        ],
-                                      ),
-                                      subtitle: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Days: ${reminder['days']}"),
-                                          Text(reminder['stress_end_time'])
-                                        ],
-                                      ),
-                                    ));
-                              });
-                        } else {
-                          return Container();
-                        }
-                      })
+                                    setState(() {
+                                      db.deleteStopper(reminder['id']).then(
+                                          (value) =>
+                                              developer.log(value.toString()));
+                                      removeStoppers(reminder['uuid']);
+                                    });
+                                  },
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(reminder['trigger']),
+                                        Text(reminder['stress_start_time']),
+                                      ],
+                                    ),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Days: ${reminder['days']}"),
+                                        Text(reminder['stress_end_time'])
+                                      ],
+                                    ),
+                                  ));
+                            });
+                      } else {
+                        return Container(
+                          child: Text("No data"),
+                        );
+                      }
+                    },
+                  )
                 ],
               );
               break;
@@ -615,6 +623,9 @@ Set-up one PTSD trigger at a time.''',
 
         break;
       case 1:
+        routine = false;
+        random = false;
+        question = true;
         headerImage = 'assets/images/resolve_header_bg.png';
         if (resolveStep <= 9 && resolveStep > 1) {
           appbarTitle = "Step ${resolveStep - 1}";
@@ -642,6 +653,9 @@ Set-up one PTSD trigger at a time.''',
         );
         break;
       case 2:
+        routine = false;
+        random = false;
+        question = true;
         headerImage = 'assets/images/my_meds_header_bg.png';
         if (myMedsInfo) {
           appbarTitle = "Meditate";
@@ -871,14 +885,15 @@ Set-up one PTSD trigger at a time.''',
                           ],
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: CustomColoredText(
-                            text: "Edit",
-                            hexColor: "#056AD6",
-                            size: 14,
-                            weight: 500), //blue
-                      ),
+                      const SizedBox()
+                      // TextButton(
+                      //   onPressed: () {},
+                      //   child: CustomColoredText(
+                      //       text: "Edit",
+                      //       hexColor: "#056AD6",
+                      //       size: 14,
+                      //       weight: 500), //blue
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -991,6 +1006,9 @@ Set-up one PTSD trigger at a time.''',
 
         break;
       case 3:
+        routine = false;
+        random = false;
+        question = true;
         // question = false;
         // headerImage = "";
         appbarTitle = "Settings";
@@ -998,6 +1016,9 @@ Set-up one PTSD trigger at a time.''',
 
         break;
       case 4:
+        routine = false;
+        random = false;
+        question = true;
         // question = false;
         // headerImage = "";
         appbarTitle = "More";

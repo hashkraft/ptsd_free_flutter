@@ -302,7 +302,11 @@ class _AddReminderState extends State<AddReminder> {
             leadingWidth: 80,
             leading: TextButton(
               onPressed: () {
-                context.go("/home");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                          currentIndex: 0,
+                          extraInfo: 2,
+                        )));
               },
               child: CustomColoredText(
                   text: "Cancel", hexColor: "#FFFFFF", size: 14, weight: 400),
