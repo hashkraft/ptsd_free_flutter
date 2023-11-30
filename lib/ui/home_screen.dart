@@ -21,7 +21,7 @@ import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
-  int currentIndex = 0;
+  int currentIndex;
   int extraInfo = 0;
   HomeScreen({
     super.key,
@@ -114,52 +114,52 @@ class _HomeScreenState extends State<HomeScreen> {
     SettingVariables().getRandomPTSD().then((value) {
       randomPTSD = value;
     });
-    if (UserAdd.zipcode.isEmpty) {
-      Future.delayed(const Duration(seconds: 1), () async {
-        String deviceId = (await getId()) ?? "";
-        developer.log(deviceId);
-        FirebaseFirestore.instance
-            .collection("users-data")
-            .where("deviceId", isEqualTo: deviceId)
-            .get()
-            .then((value) {
-          if (value.docs.isEmpty) {
-            context.go("/registration");
-            Fluttertoast.showToast(
-              msg: "Please register first!",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
-          } else {
-            for (var docSnapshot in value.docs) {
-              developer.log(
-                  'Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
-              UserAdd.setValues(
-                user: docSnapshot.data()['username'],
-                pass: docSnapshot.data()['password'],
-                zip: docSnapshot.data()['zipcode'],
-                deviceId: deviceId,
-              );
+    // if (UserAdd.zipcode.isEmpty) {
+    //   Future.delayed(const Duration(milliseconds: 5), () async {
+    //     String deviceId = (await getId()) ?? "";
+    //     developer.log(deviceId);
+    //     FirebaseFirestore.instance
+    //         .collection("users-data")
+    //         .where("deviceId", isEqualTo: deviceId)
+    //         .get()
+    //         .then((value) {
+    //       if (value.docs.isEmpty) {
+    //         context.go("/registration");
+    //         Fluttertoast.showToast(
+    //           msg: "Please register first!",
+    //           toastLength: Toast.LENGTH_SHORT,
+    //           gravity: ToastGravity.CENTER,
+    //           timeInSecForIosWeb: 1,
+    //           backgroundColor: Colors.black,
+    //           textColor: Colors.white,
+    //           fontSize: 16.0,
+    //         );
+    //       } else {
+    //         for (var docSnapshot in value.docs) {
+    //           developer.log(
+    //               'Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
+    //           UserAdd.setValues(
+    //             user: docSnapshot.data()['username'],
+    //             pass: docSnapshot.data()['password'],
+    //             zip: docSnapshot.data()['zipcode'],
+    //             deviceId: deviceId,
+    //           );
 
-              developer.log("Logged in!");
-              Fluttertoast.showToast(
-                msg: "Logged in!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.black,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            }
-          }
-        });
-      });
-    }
+    //           developer.log("Logged in!");
+    //           Fluttertoast.showToast(
+    //             msg: "Logged in!",
+    //             toastLength: Toast.LENGTH_SHORT,
+    //             gravity: ToastGravity.CENTER,
+    //             timeInSecForIosWeb: 1,
+    //             backgroundColor: Colors.black,
+    //             textColor: Colors.white,
+    //             fontSize: 16.0,
+    //           );
+    //         }
+    //       }
+    //     });
+    //   });
+    // }
     super.initState();
   }
 
@@ -265,6 +265,7 @@ Set-up one PTSD trigger at a time.''',
                   const SizedBox(height: 10),
                   FutureBuilder(
                       future: db.getReminders(),
+                      key: UniqueKey(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
@@ -273,35 +274,40 @@ Set-up one PTSD trigger at a time.''',
                               itemBuilder: (context, index) {
                                 final reminder = snapshot.data![index];
                                 developer.log(reminder.toString());
+                                developer.log(reminder['id'].toString());
+
                                 return Dismissible(
-                                  key: Key(reminder['id'].toString()),
-                                  direction: DismissDirection.startToEnd,
-                                  onDismissed: (DismissDirection dd) {
-                                    // deleteAlarmById(reminder['id']);
-                                    db.deleteStopper(reminder['id']).then(
-                                        (value) =>
-                                            developer.log(value.toString()));
-                                    removeStoppers(reminder['uuid']);
-                                  },
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(reminder['trigger']),
-                                        Text(reminder['stress_start_time'])
-                                      ],
-                                    ),
-                                    subtitle: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Days: ${reminder['days']}"),
-                                        Text(reminder['stress_end_time'])
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                    key: Key(reminder['id'].toString()),
+                                    // key: UniqueKey(),
+                                    direction: DismissDirection.startToEnd,
+                                    onDismissed: (DismissDirection dd) {
+                                      // deleteAlarmById(reminder['id']);
+
+                                      setState(() {
+                                        db.deleteStopper(reminder['id']).then(
+                                            (value) => developer
+                                                .log(value.toString()));
+                                        removeStoppers(reminder['uuid']);
+                                      });
+                                    },
+                                    child: ListTile(
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(reminder['trigger']),
+                                          Text(reminder['stress_start_time']),
+                                        ],
+                                      ),
+                                      subtitle: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Days: ${reminder['days']}"),
+                                          Text(reminder['stress_end_time'])
+                                        ],
+                                      ),
+                                    ));
                               });
                         } else {
                           return Container();
@@ -388,16 +394,21 @@ Set-up one PTSD trigger at a time.''',
           appbarTitle = "Breathe Button";
           body = Center(
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(height: 10),
-                CustomColoredText(
-                  text:
-                      "One-touch instant stress relief on your Android Screen. Touch the PTSD Free icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
-                  hexColor: "#2C3351",
-                  size: 16,
-                  weight: 400,
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    CustomColoredText(
+                      text:
+                          "One-touch instant stress relief on your Android Screen. Touch the PTSD Free icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
+                      hexColor: "#2C3351",
+                      size: 16,
+                      weight: 400,
+                    ),
+                  ],
                 ),
+
                 // const SizedBox(height: 10),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -423,24 +434,29 @@ Set-up one PTSD trigger at a time.''',
                 //     )
                 //   ],
                 // ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: ElevatedButton(
-                      style: ButtonStyle(backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          return Colors.red;
-                        },
-                      )),
-                      onPressed: () {
-                        context.go("/startinfo1");
-                      },
-                      child: CustomColoredText(
-                          text: "Start Meditation",
-                          hexColor: "#FFFFFF",
-                          size: 18,
-                          weight: 500)),
+
+                Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Colors.red;
+                            },
+                          )),
+                          onPressed: () {
+                            context.go("/startinfo1");
+                          },
+                          child: CustomColoredText(
+                              text: "Start Meditation",
+                              hexColor: "#FFFFFF",
+                              size: 18,
+                              weight: 500)),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                 )
               ],
             ),
@@ -798,7 +814,7 @@ Set-up one PTSD trigger at a time.''',
                               }
                             },
                             child: CustomColoredText(
-                              text: "Join Media Group",
+                              text: "Join Meditate Group",
                               size: 16,
                               weight: 500,
                               hexColor: "#F03608",
@@ -870,56 +886,52 @@ Set-up one PTSD trigger at a time.''',
                     future: db.getMeditations(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        // Future.delayed(const Duration(seconds: 1), () {
-                        //   Fluttertoast.showToast(
-                        //       msg: "Swipe to dismiss",
-                        //       toastLength: Toast.LENGTH_SHORT,
-                        //       gravity: ToastGravity.CENTER,
-                        //       timeInSecForIosWeb: 1,
-                        //       backgroundColor: Colors.red,
-                        //       textColor: Colors.white,
-                        //       fontSize: 16.0);
-                        // });
                         return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              final meditation = snapshot.data![index];
-                              developer.log(meditation.toString());
+                          // key: UniqueKey(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final meditation = snapshot.data![index];
+                            developer.log(meditation.toString());
+                            developer.log(snapshot.data!.length.toString());
 
-                              return Dismissible(
-                                key: Key(meditation['id'].toString()),
-                                direction: DismissDirection.startToEnd,
-                                onDismissed: (DismissDirection dd) {
+                            return Dismissible(
+                              // key: ValueKey(meditation['id'].toString()),
+                              key: UniqueKey(),
+                              direction: DismissDirection.startToEnd,
+                              onDismissed: (DismissDirection dd) {
+                                setState(() {
                                   db.deleteMeditation(meditation['id']).then(
                                       (value) =>
                                           developer.log(value.toString()));
                                   removeMeditation(meditation['uuid']);
-                                },
-                                child: ListTile(
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(meditation['days']),
-                                      Text(meditation['time'].toString())
-                                    ],
-                                  ),
-                                  subtitle: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          "Duration: ${meditation['duration'].toString()} mins"),
-                                      (meditation['reminderbefore'] == 0)
-                                          ? const Text("Don't remind")
-                                          : Text(
-                                              "Remind before: ${meditation['reminderbefore'].toString()} mins")
-                                    ],
-                                  ),
+                                });
+                              },
+                              child: ListTile(
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(meditation['days']),
+                                    Text(meditation['time'].toString())
+                                  ],
                                 ),
-                              );
-                            });
+                                subtitle: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        "Duration: ${meditation['duration'].toString()} mins"),
+                                    (meditation['reminderbefore'] == 0)
+                                        ? const Text("Don't remind")
+                                        : Text(
+                                            "Remind before: ${meditation['reminderbefore'].toString()} mins")
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       } else {
                         return Container();
                       }
@@ -1008,309 +1020,340 @@ Set-up one PTSD trigger at a time.''',
       topImageScale = 1.2;
     }
 
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          (widget.currentIndex == 3 || widget.currentIndex == 4)
-              ? Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).viewPadding.top,
-                      color: HexColor("#23C4F1"),
-                    ),
-                    Image.asset(
-                      "assets/images/header_bg.png",
-                    ),
-                  ],
-                )
-              : Image.asset(
-                  headerImage,
-                  fit: BoxFit.fitHeight,
-                  // width: MediaQuery.of(context).size.width * 1,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                ),
-          (topImage.isNotEmpty)
-              ? Positioned(
-                  top: MediaQuery.of(context).size.height * 0.125,
-                  right: MediaQuery.of(context).size.width / 2.5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canPop) {
+        if (widget.currentIndex == 0 && currentStep > 0) {
+          setState(() {
+            currentStep -= 1;
+          });
+        } else if (widget.currentIndex == 0 && currentStep == 0) {
+          setState(() {
+            question = true;
+            routine = false;
+            random = false;
+          });
+        } else if (widget.currentIndex == 0 && random) {
+          setState(() {
+            question = true;
+            routine = false;
+            random = false;
+          });
+        } else if (widget.currentIndex == 1 && resolveStep > 0) {
+          setState(() {
+            widget.currentIndex = 1;
+            resolveStep -= 1;
+          });
+        }
+        if (myMedsInfo == false && widget.currentIndex == 2) {
+          widget.currentIndex = 2;
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            (widget.currentIndex == 3 || widget.currentIndex == 4)
+                ? Column(
                     children: [
-                      const SizedBox(),
+                      Container(
+                        height: MediaQuery.of(context).viewPadding.top,
+                        color: HexColor("#23C4F1"),
+                      ),
                       Image.asset(
-                        topImage,
-                        scale: topImageScale,
-                        alignment: Alignment.center,
+                        "assets/images/header_bg.png",
                       ),
-                      const SizedBox(),
                     ],
+                  )
+                : Image.asset(
+                    headerImage,
+                    fit: BoxFit.fitHeight,
+                    // width: MediaQuery.of(context).size.width * 1,
+                    height: MediaQuery.of(context).size.height * 0.2,
                   ),
-                )
-              : (widget.currentIndex == 2 && myMedsInfo == false)
-                  ? Positioned(
-                      top: MediaQuery.of(context).size.height * 0.11,
-                      left: 20,
-                      child: CustomColoredText(
-                        text: "Meditation Times",
-                        hexColor: "#FFFFFF",
-                        size: 22,
-                        weight: 700,
-                      ),
-                    )
-                  : (resolveStep > 0 &&
-                          resolveStep <= 11 &&
-                          widget.currentIndex == 1)
-                      ? Positioned(
-                          top: MediaQuery.of(context).size.height * 0.11,
-                          // left: MediaQuery.of(context).size.width / 18,
-                          left: 20,
-                          child: (resolveStep == 9)
-                              ? CustomColoredText(
-                                  text: "Let's Get Started",
-                                  hexColor: "#FFFFFF",
-                                  size: 22,
-                                  weight: 700,
-                                )
-                              : (resolveStep == 10)
-                                  ? CustomColoredText(
-                                      text: "Think Back",
-                                      hexColor: "#FFFFFF",
-                                      size: 22,
-                                      weight: 700,
-                                    )
-                                  : (resolveStep == 11)
-                                      ? CustomColoredText(
-                                          text: "Prepare To Meditate",
-                                          hexColor: "#FFFFFF",
-                                          size: 22,
-                                          weight: 700,
-                                        )
-                                      : CustomColoredText(
-                                          text: "Step $resolveStep",
-                                          hexColor: "#FFFFFF",
-                                          size: 22,
-                                          weight: 700,
-                                        ),
-                        )
-                      : (resolveStep > 11 && resolveStep < 15)
-                          ? Positioned(
-                              top: MediaQuery.of(context).size.height * 0.11,
-                              // left: MediaQuery.of(context).size.width / 18,
-                              left: 20,
-                              child: (resolveStep == 12)
-                                  ? CustomColoredText(
-                                      text: "Great Job",
-                                      hexColor: "#FFFFFF",
-                                      size: 22,
-                                      weight: 700,
-                                    )
-                                  : (resolveStep == 13)
-                                      ? CustomColoredText(
-                                          text: "Meditate",
-                                          hexColor: "#FFFFFF",
-                                          size: 22,
-                                          weight: 700,
-                                        )
-                                      : (resolveStep == 14)
-                                          ? CustomColoredText(
-                                              text: "You did it!",
-                                              hexColor: "#FFFFFF",
-                                              size: 22,
-                                              weight: 700,
-                                            )
-                                          : CustomColoredText(
-                                              text: "Step $resolveStep",
-                                              hexColor: "#FFFFFF",
-                                              size: 22,
-                                              weight: 700,
-                                            ),
-                            )
-                          : (widget.currentIndex == 0 &&
-                                  currentStep >= 0 &&
-                                  currentStep <= 3 &&
-                                  routine)
-                              ? Positioned(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.11,
-                                  left: 20,
-                                  child: CustomColoredText(
-                                    text: (currentStep == 0)
-                                        ? "Stop Routine PTSD"
-                                        : (currentStep == 1)
-                                            ? "Step 1"
-                                            : (currentStep == 2)
-                                                ? "Step 2"
-                                                : (currentStep == 3)
-                                                    ? "Finished"
-                                                    : "",
+            (topImage.isNotEmpty)
+                ? Positioned(
+                    top: MediaQuery.of(context).size.height * 0.125,
+                    right: MediaQuery.of(context).size.width / 2.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(),
+                        Image.asset(
+                          topImage,
+                          scale: topImageScale,
+                          alignment: Alignment.center,
+                        ),
+                        const SizedBox(),
+                      ],
+                    ),
+                  )
+                : (widget.currentIndex == 2 && myMedsInfo == false)
+                    ? Positioned(
+                        top: MediaQuery.of(context).size.height * 0.11,
+                        left: 20,
+                        child: CustomColoredText(
+                          text: "Meditation Times",
+                          hexColor: "#FFFFFF",
+                          size: 22,
+                          weight: 700,
+                        ),
+                      )
+                    : (resolveStep > 0 &&
+                            resolveStep <= 11 &&
+                            widget.currentIndex == 1)
+                        ? Positioned(
+                            top: MediaQuery.of(context).size.height * 0.11,
+                            // left: MediaQuery.of(context).size.width / 18,
+                            left: 20,
+                            child: (resolveStep == 9)
+                                ? CustomColoredText(
+                                    text: "Let's Get Started",
                                     hexColor: "#FFFFFF",
                                     size: 22,
                                     weight: 700,
-                                  ),
-                                )
-                              : const SizedBox(),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: (random ||
-                    routine ||
-                    (widget.currentIndex == 1 && resolveStep > 0))
-                ? AppBar(
-                    elevation: 0,
-                    automaticallyImplyLeading: (question) ? false : true,
-                    backgroundColor: Colors.transparent,
-                    leading: IconButton(
-                      onPressed: () {
-                        if (random) {
-                          setState(() {
-                            question = true;
-                            random = false;
-                            routine = false;
-                          });
-                        } else if (routine) {
-                          setState(() {
-                            if (currentStep > 0) {
-                              currentStep--;
-                            } else {
+                                  )
+                                : (resolveStep == 10)
+                                    ? CustomColoredText(
+                                        text: "Think Back",
+                                        hexColor: "#FFFFFF",
+                                        size: 22,
+                                        weight: 700,
+                                      )
+                                    : (resolveStep == 11)
+                                        ? CustomColoredText(
+                                            text: "Prepare To Meditate",
+                                            hexColor: "#FFFFFF",
+                                            size: 22,
+                                            weight: 700,
+                                          )
+                                        : CustomColoredText(
+                                            text: "Step $resolveStep",
+                                            hexColor: "#FFFFFF",
+                                            size: 22,
+                                            weight: 700,
+                                          ),
+                          )
+                        : (resolveStep > 11 && resolveStep < 15)
+                            ? Positioned(
+                                top: MediaQuery.of(context).size.height * 0.11,
+                                // left: MediaQuery.of(context).size.width / 18,
+                                left: 20,
+                                child: (resolveStep == 12)
+                                    ? CustomColoredText(
+                                        text: "Great Job",
+                                        hexColor: "#FFFFFF",
+                                        size: 22,
+                                        weight: 700,
+                                      )
+                                    : (resolveStep == 13)
+                                        ? CustomColoredText(
+                                            text: "Meditate",
+                                            hexColor: "#FFFFFF",
+                                            size: 22,
+                                            weight: 700,
+                                          )
+                                        : (resolveStep == 14)
+                                            ? CustomColoredText(
+                                                text: "You did it!",
+                                                hexColor: "#FFFFFF",
+                                                size: 22,
+                                                weight: 700,
+                                              )
+                                            : CustomColoredText(
+                                                text: "Step $resolveStep",
+                                                hexColor: "#FFFFFF",
+                                                size: 22,
+                                                weight: 700,
+                                              ),
+                              )
+                            : (widget.currentIndex == 0 &&
+                                    currentStep >= 0 &&
+                                    currentStep <= 3 &&
+                                    routine)
+                                ? Positioned(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.11,
+                                    left: 20,
+                                    child: CustomColoredText(
+                                      text: (currentStep == 0)
+                                          ? "Stop Routine PTSD"
+                                          : (currentStep == 1)
+                                              ? "Step 1"
+                                              : (currentStep == 2)
+                                                  ? "Step 2"
+                                                  : (currentStep == 3)
+                                                      ? "Finished"
+                                                      : "",
+                                      hexColor: "#FFFFFF",
+                                      size: 22,
+                                      weight: 700,
+                                    ),
+                                  )
+                                : const SizedBox(),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: (random ||
+                      routine ||
+                      (widget.currentIndex == 1 && resolveStep > 0))
+                  ? AppBar(
+                      elevation: 0,
+                      automaticallyImplyLeading: (question) ? false : true,
+                      backgroundColor: Colors.transparent,
+                      leading: IconButton(
+                        onPressed: () {
+                          if (random) {
+                            setState(() {
                               question = true;
                               random = false;
                               routine = false;
-                            }
-                          });
-                        } else if ((widget.currentIndex == 1 &&
-                            resolveStep > 0)) {
-                          setState(() {
-                            if (resolveStep > 0) {
-                              resolveStep--;
-                            }
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: Colors.white, size: 22),
-                    ),
-                    title: CustomColoredText(
-                        text: appbarTitle,
-                        hexColor: "#FFFFFF",
-                        size: 22,
-                        weight: 400),
-                  )
-                : (widget.currentIndex == 3 || widget.currentIndex == 4)
-                    ? AppBar(
-                        elevation: 0,
-                        automaticallyImplyLeading: false,
-                        // backgroundColor: HexColor("#23C4F1"),
-                        backgroundColor: Colors.transparent,
-                        title: CustomColoredText(
-                            text: appbarTitle,
-                            hexColor: "#FFFFFF",
-                            size: 22,
-                            weight: 400),
-                      )
-                    : (widget.currentIndex == 2 && myMedsInfo == false)
-                        ? AppBar(
-                            elevation: 0,
-                            leading: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    myMedsInfo = true;
-                                  });
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_ios_sharp,
-                                  color: Colors.white,
-                                )),
-                            backgroundColor: Colors.transparent,
-                            title: CustomColoredText(
-                                text: appbarTitle,
-                                hexColor: "#FFFFFF",
-                                size: 22,
-                                weight: 400),
-                          )
-                        : AppBar(
-                            elevation: 0,
-                            automaticallyImplyLeading:
-                                (question) ? false : true,
-                            backgroundColor: Colors.transparent,
-                            title: CustomColoredText(
-                                text: appbarTitle,
-                                hexColor: "#FFFFFF",
-                                size: 22,
-                                weight: 400),
+                            });
+                          } else if (routine) {
+                            setState(() {
+                              if (currentStep > 0) {
+                                currentStep--;
+                              } else {
+                                question = true;
+                                random = false;
+                                routine = false;
+                              }
+                            });
+                          } else if ((widget.currentIndex == 1 &&
+                              resolveStep > 0)) {
+                            setState(() {
+                              if (resolveStep > 0) {
+                                resolveStep--;
+                              }
+                            });
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_back_ios,
+                            color: Colors.white, size: 22),
+                      ),
+                      title: CustomColoredText(
+                          text: appbarTitle,
+                          hexColor: "#FFFFFF",
+                          size: 22,
+                          weight: 400),
+                    )
+                  : (widget.currentIndex == 3 || widget.currentIndex == 4)
+                      ? AppBar(
+                          elevation: 0,
+                          automaticallyImplyLeading: false,
+                          // backgroundColor: HexColor("#23C4F1"),
+                          backgroundColor: Colors.transparent,
+                          title: CustomColoredText(
+                              text: appbarTitle,
+                              hexColor: "#FFFFFF",
+                              size: 22,
+                              weight: 400),
+                        )
+                      : (widget.currentIndex == 2 && myMedsInfo == false)
+                          ? AppBar(
+                              elevation: 0,
+                              leading: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      myMedsInfo = true;
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_sharp,
+                                    color: Colors.white,
+                                  )),
+                              backgroundColor: Colors.transparent,
+                              title: CustomColoredText(
+                                  text: appbarTitle,
+                                  hexColor: "#FFFFFF",
+                                  size: 22,
+                                  weight: 400),
+                            )
+                          : AppBar(
+                              elevation: 0,
+                              automaticallyImplyLeading:
+                                  (question) ? false : true,
+                              backgroundColor: Colors.transparent,
+                              title: CustomColoredText(
+                                  text: appbarTitle,
+                                  hexColor: "#FFFFFF",
+                                  size: 22,
+                                  weight: 400),
+                            ),
+              body: Padding(
+                  padding: (widget.currentIndex == 3 ||
+                          widget.currentIndex == 4)
+                      ? const EdgeInsets.only(top: 0, left: 0, right: 0)
+                      : const EdgeInsets.only(top: 110, left: 15, right: 15),
+                  // color: HexColor("#EFF8FF"),
+                  child: body),
+              bottomNavigationBar: Theme(
+                data: Theme.of(context).copyWith(canvasColor: Colors.white),
+                child: BottomNavigationBar(
+                    selectedItemColor: Colors.blue,
+                    unselectedItemColor: HexColor("#A3A7B7"),
+                    onTap: _onItemTapped,
+                    showUnselectedLabels: true,
+                    currentIndex: widget.currentIndex,
+                    elevation: 10.0,
+                    items: [
+                      BottomNavigationBarItem(
+                          icon: const ImageIcon(
+                            AssetImage("assets/images/stopper_inactive.png"),
+                            color: Colors.grey,
                           ),
-            body: Padding(
-                padding: (widget.currentIndex == 3 || widget.currentIndex == 4)
-                    ? const EdgeInsets.only(top: 0, left: 0, right: 0)
-                    : const EdgeInsets.only(top: 110, left: 15, right: 15),
-                // color: HexColor("#EFF8FF"),
-                child: body),
-            bottomNavigationBar: Theme(
-              data: Theme.of(context).copyWith(canvasColor: Colors.white),
-              child: BottomNavigationBar(
-                  selectedItemColor: Colors.blue,
-                  unselectedItemColor: HexColor("#A3A7B7"),
-                  onTap: _onItemTapped,
-                  showUnselectedLabels: true,
-                  currentIndex: widget.currentIndex,
-                  elevation: 10.0,
-                  items: [
-                    BottomNavigationBarItem(
-                        icon: const ImageIcon(
-                          AssetImage("assets/images/stopper_inactive.png"),
-                          color: Colors.grey,
-                        ),
-                        activeIcon: ImageIcon(
-                          const AssetImage(
-                              "assets/images/stopper_inactive.png"),
-                          color: HexColor("#0FA8ED"),
-                        ),
-                        label: "Breathe"),
-                    BottomNavigationBarItem(
-                        icon: const ImageIcon(
-                          AssetImage("assets/images/resolve_inactive.png"),
-                          color: Colors.grey,
-                        ),
-                        activeIcon: ImageIcon(
-                          const AssetImage(
-                              "assets/images/resolve_inactive.png"),
-                          color: HexColor("#0FA8ED"),
-                        ),
-                        label: "Heal"),
-                    BottomNavigationBarItem(
-                        icon: const ImageIcon(
-                          AssetImage("assets/images/med_inactive.png"),
-                          color: Colors.grey,
-                        ),
-                        activeIcon: ImageIcon(
-                          const AssetImage("assets/images/med_inactive.png"),
-                          color: HexColor("#0FA8ED"),
-                        ),
-                        label: "Meditate"),
-                    BottomNavigationBarItem(
-                        icon: const ImageIcon(
-                          AssetImage("assets/images/settings_inactive.png"),
-                          color: Colors.grey,
-                        ),
-                        activeIcon: ImageIcon(
-                          const AssetImage(
-                              "assets/images/settings_inactive.png"),
-                          color: HexColor("#0FA8ED"),
-                        ),
-                        label: "Settings"),
-                    BottomNavigationBarItem(
-                        icon: const ImageIcon(
-                          AssetImage("assets/images/three_dots_inactive.png"),
-                          color: Colors.grey,
-                        ),
-                        activeIcon: ImageIcon(
-                          const AssetImage(
-                              "assets/images/three_dots_inactive.png"),
-                          color: HexColor("#0FA8ED"),
-                        ),
-                        label: "More"),
-                  ]),
+                          activeIcon: ImageIcon(
+                            const AssetImage(
+                                "assets/images/stopper_inactive.png"),
+                            color: HexColor("#0FA8ED"),
+                          ),
+                          label: "Breathe"),
+                      BottomNavigationBarItem(
+                          icon: const ImageIcon(
+                            AssetImage("assets/images/resolve_inactive.png"),
+                            color: Colors.grey,
+                          ),
+                          activeIcon: ImageIcon(
+                            const AssetImage(
+                                "assets/images/resolve_inactive.png"),
+                            color: HexColor("#0FA8ED"),
+                          ),
+                          label: "Heal"),
+                      BottomNavigationBarItem(
+                          icon: const ImageIcon(
+                            AssetImage("assets/images/med_inactive.png"),
+                            color: Colors.grey,
+                          ),
+                          activeIcon: ImageIcon(
+                            const AssetImage("assets/images/med_inactive.png"),
+                            color: HexColor("#0FA8ED"),
+                          ),
+                          label: "Meditate"),
+                      BottomNavigationBarItem(
+                          icon: const ImageIcon(
+                            AssetImage("assets/images/settings_inactive.png"),
+                            color: Colors.grey,
+                          ),
+                          activeIcon: ImageIcon(
+                            const AssetImage(
+                                "assets/images/settings_inactive.png"),
+                            color: HexColor("#0FA8ED"),
+                          ),
+                          label: "Settings"),
+                      BottomNavigationBarItem(
+                          icon: const ImageIcon(
+                            AssetImage("assets/images/three_dots_inactive.png"),
+                            color: Colors.grey,
+                          ),
+                          activeIcon: ImageIcon(
+                            const AssetImage(
+                                "assets/images/three_dots_inactive.png"),
+                            color: HexColor("#0FA8ED"),
+                          ),
+                          label: "More"),
+                    ]),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -61,7 +61,7 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'startinfo2',
           builder: (BuildContext context, GoRouterState state) {
-            return const StartInfo2();
+            return StartInfo2();
           },
         ),
         GoRoute(

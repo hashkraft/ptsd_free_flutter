@@ -44,8 +44,18 @@ class _AddReminderState extends State<AddReminder> {
     'Both'
   ];
   String selectedReminderWhen = 'During the stress';
-  TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
-  TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime1 = TimeOfDay.now();
+  TimeOfDay selectedTime2 = TimeOfDay.now();
+
+  bool isTimeLater(TimeOfDay time1, TimeOfDay time2) {
+    if (time1.hour > time2.hour) {
+      return true;
+    } else if (time1.hour == time2.hour && time1.minute > time2.minute) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   Future<void> _onSave() async {
     if (day1) {
@@ -72,6 +82,9 @@ class _AddReminderState extends State<AddReminder> {
     if (selectedDays.isEmpty) {
       functions.showSnackbarWithColor(
           context, "Please select day(s)", Colors.red);
+    } else if (isTimeLater(selectedTime1, selectedTime2)) {
+      functions.showSnackbarWithColor(
+          context, "End time should be later than start time", Colors.red);
     } else {
       final String uuid = const Uuid().v4();
       List<int> days = functions.convertDaysToIndices(selectedDays);
@@ -113,18 +126,34 @@ class _AddReminderState extends State<AddReminder> {
                 meditate: false,
               );
             } else {
-              TimeOfDay timebefore =
-                  TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
-              final days1 = functions.daysOneDayBefore(days);
+              if (selectedTime1.hour == 0) {
+                TimeOfDay timebefore = TimeOfDay(
+                    hour: 23, minute: 60 + (selectedTime1.minute - 3));
 
-              await NotificationsService().scheduleAlarm(
-                timeofday: timebefore,
-                days: days1,
-                idList: value,
-                title: "Breathing exercise starts in 3 mins",
-                // body: "Please relax yourself",
-                meditate: false,
-              );
+                final days1 = functions.daysOneDayBefore(days);
+
+                await NotificationsService().scheduleAlarm(
+                  timeofday: timebefore,
+                  days: days1,
+                  idList: value,
+                  title: "Breathing exercise starts in 3 mins",
+                  // body: "Please relax yourself",
+                  meditate: false,
+                );
+              } else {
+                TimeOfDay timebefore = TimeOfDay(
+                    hour: selectedTime1.hour - 1,
+                    minute: 60 + (selectedTime1.minute - 3));
+
+                await NotificationsService().scheduleAlarm(
+                  timeofday: timebefore,
+                  days: days,
+                  idList: value,
+                  title: "Breathing exercise starts in 3 mins",
+                  // body: "Please relax yourself",
+                  meditate: false,
+                );
+              }
             }
             break;
           case "Both":
@@ -148,23 +177,37 @@ class _AddReminderState extends State<AddReminder> {
                 days: days,
                 idList: value,
                 title: "Breathing exercise starts in 3 mins",
-
-                // body: "Please relax yourself",
                 meditate: false,
               );
             } else {
-              TimeOfDay timebefore =
-                  TimeOfDay(hour: 23, minute: 60 + (selectedTime1.minute - 3));
-              final days1 = functions.daysOneDayBefore(days);
+              if (selectedTime1.hour == 0) {
+                TimeOfDay timebefore = TimeOfDay(
+                    hour: 23, minute: 60 + (selectedTime1.minute - 3));
 
-              await NotificationsService().scheduleAlarm(
-                timeofday: timebefore,
-                days: days1,
-                idList: value,
-                title: "Breathing exercise starts in 3 mins",
-                // body: "Please relax yourself",
-                meditate: false,
-              );
+                final days1 = functions.daysOneDayBefore(days);
+
+                await NotificationsService().scheduleAlarm(
+                  timeofday: timebefore,
+                  days: days1,
+                  idList: value,
+                  title: "Breathing exercise starts in 3 mins",
+                  // body: "Please relax yourself",
+                  meditate: false,
+                );
+              } else {
+                TimeOfDay timebefore = TimeOfDay(
+                    hour: selectedTime1.hour - 1,
+                    minute: 60 + (selectedTime1.minute - 3));
+
+                await NotificationsService().scheduleAlarm(
+                  timeofday: timebefore,
+                  days: days,
+                  idList: value,
+                  title: "Breathing exercise starts in 3 mins",
+                  // body: "Please relax yourself",
+                  meditate: false,
+                );
+              }
             }
             break;
           default:
@@ -242,204 +285,215 @@ class _AddReminderState extends State<AddReminder> {
         },
       );
     }).toList();
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          elevation: 0,
-          leadingWidth: 80,
-          leading: TextButton(
-            onPressed: () {
-              context.go("/home");
-            },
-            child: CustomColoredText(
-                text: "Cancel", hexColor: "#FFFFFF", size: 16, weight: 400),
-          ),
-          actions: [
-            TextButton(
-              onPressed: _onSave,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canPop) {
+        // context.go("/home", extra: 2);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  currentIndex: 0,
+                  extraInfo: 2,
+                )));
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.red,
+            elevation: 0,
+            leadingWidth: 80,
+            leading: TextButton(
+              onPressed: () {
+                context.go("/home");
+              },
               child: CustomColoredText(
-                  text: "Save", hexColor: "#FFFFFF", size: 16, weight: 400),
-            )
-          ],
-          title: Center(
-            child: CustomColoredText(
-                text: 'Add Reminder',
-                hexColor: "#FFFFFF",
-                size: 20,
-                weight: 500),
-          ),
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // const SizedBox(height: 40),
-              CustomColoredText(
-                  text: "Select the days",
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 8),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: daysWidget),
-              // Wrap(
-              //   children: days.map((day) {
-              //     return Row(
-              //       mainAxisSize: MainAxisSize.min,
-              //       children: <Widget>[
-              //         Checkbox(
-              //           value: selectedDays.contains(day),
-              //           onChanged: (value) {
-              //             setState(() {
-              //               if (value == true) {
-              //                 selectedDays.add(day);
-              //               } else {
-              //                 selectedDays.remove(day);
-              //               }
-              //             });
-              //           },
-              //         ),
-              //         CustomText(
-              //           text: day,
-              //           weight: 400,
-              //         ),
-              //       ],
-              //     );
-              //   }).toList(),
-              // ),
-              const SizedBox(height: 20),
-
-              CustomColoredText(
-                  text: 'I want a reminder to breathe',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 8),
-              CustomDropDown(
-                  items: reminderWhenOptions,
-                  value: selectedReminderWhen,
-                  onChanged: (val) {
-                    setState(() {
-                      selectedReminderWhen = val!;
-                    });
-                  }),
-
-              const SizedBox(height: 20),
-
-              CustomColoredText(
-                  text: 'What time does your stress usually start?',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () async {
-                  TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime1,
-                    builder: (context, child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Colors.blue,
-                            tertiary: Colors.blue,
-                            // onSurface: Colors.blue,
-                          ),
-                          buttonTheme: const ButtonThemeData(
-                            colorScheme: ColorScheme.light(
-                              primary: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (pickedTime != null && pickedTime != selectedTime1) {
-                    setState(() {
-                      selectedTime1 = pickedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1,
-                    ),
-                  ),
-                  child: CustomText(
-                    text: selectedTime1.format(context),
-                    weight: 400,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              CustomColoredText(
-                  text: 'What time does your stress usually end?',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () async {
-                  TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime2,
-                    builder: (context, child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Colors.blue,
-                            tertiary: Colors.blue,
-                            // onSurface: Colors.blue,
-                          ),
-                          buttonTheme: const ButtonThemeData(
-                            colorScheme: ColorScheme.light(
-                              primary: Colors.blue,
-                            ),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (pickedTime != null && pickedTime != selectedTime2) {
-                    setState(() {
-                      selectedTime2 = pickedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1,
-                    ),
-                  ),
-                  child: CustomText(
-                    text: selectedTime2.format(context),
-                    weight: 400,
-                  ),
-                ),
-              ),
-              // Center(
-              //   child: ElevatedButton(
-              //     onPressed: _onSave,
-              //     child: const CustomText(text: "Save", weight: 400),
-              //   ),
-              // ),
+                  text: "Cancel", hexColor: "#FFFFFF", size: 14, weight: 400),
+            ),
+            actions: [
+              TextButton(
+                onPressed: _onSave,
+                child: CustomColoredText(
+                    text: "Save", hexColor: "#FFFFFF", size: 14, weight: 400),
+              )
             ],
+            title: Center(
+              child: CustomColoredText(
+                  text: 'Add Reminder',
+                  hexColor: "#FFFFFF",
+                  size: 20,
+                  weight: 500),
+            ),
           ),
-        ));
+          body: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const SizedBox(height: 40),
+                CustomColoredText(
+                    text: "Select the days",
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
+                const SizedBox(height: 8),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: daysWidget),
+                // Wrap(
+                //   children: days.map((day) {
+                //     return Row(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: <Widget>[
+                //         Checkbox(
+                //           value: selectedDays.contains(day),
+                //           onChanged: (value) {
+                //             setState(() {
+                //               if (value == true) {
+                //                 selectedDays.add(day);
+                //               } else {
+                //                 selectedDays.remove(day);
+                //               }
+                //             });
+                //           },
+                //         ),
+                //         CustomText(
+                //           text: day,
+                //           weight: 400,
+                //         ),
+                //       ],
+                //     );
+                //   }).toList(),
+                // ),
+                const SizedBox(height: 20),
+
+                CustomColoredText(
+                    text: 'I want a reminder to breathe',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
+                const SizedBox(height: 8),
+                CustomDropDown(
+                    items: reminderWhenOptions,
+                    value: selectedReminderWhen,
+                    onChanged: (val) {
+                      setState(() {
+                        selectedReminderWhen = val!;
+                      });
+                    }),
+
+                const SizedBox(height: 20),
+
+                CustomColoredText(
+                    text: 'What time does your stress usually start?',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime1,
+                      builder: (context, child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: Colors.blue,
+                              tertiary: Colors.blue,
+                              // onSurface: Colors.blue,
+                            ),
+                            buttonTheme: const ButtonThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (pickedTime != null && pickedTime != selectedTime1) {
+                      setState(() {
+                        selectedTime1 = pickedTime;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    child: CustomText(
+                      text: selectedTime1.format(context),
+                      weight: 400,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                CustomColoredText(
+                    text: 'What time does your stress usually end?',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime2,
+                      builder: (context, child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: Colors.blue,
+                              tertiary: Colors.blue,
+                              // onSurface: Colors.blue,
+                            ),
+                            buttonTheme: const ButtonThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: Colors.blue,
+                              ),
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (pickedTime != null && pickedTime != selectedTime2) {
+                      setState(() {
+                        selectedTime2 = pickedTime;
+                      });
+                    }
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    child: CustomText(
+                      text: selectedTime2.format(context),
+                      weight: 400,
+                    ),
+                  ),
+                ),
+                // Center(
+                //   child: ElevatedButton(
+                //     onPressed: _onSave,
+                //     child: const CustomText(text: "Save", weight: 400),
+                //   ),
+                // ),
+              ],
+            ),
+          )),
+    );
   }
 }

@@ -42,7 +42,7 @@ class _AddMeditationState extends State<AddMeditation> {
   bool day6 = false;
   bool day7 = false;
   List<String> selectedDays = [];
-  TimeOfDay selectedTime1 = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime1 = TimeOfDay.now();
   double durationDouble = 1;
   double reminderBeforeDouble = 0;
   double volume = 30;
@@ -85,191 +85,202 @@ class _AddMeditationState extends State<AddMeditation> {
         },
       );
     }).toList();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        elevation: 0,
-        leadingWidth: 80,
-        leading: TextButton(
-          onPressed: () {
-            context.go("/home", extra: 2);
-          },
-          child: CustomColoredText(
-              text: "Cancel", hexColor: "#FFFFFF", size: 16, weight: 400),
-        ),
-        actions: [
-          TextButton(
-            onPressed: _onSave,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canPop) {
+        // context.go("/home", extra: 2);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  currentIndex: 2,
+                  extraInfo: 1,
+                )));
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue[400],
+          elevation: 0,
+          leadingWidth: 80,
+          leading: TextButton(
+            onPressed: () {
+              context.go("/home", extra: 2);
+            },
             child: CustomColoredText(
-                text: "Save", hexColor: "#FFFFFF", size: 16, weight: 400),
-          )
-        ],
-        title: Center(
-          child: CustomColoredText(
-              text: 'Add Meditation',
-              hexColor: "#FFFFFF",
-              size: 20,
-              weight: 500),
+                text: "Cancel", hexColor: "#FFFFFF", size: 14, weight: 400),
+          ),
+          actions: [
+            TextButton(
+              onPressed: _onSave,
+              child: CustomColoredText(
+                  text: "Save", hexColor: "#FFFFFF", size: 14, weight: 400),
+            )
+          ],
+          title: Center(
+            child: CustomColoredText(
+                text: 'Add Meditation',
+                hexColor: "#FFFFFF",
+                size: 20,
+                weight: 500),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomColoredText(
-                  text: "Days", hexColor: "#066CD8", size: 16, weight: 400),
-              const SizedBox(height: 8),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: daysWidget),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomColoredText(
+                    text: "Days", hexColor: "#066CD8", size: 16, weight: 400),
+                const SizedBox(height: 8),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: daysWidget),
 
-              const SizedBox(height: 16),
-              CustomColoredText(
-                  text: "Time", hexColor: "#066CD8", size: 16, weight: 400),
-              const SizedBox(height: 8),
-              GestureDetector(
-                onTap: () async {
-                  TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: selectedTime1,
-                    builder: (context, child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Colors.blue,
-                            tertiary: Colors.blue,
-                            // onSurface: Colors.blue,
-                          ),
-                          buttonTheme: const ButtonThemeData(
-                            colorScheme: ColorScheme.light(
+                const SizedBox(height: 16),
+                CustomColoredText(
+                    text: "Time", hexColor: "#066CD8", size: 16, weight: 400),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () async {
+                    TimeOfDay? pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: selectedTime1,
+                      builder: (context, child) {
+                        return Theme(
+                          data: ThemeData.light().copyWith(
+                            colorScheme: const ColorScheme.light(
                               primary: Colors.blue,
+                              tertiary: Colors.blue,
+                              // onSurface: Colors.blue,
+                            ),
+                            buttonTheme: const ButtonThemeData(
+                              colorScheme: ColorScheme.light(
+                                primary: Colors.blue,
+                              ),
                             ),
                           ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (pickedTime != null && pickedTime != selectedTime1) {
-                    setState(() {
-                      selectedTime1 = pickedTime;
-                    });
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (pickedTime != null && pickedTime != selectedTime1) {
+                      setState(() {
+                        selectedTime1 = pickedTime;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      width: 1,
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1,
+                      ),
                     ),
+                    child: CustomText(
+                        text: selectedTime1.format(context), weight: 400),
                   ),
-                  child: CustomText(
-                      text: selectedTime1.format(context), weight: 400),
                 ),
-              ),
-              const SizedBox(height: 16),
-              CustomColoredText(
-                  text: 'Duration:  ${(durationDouble * 5).toInt()} mins',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
+                const SizedBox(height: 16),
+                CustomColoredText(
+                    text: 'Duration:  ${(durationDouble * 5).toInt()} mins',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
 
-              Slider(
-                  divisions: 5,
-                  min: 1,
-                  max: 6,
-                  activeColor: Colors.blue,
-                  value: durationDouble,
-                  onChanged: (val) {
-                    setState(() {
-                      durationDouble = val;
-                    });
-                  }),
-              // Wrap(
-              //   children: durations.map((dur) {
-              //     return RadioItem(
-              //         value: dur,
-              //         groupValue: duration,
-              //         label: "$dur mins");
-              //   }).toList(),
-              // ),
-              const SizedBox(height: 10),
+                Slider(
+                    divisions: 5,
+                    min: 1,
+                    max: 6,
+                    activeColor: Colors.blue,
+                    value: durationDouble,
+                    onChanged: (val) {
+                      setState(() {
+                        durationDouble = val;
+                      });
+                    }),
+                // Wrap(
+                //   children: durations.map((dur) {
+                //     return RadioItem(
+                //         value: dur,
+                //         groupValue: duration,
+                //         label: "$dur mins");
+                //   }).toList(),
+                // ),
+                const SizedBox(height: 10),
 
-              CustomColoredText(
-                  text: (reminderBeforeDouble == 0)
-                      ? 'Reminder before meditation: None'
-                      : 'Reminder before meditation: ${(reminderBeforeDouble * 5).toInt()} mins',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
+                CustomColoredText(
+                    text: (reminderBeforeDouble == 0)
+                        ? 'Reminder before meditation: None'
+                        : 'Reminder before meditation: ${(reminderBeforeDouble * 5).toInt()} mins',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
 
-              Slider(
-                  divisions: 6,
-                  min: 0,
-                  max: 6,
-                  activeColor: Colors.blue,
-                  value: reminderBeforeDouble,
-                  onChanged: (val) {
-                    setState(() {
-                      reminderBeforeDouble = val;
-                    });
-                  }),
-              // Wrap(
-              //   children: reminderBefores.map((dur) {
-              //     if (dur == "0") {
-              //       return RadioItem(
-              //           value: dur, groupValue: duration, label: "None");
-              //     } else if (dur == "1") {
-              //       return RadioItem(
-              //           value: dur,
-              //           groupValue: duration,
-              //           label: "$dur hour");
-              //     } else {
-              //       return RadioItem(
-              //           value: dur,
-              //           groupValue: duration,
-              //           label: "$dur mins");
-              //     }
-              //   }).toList(),
-              // ),
-              const SizedBox(height: 16),
-              CustomColoredText(
-                  text: "Sound", hexColor: "#066CD8", size: 16, weight: 400),
-              const SizedBox(height: 8),
-              CustomDropDown(
-                  items: sounds,
-                  value: sound,
-                  onChanged: (val) {
-                    setState(() {
-                      sound = val!;
-                    });
-                  }),
+                Slider(
+                    divisions: 6,
+                    min: 0,
+                    max: 6,
+                    activeColor: Colors.blue,
+                    value: reminderBeforeDouble,
+                    onChanged: (val) {
+                      setState(() {
+                        reminderBeforeDouble = val;
+                      });
+                    }),
+                // Wrap(
+                //   children: reminderBefores.map((dur) {
+                //     if (dur == "0") {
+                //       return RadioItem(
+                //           value: dur, groupValue: duration, label: "None");
+                //     } else if (dur == "1") {
+                //       return RadioItem(
+                //           value: dur,
+                //           groupValue: duration,
+                //           label: "$dur hour");
+                //     } else {
+                //       return RadioItem(
+                //           value: dur,
+                //           groupValue: duration,
+                //           label: "$dur mins");
+                //     }
+                //   }).toList(),
+                // ),
+                const SizedBox(height: 16),
+                CustomColoredText(
+                    text: "Sound", hexColor: "#066CD8", size: 16, weight: 400),
+                const SizedBox(height: 8),
+                CustomDropDown(
+                    items: sounds,
+                    value: sound,
+                    onChanged: (val) {
+                      setState(() {
+                        sound = val!;
+                      });
+                    }),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              CustomColoredText(
-                  text: 'Volume:  ${volume.toInt()}%',
-                  hexColor: "#066CD8",
-                  size: 16,
-                  weight: 400),
-              const SizedBox(height: 8),
-              Slider(
-                  divisions: 100,
-                  min: 0,
-                  max: 100,
-                  activeColor: Colors.blue,
-                  value: volume,
-                  onChanged: (val) {
-                    setState(() {
-                      volume = val;
-                    });
-                  }),
-            ],
+                CustomColoredText(
+                    text: 'Volume:  ${volume.toInt()}%',
+                    hexColor: "#066CD8",
+                    size: 16,
+                    weight: 400),
+                const SizedBox(height: 8),
+                Slider(
+                    divisions: 100,
+                    min: 0,
+                    max: 100,
+                    activeColor: Colors.blue,
+                    value: volume,
+                    onChanged: (val) {
+                      setState(() {
+                        volume = val;
+                      });
+                    }),
+              ],
+            ),
           ),
         ),
       ),

@@ -88,86 +88,95 @@ class _HotlineState extends State<Hotline> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: HexColor("#23C4F1"),
-        leading: IconButton(
-            onPressed: () {
-              context.go("/home", extra: 3);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new_sharp,
-              color: Colors.white,
-            )),
-        title: CustomColoredText(
-            text: "Hotline Number", hexColor: "#FFFFFF", size: 22, weight: 500),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomColoredText(
-              text: "Your current zipcode: ${UserAdd.zipcode}",
-              hexColor: "#2C3351",
-              size: 16,
-              weight: 700,
-            ),
-            const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomColoredText(
-                  text:
-                      "Please contact the hotline number provided below for assistance if needed.",
-                  hexColor: "#2C3351",
-                  size: 16,
-                  weight: 400,
-                ),
-                const SizedBox(height: 16),
-                CustomColoredText(
-                  text: "Tap on the number below to initial a direct call.",
-                  hexColor: "#2C3351",
-                  size: 16,
-                  weight: 400,
-                ),
-                const SizedBox(height: 32),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      launchDialer();
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: HexColor("#BBBBBB"),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canpop) {
+        context.go("/home", extra: 3);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: HexColor("#23C4F1"),
+          leading: IconButton(
+              onPressed: () {
+                context.go("/home", extra: 3);
+              },
+              icon: const Icon(
+                Icons.arrow_back_ios_new_sharp,
+                color: Colors.white,
+              )),
+          title: CustomColoredText(
+              text: "Hotline Number",
+              hexColor: "#FFFFFF",
+              size: 22,
+              weight: 500),
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomColoredText(
+                text: "Your current zipcode: ${UserAdd.zipcode}",
+                hexColor: "#2C3351",
+                size: 16,
+                weight: 700,
+              ),
+              const SizedBox(height: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomColoredText(
+                    text:
+                        "Please contact the hotline number provided below for assistance if needed.",
+                    hexColor: "#2C3351",
+                    size: 16,
+                    weight: 400,
+                  ),
+                  const SizedBox(height: 16),
+                  CustomColoredText(
+                    text: "Tap on the number below to initial a direct call.",
+                    hexColor: "#2C3351",
+                    size: 16,
+                    weight: 400,
+                  ),
+                  const SizedBox(height: 32),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        launchDialer();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: HexColor("#BBBBBB"),
+                          ),
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.call,
-                            color: HexColor("#0E9E50"),
-                          ),
-                          const SizedBox(width: 16),
-                          CustomColoredText(
-                            text: number,
-                            hexColor: "#0E9E50",
-                            size: 18,
-                            weight: 500,
-                          ),
-                        ],
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: HexColor("#0E9E50"),
+                            ),
+                            const SizedBox(width: 16),
+                            CustomColoredText(
+                              text: number,
+                              hexColor: "#0E9E50",
+                              size: 18,
+                              weight: 500,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

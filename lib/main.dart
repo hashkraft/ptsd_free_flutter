@@ -61,10 +61,6 @@ class _SplashScreenState extends State<SplashScreen>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    // AwesomeNotifications().getAppLifeCycle().then((value) {
-    //   // didChangeAppLifecycleState(value as AppLifecycleState);
-    //   developer.log(value.toString());
-    // });
     WidgetsBinding.instance.addObserver(this);
     SettingVariables().getRandomPTSD().then((val) {
       developer.log(SettingVariables().randomPTSD.toString());
@@ -81,11 +77,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     super.initState();
   }
-  // @override
-  //   void initState() {
-  //     WidgetsBinding.instance.addObserver(this);
-  //     super.initState();
-  //   }
 
   @override
   void dispose() {
@@ -98,8 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
     switch (state) {
       case AppLifecycleState.resumed:
         developer.log("RESUMED");
-        // Restart.restartApp();
-        // context.go("/startinfo2");
         break;
       case AppLifecycleState.inactive:
         developer.log("INACTIVE");
@@ -118,8 +107,20 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return const Image(
-      image: AssetImage('assets/images/splash_bg.jpg'),
+    return GestureDetector(
+      onTap: () {
+        SettingVariables().getRandomPTSD().then((val) {
+          developer.log(SettingVariables().randomPTSD.toString());
+          if (val) {
+            context.go("/startinfo1");
+          } else {
+            context.go("/startinfo2");
+          }
+        });
+      },
+      child: const Image(
+        image: AssetImage('assets/images/splash_bg.jpg'),
+      ),
     );
     ;
   }
