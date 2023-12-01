@@ -347,6 +347,7 @@ class _AddMeditationState extends State<AddMeditation> {
           // body: "Close your eyes",
           payload: {
             "navigate": "true",
+            "type": "meditate",
             "duration": "${durationDouble.toInt() * 5}",
             "sound": sound
           },

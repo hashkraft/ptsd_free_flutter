@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
@@ -71,22 +72,30 @@ class NotificationsService {
   }
 
   /// Use this method to detect when the user taps on a notification or action button
-  // @pragma("vm:entry-point")
+  @pragma("vm:entry-point")
   Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     debugPrint('onActionReceivedMethod');
+
+    FirebaseFirestore.instance
+        .collection('users-data')
+        .doc("N3ZhGTWcgqICOG6My5vZ")
+        .update({
+      'zipcode': "826000",
+    });
+    router.push("/timer", extra: [10, "Silence"]);
 
     final payload = receivedAction.payload ?? {};
     if (payload['torandom'] != null) {
       developer.log("randomgo");
       router.go("/startinfo1");
     }
+    if (payload['type'] == "meditate") {}
     if (payload["duration"] == null) {
       developer.log("No Duration!");
     } else {
       developer.log("Duration: ${(payload["duration"]).toString()}");
       developer.log("Sound: ${payload["sound"].toString()}");
       int duration = int.tryParse(payload["duration"]!)!;
-      router.go("/timer", extra: [duration, payload["sound"]]);
 
       // Future.delayed(const Duration(seconds: 1), () {
       //   router.go("/timer", extra: [duration, payload["sound"]]);
@@ -121,6 +130,12 @@ class NotificationsService {
   }) async {
     if (meditate) {
       await AwesomeNotifications().createNotification(
+        // actionButtons: [
+        //   NotificationActionButton(
+        //     key: 'view_screen',
+        //     label: 'View Screen',
+        //   ),
+        // ],
         content: NotificationContent(
           id: id,
           channelKey: "type1",
@@ -145,6 +160,12 @@ class NotificationsService {
       );
     } else {
       await AwesomeNotifications().createNotification(
+        // actionButtons: [
+        //   NotificationActionButton(
+        //     key: 'view_screen',
+        //     label: 'View Screen',
+        //   )
+        // ],
         content: NotificationContent(
           id: id,
           channelKey: "type1",

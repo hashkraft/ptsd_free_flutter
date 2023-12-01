@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(scaffoldBackgroundColor: HexColor("#EFF8FF")),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
+      key: navigatorKey,
     );
   }
 }
@@ -62,6 +63,13 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    // AwesomeNotifications().setListeners(
+    //     onActionReceivedMethod: (receivedNotification) async {
+    //   if (receivedNotification.buttonKeyInput == 'view_screen') {
+    //     // Handle the action to navigate to a specific screen
+    //     router.go("/timer", extra: [10, "Silence"]);
+    //   }
+    // });
     SettingVariables().getRandomPTSD().then((val) {
       developer.log(SettingVariables().randomPTSD.toString());
       if (val) {

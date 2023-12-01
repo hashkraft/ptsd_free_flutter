@@ -828,7 +828,7 @@ Set-up one PTSD trigger at a time.''',
                               }
                             },
                             child: CustomColoredText(
-                              text: "Join Meditate Group",
+                              text: "Join Meditation Group",
                               size: 16,
                               weight: 500,
                               hexColor: "#F03608",
