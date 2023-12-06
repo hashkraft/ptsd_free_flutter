@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ptsd_free/main.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
+import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'dart:developer' as developer;
 import 'package:ptsd_free/utils/functions.dart' as functions;
@@ -324,7 +327,6 @@ class _AddMeditationState extends State<AddMeditation> {
       developer.log((reminderBeforeDouble.toInt() * 5).toString());
       developer.log(sound);
       developer.log(volume.toInt().toString());
-
       List<int> days = functions.convertDaysToIndices(selectedDays);
       developer.log('Days in indices: $days');
       DatabaseHelper()
@@ -337,47 +339,95 @@ class _AddMeditationState extends State<AddMeditation> {
         volume: volume.toInt(),
         uuid: const Uuid().v4(),
       )
-          .then((value) {
-        NotificationsService().scheduleAlarm(
-          timeofday: selectedTime1,
-          days: days,
-          idList: value,
-          meditate: true,
-          title: "Tap here to start the meditation",
-          // body: "Close your eyes",
-          payload: {
-            "navigate": "true",
-            "type": "meditate",
-            "duration": "${durationDouble.toInt() * 5}",
-            "sound": sound
-          },
-        );
+          .then((value) async {
+        for (int day in days) {
+          await scheduleWeeklyPTSDNotification(
+            title: "Meditate",
+            body: "Tap here to start meditation",
+            notificationId: value[days.indexOf(day)],
+            dayOfWeek: day,
+            hourOfTheDay: selectedTime1.hour,
+            minOfTheHour: selectedTime1.minute,
+            payload: jsonEncode({
+              "type": "meditate",
+              "sound": sound,
+              "duration": "${durationDouble.toInt() * 5}"
+            }),
+          );
+          developer.log(
+              "Notification set on day $day, at ${selectedTime1.hour}:${selectedTime1.minute}");
+        }
+
         if (reminderBeforeDouble.toInt() > 0) {
           final minutes = reminderBeforeDouble.toInt() * 5;
           if ((selectedTime1.minute - minutes) > 0) {
-            TimeOfDay timebefore = TimeOfDay(
-                hour: selectedTime1.hour,
-                minute: selectedTime1.minute - minutes);
-            NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days,
-              idList: value,
-              meditate: true,
-              title: "Meditation starts in $minutes mins",
-              // body: "Start in $minutes mins later",
-            );
+            for (int day in days) {
+              await scheduleWeeklyPTSDNotification(
+                title: "Reminder",
+                body: 'Meditation starts in $minutes mins',
+                notificationId: value[days.indexOf(day)],
+                dayOfWeek: day,
+                hourOfTheDay: selectedTime1.hour,
+                minOfTheHour: selectedTime1.minute - minutes,
+                payload: jsonEncode({
+                  "type": "reminder",
+                }),
+              );
+              developer.log(
+                  "Notification set on day $day, at ${selectedTime1.hour}:${selectedTime1.minute - minutes}");
+            }
+            // NotificationsService().scheduleAlarm(
+            //   timeofday: timebefore,
+            //   days: days,
+            //   idList: value,
+            //   meditate: true,
+            //   title: "Meditation starts in $minutes mins",
+            //   // body: "Start in $minutes mins later",
+            // );
           } else {
-            TimeOfDay timebefore = TimeOfDay(
-                hour: 23, minute: 60 + (selectedTime1.minute - minutes));
-            final days1 = functions.daysOneDayBefore(days);
-            NotificationsService().scheduleAlarm(
-              timeofday: timebefore,
-              days: days1,
-              meditate: true,
-              idList: value,
-              title: "Meditation starts in $minutes mins",
-              // body: "Start in $minutes mins later",
-            );
+            if (selectedTime1.hour == 0) {
+              final days1 = functions.daysOneDayBefore(days);
+              for (int day in days1) {
+                await scheduleWeeklyPTSDNotification(
+                  title: "Reminder",
+                  body: 'Meditation starts in $minutes mins',
+                  notificationId: value[days1.indexOf(day)],
+                  dayOfWeek: day,
+                  hourOfTheDay: 23,
+                  minOfTheHour: 60 + (selectedTime1.minute - minutes),
+                  payload: jsonEncode({
+                    "type": "reminder",
+                  }),
+                );
+                developer.log(
+                    "Notification set on day $day, at 23:${60 + (selectedTime1.minute - minutes)}");
+              }
+            } else {
+              for (int day in days) {
+                await scheduleWeeklyPTSDNotification(
+                  title: "Reminder",
+                  body: 'Meditation starts in $minutes mins',
+                  notificationId: value[days.indexOf(day)],
+                  dayOfWeek: day,
+                  hourOfTheDay: selectedTime1.hour - 1,
+                  minOfTheHour: 60 + (selectedTime1.minute - minutes),
+                  payload: jsonEncode({
+                    "type": "reminder",
+                  }),
+                );
+                developer.log(
+                    "Notification set on day $day, at ${selectedTime1.hour - 1}:${60 + (selectedTime1.minute - minutes)}");
+              }
+            }
+
+            // NotificationsService().scheduleAlarm(
+            //   timeofday: timebefore,
+            //   days: days1,
+            //   meditate: true,
+            //   idList: value,
+            //   title: "Meditation starts in $minutes mins",
+            //   // body: "Start in $minutes mins later",
+            // );
           }
         }
         Navigator.of(context).push(MaterialPageRoute(

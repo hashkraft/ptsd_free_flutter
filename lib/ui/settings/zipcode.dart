@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/user.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
@@ -48,14 +49,22 @@ class _ZipcodeState extends State<ZipCode> {
     return PopScope(
       canPop: false,
       onPopInvoked: (canpop) {
-        context.go("/home", extra: 3);
+        // context.go("/home", extra: 3);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(currentIndex: 3)));
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: HexColor("#23C4F1"),
           leading: IconButton(
               onPressed: () {
-                context.go("/home", extra: 3);
+                // context.go("/home", extra: 3);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(currentIndex: 3)));
               },
               icon: const Icon(
                 Icons.arrow_back_ios_new_sharp,

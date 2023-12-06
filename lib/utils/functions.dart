@@ -35,6 +35,31 @@ Future<String?> getId() async {
   }
 }
 
+String abbreviateDays(String input) {
+  // Define a map of day abbreviations
+  final dayAbbreviations = {
+    'Monday': 'Mo',
+    'Tuesday': 'Tu',
+    'Wednesday': 'We',
+    'Thursday': 'Th',
+    'Friday': 'Fr',
+    'Saturday': 'Sa',
+    'Sunday': 'Su',
+  };
+
+  final days = input.split(',');
+
+  final abbreviatedDays = days.map((day) {
+    final trimmedDay = day.trim();
+    return dayAbbreviations[trimmedDay] ?? trimmedDay;
+  });
+
+  // Join the abbreviated days into a comma-separated string
+  final result = abbreviatedDays.join(',');
+
+  return result;
+}
+
 void showSnackbar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -97,6 +122,27 @@ List<int> daysOneDayBefore(List<int> days) {
     }
   }
   return d;
+}
+
+String convertTimeFormat(String inputTime) {
+  List<String> timeParts = inputTime.split(':');
+  int hours = int.parse(timeParts[0]);
+  int minutes = int.parse(timeParts[1]);
+
+  String period = (hours >= 12) ? 'PM' : 'AM';
+  hours = (hours > 12) ? (hours - 12) : hours;
+  hours = (hours == 0) ? 12 : hours;
+  String hoursStr = hours.toString();
+  String minutesStr = minutes.toString();
+  if (hours < 10) {
+    hoursStr = "0$hours";
+  }
+  if (minutes < 10) {
+    minutesStr = "0$minutes";
+  }
+  String formattedTime = '$hoursStr:$minutesStr $period';
+
+  return formattedTime;
 }
 
 List<int> convertDaysToIndices(List<String> days) {

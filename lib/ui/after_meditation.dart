@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
+import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:ptsd_free/widgets/image_with_text.dart';
@@ -168,8 +170,15 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                                     }),
                                   ),
                                   onPressed: () {
-                                    context
-                                        .go("/timer", extra: [10, "I'm Okay"]);
+                                    // context
+                                    //     .go("/timer", extra: [10, "I'm Okay"]);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => TimerScreen(
+                                                  mins: 10,
+                                                  sound: "I'm Okay",
+                                                )));
                                   },
                                   child: CustomColoredText(
                                       text: "Start Meditation",
@@ -214,7 +223,13 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                                       }
 
                                       if (screen == 3) {
-                                        context.go("/home", extra: 1);
+                                        // context.go("/home", extra: 1);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomeScreen(
+                                                        currentIndex: 3)));
                                       }
                                     },
                                     child: CustomColoredText(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/user.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
@@ -40,7 +41,11 @@ class _RegistrationState extends State<Registration> {
           password: deviceId,
         );
         developer.log("User Created!");
-        context.go("/home");
+        // context.go("/home");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(currentIndex: 0)));
       } on FirebaseAuthException catch (ex) {
         developer.log(ex.toString());
       }
@@ -74,78 +79,69 @@ class _RegistrationState extends State<Registration> {
       appBar: AppBar(
         backgroundColor: HexColor("#23C4F1"),
         automaticallyImplyLeading: false,
-        // leading: IconButton(
-        //     onPressed: () {
-        //       context.go("/home", extra: 3);
-        //     },
-        //     icon: const Icon(
-        //       Icons.arrow_back_ios_new_sharp,
-        //       color: Colors.white,
-        //     )),
         title: CustomColoredText(
-            text: "Registration", hexColor: "#FFFFFF", size: 22, weight: 500),
+            text: "Register to PTSD Free App",
+            hexColor: "#FFFFFF",
+            size: 22,
+            weight: 500),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: (UserAdd.zipcode.isNotEmpty)
-              ? const Text("You're already registered!")
-              : Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: (UserAdd.zipcode.isNotEmpty)
+          ? const Center(child: Text("You're already registered!"))
+          : SingleChildScrollView(
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomColoredText(
+                          text:
+                              "To ensure you receive prompt and personalized assistance, please share your email and ZIP code with us. This information is vital for us to connect you with immediate help and resources in your area.",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomColoredText(
+                          text:
+                              "Your privacy is our priority. We respect and protect your information.",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 32),
+                        CustomColoredText(
+                          text: "Email: ",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextFormField(
+                          controller: emailController,
+                          hintText: "Email",
+                          obscureText: false,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomColoredText(
+                          text: "Zip Code: ",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomTextFormField(
+                          controller: zipcodeController,
+                          hintText: "Zip Code",
+                          obscureText: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
                     children: [
-                      CustomColoredText(
-                        text: "Email: ",
-                        hexColor: "#2C3351",
-                        size: 16,
-                        weight: 500,
-                      ),
-                      const SizedBox(height: 8),
-                      CustomTextFormField(
-                        controller: emailController,
-                        hintText: "Email",
-                        obscureText: false,
-                      ),
-                      const SizedBox(height: 16),
-                      // CustomColoredText(
-                      //   text: "Password: ",
-                      //   hexColor: "#2C3351",
-                      //   size: 16,
-                      //   weight: 500,
-                      // ),
-                      // const SizedBox(height: 8),
-                      // CustomTextFormField(
-                      //   controller: passwordController,
-                      //   hintText: "Password",
-                      //   obscureText: true,
-                      // ),
-                      // const SizedBox(height: 16),
-                      // CustomColoredText(
-                      //   text: "Confirm Password: ",
-                      //   hexColor: "#2C3351",
-                      //   size: 16,
-                      //   weight: 500,
-                      // ),
-                      // const SizedBox(height: 8),
-                      // CustomTextFormField(
-                      //   controller: cPasswordController,
-                      //   hintText: "Confirm Password",
-                      //   obscureText: true,
-                      // ),
-                      // const SizedBox(height: 16),
-                      CustomColoredText(
-                        text: "Zip Code: ",
-                        hexColor: "#2C3351",
-                        size: 16,
-                        weight: 500,
-                      ),
-                      const SizedBox(height: 8),
-                      CustomTextFormField(
-                        controller: zipcodeController,
-                        hintText: "Zip Code",
-                        obscureText: false,
-                      ),
-                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -207,7 +203,11 @@ class _RegistrationState extends State<Registration> {
                                     zipcodeController.clear();
                                     Future.delayed(const Duration(seconds: 1),
                                         () {
-                                      context.go("/home");
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => HomeScreen(
+                                                    currentIndex: 0,
+                                                  )));
                                     });
                                   });
                                 }
@@ -223,11 +223,12 @@ class _RegistrationState extends State<Registration> {
                           const SizedBox(),
                         ],
                       ),
+                      const SizedBox(height: 8),
                     ],
                   ),
-                ),
-        ),
-      ),
+                ],
+              ),
+            ),
     );
   }
 }

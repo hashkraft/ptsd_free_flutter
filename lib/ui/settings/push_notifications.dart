@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer' as developer;
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 
@@ -40,7 +40,11 @@ class _PushNotificationsState extends State<PushNotifications> {
         backgroundColor: HexColor("#23C4F1"),
         leading: IconButton(
             onPressed: () {
-              context.go("/home", extra: 3);
+              // context.go("/home", extra: 3);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomeScreen(currentIndex: 3)));
             },
             icon: const Icon(
               Icons.arrow_back_ios_new_sharp,
@@ -77,12 +81,12 @@ class _PushNotificationsState extends State<PushNotifications> {
                     });
                     developer.log(push.toString());
                     if (value == true) {
-                      AwesomeNotifications()
-                          .listScheduledNotifications()
-                          .then((value) {
-                        developer.log(value.toString());
-                        developer.log(value.length.toString());
-                      });
+                      // AwesomeNotifications()
+                      //     .listScheduledNotifications()
+                      //     .then((value) {
+                      //   developer.log(value.toString());
+                      //   developer.log(value.length.toString());
+                      // });
                     } else {}
                   },
                 ),

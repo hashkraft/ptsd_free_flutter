@@ -44,6 +44,7 @@ class DatabaseHelper {
     required final TimeOfDay selectedTime1,
     required final TimeOfDay selectedTime2,
     required final String uuid,
+    required final String trigger,
   }) async {
     List<int> alarmIds = [];
     for (String day in selectedDays) {
@@ -55,7 +56,7 @@ class DatabaseHelper {
     developer.log(uuid);
     db.insert(values.stopperTableName, {
       "days": selectedDays.join(', '),
-      "trigger": selectedReminderWhen,
+      "trigger": trigger,
       "stress_start_time": functions.timeToString(selectedTime1),
       "stress_end_time": functions.timeToString(selectedTime2),
       "uuid": uuid,

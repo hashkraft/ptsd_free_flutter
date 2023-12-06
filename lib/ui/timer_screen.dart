@@ -13,14 +13,17 @@ import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
 
 class TimerScreen extends StatefulWidget {
-  final int mins;
-  final String sound;
+  static String route = "/timer";
+  int mins;
+  String sound;
   String imageText;
   String source;
+  String payload;
   TimerScreen({
     super.key,
     required this.mins,
     required this.sound,
+    this.payload = "",
     this.imageText = "",
     this.source = "",
   });
@@ -117,11 +120,6 @@ class _TimerScreenState extends State<TimerScreen> {
           onPressed: () {
             setState(() {
               paused = !paused;
-              // if (_videoController.value.isPlaying) {
-              //   _videoController.pause();
-              // } else {
-              //   _videoController.play();
-              // }
 
               if (paused) {
                 _controller.pause();
@@ -153,12 +151,27 @@ class _TimerScreenState extends State<TimerScreen> {
       _videoController.play();
       _videoController.setLooping(true);
     }
-    developer.log(_videoController.value.isPlaying.toString());
+    dynamic args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+    if (args != null) {
+      if (args['sound'] != null) {
+        widget.sound = args['sound']!;
+        widget.mins = int.tryParse(args['duration']!) ?? 10;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              context.go("/home", extra: 1);
+              // context.go("/home", extra: 1);
+              // Navigator.pop(context);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => HomeScreen(
+              //               currentIndex: 1,
+              //             )));
             },
             icon: const Icon(Icons.arrow_back_ios_new_sharp)),
         title: const Text("Prepare to meditate"),
@@ -188,7 +201,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 ),
                 Center(
                   child: CircularCountDownTimer(
-                    duration: widget.mins * 60, // 10
+                    duration: (widget.mins * 60),
                     initialDuration: 0,
                     controller: _controller,
                     width: MediaQuery.of(context).size.width / 2,
@@ -272,7 +285,14 @@ class _TimerScreenState extends State<TimerScreen> {
                         ),
                       );
                     } else {
-                      context.go("/home", extra: 2);
+                      // context.go("/home", extra: 2);
+                      // Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen(
+                                    currentIndex: 2,
+                                  )));
                     }
                   },
                 ),

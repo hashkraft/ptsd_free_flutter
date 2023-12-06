@@ -1,5 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
 import 'package:ptsd_free/ui/add_meditation.dart';
 import 'package:ptsd_free/ui/after_meditation.dart';
 import 'package:ptsd_free/ui/auth/login.dart';
@@ -12,11 +18,23 @@ import 'package:ptsd_free/ui/more/membership.dart';
 import 'package:ptsd_free/ui/settings/hotline.dart';
 import 'package:ptsd_free/ui/settings/privacy_policy.dart';
 import 'package:ptsd_free/ui/settings/push_notifications.dart';
+import 'package:ptsd_free/ui/splash_screen.dart';
 import 'package:ptsd_free/ui/start_information.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/ui/settings/zipcode.dart';
 
+String iRoute() {
+  // final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+  //         Platform.isLinux
+  //     ? null
+  //     : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {}
+
+  return "/";
+}
+
 final GoRouter router = GoRouter(
+  initialLocation: iRoute(),
   routes: <RouteBase>[
     GoRoute(
       path: '/',
@@ -75,7 +93,9 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'addreminder',
           builder: (BuildContext context, GoRouterState state) {
-            return const AddReminder();
+            return const AddReminder(
+              trigger: "Places",
+            );
           },
         ),
         GoRoute(
@@ -87,18 +107,26 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'timer',
           builder: (BuildContext context, GoRouterState state) {
-            var val = state.extra as List;
-            if (val.length == 3) {
+            if (state.extra == null) {
               return TimerScreen(
-                mins: val[0],
-                sound: val[1],
-                imageText: val[2],
+                mins: 10,
+                sound: "Silence",
+                // imageText: val[2],
               );
             } else {
-              return TimerScreen(
-                mins: val[0],
-                sound: val[1],
-              );
+              var val = state.extra as List;
+              if (val.length == 3) {
+                return TimerScreen(
+                  mins: val[0],
+                  sound: val[1],
+                  imageText: val[2],
+                );
+              } else {
+                return TimerScreen(
+                  mins: val[0],
+                  sound: val[1],
+                );
+              }
             }
           },
         ),

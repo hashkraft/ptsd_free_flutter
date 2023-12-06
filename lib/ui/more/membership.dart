@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +35,11 @@ class Membership extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvoked: (canpop) {
-        context.go("/home", extra: 4);
+        // context.go("/home", extra: 4);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(currentIndex: 4)));
       },
       child: Scaffold(
         body: Stack(
@@ -50,7 +55,11 @@ class Membership extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 leading: IconButton(
                   onPressed: () {
-                    context.go("/home", extra: 4);
+                    // context.go("/home", extra: 4);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomeScreen(currentIndex: 4)));
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios_sharp,

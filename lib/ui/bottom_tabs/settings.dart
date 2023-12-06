@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
+import 'package:ptsd_free/ui/settings/hotline.dart';
+import 'package:ptsd_free/ui/settings/privacy_policy.dart';
+import 'package:ptsd_free/ui/settings/zipcode.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
@@ -41,13 +44,17 @@ class _SettingsState extends State<SettingsScreen> {
           ListTileSettings(
             text: "Zipcode",
             onPressed: () {
-              context.go("/zipcode");
+              // context.go("/zipcode");
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ZipCode()));
             },
           ),
           ListTileSettings(
             text: "Hotline Number",
             onPressed: () {
-              context.go("/hotline");
+              // context.go("/hotline");
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Hotline()));
             },
           ),
           // ListTileSettings(
@@ -126,7 +133,11 @@ class _SettingsState extends State<SettingsScreen> {
             text: "Privacy Policy",
             onPressed: () {
               developer.log("Privacy Policy clicked!");
-              context.go("/privacypolicy");
+              // context.go("/privacypolicy");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PrivacyPolicy()));
             },
           ),
           const SizedBox(height: 32),

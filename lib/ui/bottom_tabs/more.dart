@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ptsd_free/ui/more/coaching.dart';
+import 'package:ptsd_free/ui/more/membership.dart';
 import 'package:ptsd_free/widgets/list_tile_more.dart';
 import 'dart:developer' as developer;
 
@@ -24,14 +26,18 @@ class _MoreState extends State<More> {
           icon: "assets/images/membership_icon.png",
           onPressed: () {
             developer.log("Membership clicked!");
-            context.go("/membership");
+            // context.go("/membership");
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Membership()));
           },
         ),
         ListTileMore(
           text: "Coaching",
           icon: "assets/images/coaching_icon.png",
           onPressed: () {
-            context.go("/coaching");
+            // context.go("/coaching");
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Coaching()));
             developer.log("Coaching clicked!");
           },
         ),

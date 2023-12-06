@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/notifications/notifications_service.dart';
+import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
 import 'package:ptsd_free/repo/database_helpers.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
@@ -12,7 +15,8 @@ import 'package:uuid/uuid.dart';
 import 'package:ptsd_free/utils/functions.dart' as functions;
 
 class AddReminder extends StatefulWidget {
-  const AddReminder({super.key});
+  final String trigger;
+  const AddReminder({super.key, required this.trigger});
 
   @override
   State<AddReminder> createState() => _AddReminderState();
@@ -91,6 +95,7 @@ class _AddReminderState extends State<AddReminder> {
       developer.log('Days in indices: $days');
       DatabaseHelper()
           .insertStopper(
+        trigger: widget.trigger,
         selectedDays: selectedDays,
         selectedReminderWhen: selectedReminderWhen,
         selectedTime1: selectedTime1,
@@ -100,31 +105,38 @@ class _AddReminderState extends State<AddReminder> {
           .then((value) async {
         switch (selectedReminderWhen) {
           case "During the stress":
-            await NotificationsService().scheduleAlarm(
-              timeofday: selectedTime1,
-              days: days,
-              idList: value,
-              title: "Touch here to breathe and let go.",
-              // body: "Please relax yourself",
-              meditate: false,
-              payload: {
-                "torandom": "true",
-              },
-            );
+            for (int day in days) {
+              await scheduleWeeklyPTSDNotification(
+                title: "Breathe",
+                body: 'Tap here to breathe and let go',
+                notificationId: value[days.indexOf(day)],
+                dayOfWeek: day,
+                hourOfTheDay: selectedTime1.hour,
+                minOfTheHour: selectedTime1.minute,
+                payload: jsonEncode({
+                  "type": "breathe",
+                }),
+              );
+            }
             break;
           case "3 minutes before":
             if ((selectedTime1.minute - 3) > 0) {
               TimeOfDay timebefore = TimeOfDay(
                   hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
 
-              await NotificationsService().scheduleAlarm(
-                timeofday: timebefore,
-                days: days,
-                idList: value,
-                title: "Breathing exercise starts in 3 mins",
-                // body: "Please relax yourself",
-                meditate: false,
-              );
+              for (int day in days) {
+                await scheduleWeeklyPTSDNotification(
+                  title: "Reminder",
+                  body: 'Meditation starts in 3 mins',
+                  notificationId: value[days.indexOf(day)],
+                  dayOfWeek: day,
+                  hourOfTheDay: timebefore.hour,
+                  minOfTheHour: timebefore.minute,
+                  payload: jsonEncode({
+                    "type": "reminder",
+                  }),
+                );
+              }
             } else {
               if (selectedTime1.hour == 0) {
                 TimeOfDay timebefore = TimeOfDay(
@@ -132,96 +144,120 @@ class _AddReminderState extends State<AddReminder> {
 
                 final days1 = functions.daysOneDayBefore(days);
 
-                await NotificationsService().scheduleAlarm(
-                  timeofday: timebefore,
-                  days: days1,
-                  idList: value,
-                  title: "Breathing exercise starts in 3 mins",
-                  // body: "Please relax yourself",
-                  meditate: false,
-                );
+                for (int day in days1) {
+                  await scheduleWeeklyPTSDNotification(
+                    title: "Reminder",
+                    body: 'Meditation starts in 3 mins',
+                    notificationId: value[days1.indexOf(day)],
+                    dayOfWeek: day,
+                    hourOfTheDay: timebefore.hour,
+                    minOfTheHour: timebefore.minute,
+                    payload: jsonEncode({
+                      "type": "reminder",
+                    }),
+                  );
+                }
               } else {
                 TimeOfDay timebefore = TimeOfDay(
                     hour: selectedTime1.hour - 1,
                     minute: 60 + (selectedTime1.minute - 3));
 
-                await NotificationsService().scheduleAlarm(
-                  timeofday: timebefore,
-                  days: days,
-                  idList: value,
-                  title: "Breathing exercise starts in 3 mins",
-                  // body: "Please relax yourself",
-                  meditate: false,
-                );
+                for (int day in days) {
+                  await scheduleWeeklyPTSDNotification(
+                    title: "Reminder",
+                    body: 'Meditation starts in 3 mins',
+                    notificationId: value[days.indexOf(day)],
+                    dayOfWeek: day,
+                    hourOfTheDay: timebefore.hour,
+                    minOfTheHour: timebefore.minute,
+                    payload: jsonEncode({
+                      "type": "reminder",
+                    }),
+                  );
+                }
               }
             }
             break;
           case "Both":
-            await NotificationsService().scheduleAlarm(
-              timeofday: selectedTime1,
-              days: days,
-              idList: value,
-              title: "Touch here to breathe and let go.",
-              // body: "Touch here to breathe and let go.",
-              meditate: false,
-              payload: {
-                "torandom": "true",
-              },
-            );
+            for (int day in days) {
+              await scheduleWeeklyPTSDNotification(
+                title: "Reminder",
+                body: 'Meditation starts in 3 mins',
+                notificationId: value[days.indexOf(day)],
+                dayOfWeek: day,
+                hourOfTheDay: selectedTime1.hour,
+                minOfTheHour: selectedTime1.minute,
+                payload: jsonEncode({
+                  "type": "reminder",
+                }),
+              );
+            }
             if ((selectedTime1.minute - 3) > 0) {
               TimeOfDay timebefore = TimeOfDay(
                   hour: selectedTime1.hour, minute: selectedTime1.minute - 3);
-
-              await NotificationsService().scheduleAlarm(
-                timeofday: timebefore,
-                days: days,
-                idList: value,
-                title: "Breathing exercise starts in 3 mins",
-                meditate: false,
-              );
+              for (int day in days) {
+                await scheduleWeeklyPTSDNotification(
+                  title: "Reminder",
+                  body: 'Meditation starts in 3 mins',
+                  notificationId: value[days.indexOf(day)],
+                  dayOfWeek: day,
+                  hourOfTheDay: timebefore.hour,
+                  minOfTheHour: timebefore.minute,
+                  payload: jsonEncode({
+                    "type": "reminder",
+                  }),
+                );
+              }
             } else {
               if (selectedTime1.hour == 0) {
                 TimeOfDay timebefore = TimeOfDay(
                     hour: 23, minute: 60 + (selectedTime1.minute - 3));
-
                 final days1 = functions.daysOneDayBefore(days);
-
-                await NotificationsService().scheduleAlarm(
-                  timeofday: timebefore,
-                  days: days1,
-                  idList: value,
-                  title: "Breathing exercise starts in 3 mins",
-                  // body: "Please relax yourself",
-                  meditate: false,
-                );
+                for (int day in days1) {
+                  await scheduleWeeklyPTSDNotification(
+                    title: "Reminder",
+                    body: 'Meditation starts in 3 mins',
+                    notificationId: value[days1.indexOf(day)],
+                    dayOfWeek: day,
+                    hourOfTheDay: timebefore.hour,
+                    minOfTheHour: timebefore.minute,
+                    payload: jsonEncode({
+                      "type": "reminder",
+                    }),
+                  );
+                }
               } else {
                 TimeOfDay timebefore = TimeOfDay(
                     hour: selectedTime1.hour - 1,
                     minute: 60 + (selectedTime1.minute - 3));
-
-                await NotificationsService().scheduleAlarm(
-                  timeofday: timebefore,
-                  days: days,
-                  idList: value,
-                  title: "Breathing exercise starts in 3 mins",
-                  // body: "Please relax yourself",
-                  meditate: false,
-                );
+                for (int day in days) {
+                  await scheduleWeeklyPTSDNotification(
+                    title: "Reminder",
+                    body: 'Meditation starts in 3 mins',
+                    notificationId: value[days.indexOf(day)],
+                    dayOfWeek: day,
+                    hourOfTheDay: timebefore.hour,
+                    minOfTheHour: timebefore.minute,
+                    payload: jsonEncode({
+                      "type": "reminder",
+                    }),
+                  );
+                }
               }
             }
             break;
           default:
-            await NotificationsService().scheduleAlarm(
-              timeofday: selectedTime1,
-              days: days,
-              idList: value,
-              title: "Touch here to breathe and let go.",
-              // body: "Please relax yourself",
-              meditate: false,
-              payload: {
-                "torandom": "true",
-              },
-            );
+            // await NotificationsService().scheduleAlarm(
+            //   timeofday: selectedTime1,
+            //   days: days,
+            //   idList: value,
+            //   title: "Touch here to breathe and let go.",
+            //   // body: "Please relax yourself",
+            //   meditate: false,
+            //   payload: {
+            //     "torandom": "true",
+            //   },
+            // );
             break;
         }
         // await NotificationsService().scheduleAlarm(

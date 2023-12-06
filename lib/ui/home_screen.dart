@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer' as developer;
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,11 +8,15 @@ import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/models/user.dart';
+import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
 
 import 'package:ptsd_free/repo/database_helpers.dart';
+import 'package:ptsd_free/ui/add_meditation.dart';
+import 'package:ptsd_free/ui/add_reminder.dart';
 import 'package:ptsd_free/ui/bottom_tabs/more.dart';
 import 'package:ptsd_free/ui/bottom_tabs/resolve.dart';
 import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
+import 'package:ptsd_free/ui/start_information.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
@@ -21,6 +24,7 @@ import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
+  static String route = "/home";
   int currentIndex;
   int extraInfo = 0;
   HomeScreen({
@@ -64,7 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final alarmIDs = await db.alarmIdsByUUID2(uuid);
     for (int id in alarmIDs) {
       developer.log("Deleting notification of id: $id");
-      await AwesomeNotifications().cancel(id);
+      cancelPTSDNotification(id);
+      // await AwesomeNotifications().cancel(id);
     }
   }
 
@@ -72,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final alarmIDs = await db.alarmIdsByUUID(uuid);
     for (int id in alarmIDs) {
       developer.log("Deleting notification of id: $id");
-      await AwesomeNotifications().cancel(id);
+      // await AwesomeNotifications().cancel(id);
     }
   }
 
@@ -234,7 +239,12 @@ Set-up one PTSD trigger at a time.''',
                     children: [
                       TextButton(
                         onPressed: () {
-                          context.go("/addreminder");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddReminder(trigger: triggerType)));
+                          // context.go("/addreminder");
                         },
                         child: Row(
                           children: [
@@ -280,7 +290,7 @@ Set-up one PTSD trigger at a time.''',
                               final reminder = snapshot.data![index];
                               developer.log(reminder.toString());
                               developer.log(reminder['id'].toString());
-
+                              String days = reminder['days'];
                               return Dismissible(
                                   // key: Key(reminder['id']),
                                   key: UniqueKey(),
@@ -301,15 +311,18 @@ Set-up one PTSD trigger at a time.''',
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(reminder['trigger']),
-                                        Text(reminder['stress_start_time']),
+                                        Text(convertTimeFormat(
+                                            reminder['stress_start_time'])),
                                       ],
                                     ),
                                     subtitle: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("Days: ${reminder['days']}"),
-                                        Text(reminder['stress_end_time'])
+                                        Text(
+                                            "Days: ${abbreviateDays(reminder['days'])}"),
+                                        Text(convertTimeFormat(
+                                            reminder['stress_end_time']))
                                       ],
                                     ),
                                   ));
@@ -455,7 +468,11 @@ Set-up one PTSD trigger at a time.''',
                             },
                           )),
                           onPressed: () {
-                            context.go("/startinfo1");
+                            // context.go("/startinfo1");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const StartInfo1()));
                           },
                           child: CustomColoredText(
                               text: "Start Meditation",
@@ -868,7 +885,12 @@ Set-up one PTSD trigger at a time.''',
                     children: [
                       TextButton(
                         onPressed: () {
-                          context.go("/addmeditation");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddMeditation()),
+                          );
+                          // context.go("/addmeditation");
                         },
                         child: Row(
                           children: [
@@ -927,8 +949,9 @@ Set-up one PTSD trigger at a time.''',
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(meditation['days']),
-                                    Text(meditation['time'].toString())
+                                    Text(
+                                        "Mini-Med: ${abbreviateDays(meditation['days'])}"),
+                                    Text(convertTimeFormat(meditation['time']))
                                   ],
                                 ),
                                 subtitle: Row(
@@ -938,7 +961,7 @@ Set-up one PTSD trigger at a time.''',
                                     Text(
                                         "Duration: ${meditation['duration'].toString()} mins"),
                                     (meditation['reminderbefore'] == 0)
-                                        ? const Text("Don't remind")
+                                        ? const Text("No Reminder")
                                         : Text(
                                             "Remind before: ${meditation['reminderbefore'].toString()} mins")
                                   ],
@@ -968,7 +991,11 @@ Set-up one PTSD trigger at a time.''',
                           },
                         )),
                         onPressed: () {
-                          context.go("/addmeditation");
+                          // context.go("/addmeditation");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AddMeditation()));
                         },
                         child: const Text(
                           "Setup Another Meditation",

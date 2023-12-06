@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/models/user.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:ptsd_free/widgets/testimonial_quote.dart';
@@ -78,14 +79,22 @@ class _CoachingState extends State<Coaching> {
     return PopScope(
       canPop: false,
       onPopInvoked: (canpop) {
-        context.go("/home", extra: 4);
+        // context.go("/home", extra: 4);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(currentIndex: 4)));
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: HexColor("#23C4F1"),
           leading: IconButton(
               onPressed: () {
-                context.go("/home", extra: 4);
+                // context.go("/home", extra: 4);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(currentIndex: 4)));
               },
               icon: const Icon(
                 Icons.arrow_back_ios_sharp,

@@ -1,135 +1,123 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-
-import 'package:awesome_notifications/awesome_notifications.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
-
 import 'package:ptsd_free/firebase_options.dart';
 import 'package:ptsd_free/models/settings.dart';
-import 'package:ptsd_free/models/user.dart';
-import 'package:ptsd_free/notifications/notifications_service.dart';
-import 'package:ptsd_free/router/router.dart';
+import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
+import 'package:ptsd_free/ui/splash_screen.dart';
+import 'package:ptsd_free/ui/start_information.dart';
+import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
-import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'dart:developer' as developer;
+import 'dart:developer';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-import 'package:restart_app/restart_app.dart';
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+const String portName = 'notification_send_port';
+
+String? payloadAfterRelaunch;
+dynamic payloadJson;
+
+/// A notification action which triggers a url launch event
+const String urlLaunchActionId = 'id_1';
+
+/// A notification action which triggers a App navigation event
+const String navigationActionId = 'id_3';
+
+/// Defines a iOS/MacOS notification category for text input actions.
+const String darwinNotificationCategoryText = 'textCategory';
+
+/// Defines a iOS/MacOS notification category for plain actions.
+const String darwinNotificationCategoryPlain = 'plainCategory';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  // ignore: avoid_print
+  print('notification(${notificationResponse.id}) action tapped: '
+      '${notificationResponse.actionId} with'
+      ' payload: ${notificationResponse.payload}');
+  if (notificationResponse.input?.isNotEmpty ?? false) {
+    // ignore: avoid_print
+    print(
+        'notification action tapped with input: ${notificationResponse.input}');
+  }
+}
+
+Future<void> _configureLocalTimeZone() async {
+  if (kIsWeb || Platform.isLinux) {
+    return;
+  }
+  tz.initializeTimeZones();
+  final String? timeZoneName = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName!));
+}
 
 Future<void> main() async {
-  await NotificationsService().initializeNotification();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializationPTSDNotifications();
+  await _configureLocalTimeZone();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: true,
-  );
 
-  runApp(const MyApp());
-}
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+          Platform.isLinux
+      ? null
+      : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  String initialRoute = SplashScreen.route;
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    payloadAfterRelaunch =
+        notificationAppLaunchDetails!.notificationResponse?.payload;
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  @override
-  Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   navigatorKey: navigatorKey,
-    // );
+    if (payloadAfterRelaunch != null) {
+      payloadJson = jsonDecode(payloadAfterRelaunch ?? "{}");
 
-    return MaterialApp.router(
-      theme: ThemeData(scaffoldBackgroundColor: HexColor("#EFF8FF")),
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
-      key: navigatorKey,
-    );
-  }
-}
-
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen>
-    with WidgetsBindingObserver {
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    // AwesomeNotifications().setListeners(
-    //     onActionReceivedMethod: (receivedNotification) async {
-    //   if (receivedNotification.buttonKeyInput == 'view_screen') {
-    //     // Handle the action to navigate to a specific screen
-    //     router.go("/timer", extra: [10, "Silence"]);
-    //   }
-    // });
-    SettingVariables().getRandomPTSD().then((val) {
-      developer.log(SettingVariables().randomPTSD.toString());
-      if (val) {
-        Timer(const Duration(seconds: 1), () async {
-          context.go("/startinfo1");
-        });
+      if (payloadJson['type'] == "meditate") {
+        initialRoute = TimerScreen.route;
+      } else if (payloadJson['type'] == "breathe") {
+        initialRoute = StartInfo1.route;
       } else {
-        Timer(const Duration(seconds: 1), () async {
-          context.go("/startinfo2");
-        });
+        initialRoute = SplashScreen.route;
       }
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        developer.log("RESUMED");
-        break;
-      case AppLifecycleState.inactive:
-        developer.log("INACTIVE");
-        break;
-      case AppLifecycleState.paused:
-        developer.log("PAUSED");
-        break;
-      case AppLifecycleState.detached:
-        developer.log("DETACHED");
-        break;
-      case AppLifecycleState.hidden:
-        developer.log("HIDDEN");
-        break;
+    } else {
+      initialRoute = HomeScreen.route;
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        SettingVariables().getRandomPTSD().then((val) {
-          developer.log(SettingVariables().randomPTSD.toString());
-          if (val) {
-            context.go("/startinfo1");
-          } else {
-            context.go("/startinfo2");
-          }
-        });
-      },
-      child: const Image(
-        image: AssetImage('assets/images/splash_bg.jpg'),
-      ),
-    );
-    ;
-  }
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    navigatorKey: navigatorKey,
+    theme: ThemeData(scaffoldBackgroundColor: HexColor("#EFF8FF")),
+    initialRoute: initialRoute,
+    routes: <String, WidgetBuilder>{
+      SplashScreen.route: (_) => const SplashScreen(),
+      HomeScreen.route: (_) => HomeScreen(currentIndex: 0),
+      TimerScreen.route: (_) => TimerScreen(
+            mins: (payloadJson != null)
+                ? int.tryParse(payloadJson['duration']) ?? 10
+                : 10,
+            sound: (payloadJson != null)
+                ? payloadJson['sound'] ?? "Silence"
+                : "Silence",
+          ),
+      StartInfo1.route: (_) => const StartInfo1(),
+    },
+  ));
 }

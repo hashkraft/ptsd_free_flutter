@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/middleware/MiddlewareCheck.dart';
 import 'package:ptsd_free/models/settings.dart';
+import 'package:ptsd_free/ui/auth/registration.dart';
+import 'package:ptsd_free/ui/home_screen.dart';
+import 'package:ptsd_free/ui/more/coaching.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 
 // class StartInformation extends StatefulWidget {
@@ -280,6 +283,7 @@ import 'package:ptsd_free/widgets/custom_colored_text.dart';
 // }
 
 class StartInfo1 extends StatefulWidget {
+  static const route = "/startinfo1";
   const StartInfo1({super.key});
 
   @override
@@ -416,7 +420,11 @@ class _StartInfo1State extends State<StartInfo1> {
                   ),
                   onPressed: () {
                     stopAudio().then((value) {
-                      context.go("/startinfo2");
+                      // context.go("/startinfo2");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const StartInfo2()));
                     });
                   },
                   child: CustomColoredText(
@@ -436,7 +444,9 @@ class _StartInfo1State extends State<StartInfo1> {
                   ),
                   onPressed: () {
                     stopAudio().then((value) {
-                      context.go("/coaching");
+                      // context.go("/coaching");
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Coaching()));
                     });
                   },
                   child: CustomColoredText(
@@ -618,9 +628,19 @@ class _StartInfo2State extends State<StartInfo2> {
                       MiddlewareCheck check = MiddlewareCheck();
                       final isRegistered = await check.checkIfUserRegistered();
                       if (isRegistered) {
-                        context.go("/home");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen(
+                                    currentIndex: 0,
+                                  )),
+                        );
                       } else {
-                        context.go("/registration");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Registration()),
+                        );
                       }
                       // context.go("/home");
                     },
