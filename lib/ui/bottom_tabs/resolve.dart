@@ -14,11 +14,13 @@ import 'package:ptsd_free/widgets/text_form_field.dart';
 class Resolve extends StatefulWidget {
   final Function(int) onValueChanged;
   int step;
+  String imgText = "";
   Resolve({
-    Key? key,
+    super.key,
     required this.onValueChanged,
     required this.step,
-  }) : super(key: key);
+    this.imgText = "",
+  });
 
   @override
   State<Resolve> createState() => _ResolveState();
@@ -905,7 +907,7 @@ class _ResolveState extends State<Resolve> {
             children: [
               CustomColoredText(
                 text:
-                    '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your head.''',
+                    '''Use Stress Stopper Breathwork to release the emotion from the memory. Get comfortable, breathe deep and slow, and if possible, touch your $feelWhereNow.''',
                 hexColor: "#2C3351",
                 size: 16,
                 weight: 400,
@@ -981,7 +983,7 @@ class _ResolveState extends State<Resolve> {
                       ? (thoughtTrigger.text.length > 12)
                           ? "${thoughtTrigger.text.substring(0, 12)}..."
                           : thoughtTrigger.text
-                      : "Bla bla"),
+                      : "..."),
             ],
           ),
           Column(
@@ -1073,6 +1075,7 @@ class _ResolveState extends State<Resolve> {
                               mins: 10,
                               sound: "I'm Okay",
                               source: "resolve",
+                              imageText: thoughtTrigger.text,
                             ),
                           ),
                         );
@@ -1101,7 +1104,7 @@ class _ResolveState extends State<Resolve> {
             children: [
               CustomColoredText(
                 text:
-                    '''Great job! Now use Stress Stopper Breathwork to reduce present day stress. Think about a recent reaction triggered by places.''',
+                    '''Great job! Now use Stress Stopper Breathwork to reduce present day stress. Think about a recent reaction triggered by ${thoughtTrigger.text}.''',
                 hexColor: "#2C3351",
                 size: 16,
                 weight: 500,
@@ -1109,11 +1112,11 @@ class _ResolveState extends State<Resolve> {
               const SizedBox(height: 30),
               Center(
                 child: ImageWText(
-                    text: thoughtTrigger.text.isNotEmpty
-                        ? (thoughtTrigger.text.length > 12)
-                            ? "${thoughtTrigger.text.substring(0, 12)}..."
-                            : thoughtTrigger.text
-                        : "Bla bla"),
+                    text: widget.imgText.isNotEmpty
+                        ? (widget.imgText.length > 12)
+                            ? "${widget.imgText.substring(0, 12)}..."
+                            : widget.imgText
+                        : "..."),
               ),
             ],
           ),

@@ -215,9 +215,12 @@ Future<void> scheduleWeeklyPTSDNotification({
     _nextInstanceOfPTSDDayTime(dayOfWeek, hourOfTheDay, minOfTheHour),
     const NotificationDetails(
       android: AndroidNotificationDetails(
-        'weekly notification channel id',
-        'weekly notification channel name',
-        channelDescription: 'weekly notificationdescription',
+        '01',
+        'PTSD Local Notifications',
+        channelDescription:
+            'Notifications for meditation and breathing exercises',
+        importance: Importance.high,
+        priority: Priority.high,
       ),
     ),
     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,

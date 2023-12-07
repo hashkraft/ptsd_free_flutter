@@ -27,11 +27,12 @@ class HomeScreen extends StatefulWidget {
   static String route = "/home";
   int currentIndex;
   int extraInfo = 0;
-  HomeScreen({
-    super.key,
-    required this.currentIndex,
-    this.extraInfo = 0,
-  });
+  String extraText = "";
+  HomeScreen(
+      {super.key,
+      required this.currentIndex,
+      this.extraInfo = 0,
+      this.extraText = ""});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -220,121 +221,120 @@ Set-up one PTSD trigger at a time.''',
               break;
             case 2:
               appbarTitle = "Step 1";
-              stepBody = Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                      text:
-                          'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?',
-                      weight: 400),
-                  const SizedBox(height: 16),
-                  CustomColoredText(
-                      text: "Note: Swipe right to delete the saved reminder",
-                      hexColor: "#969696",
-                      size: 14,
-                      weight: 400),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              stepBody = Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AddReminder(trigger: triggerType)));
-                          // context.go("/addreminder");
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add_rounded,
-                              color: HexColor("#056AD6"),
+                      CustomText(
+                          text:
+                              'What time of the day or days of the week does this stress triggered by $triggerType most often occurred?',
+                          weight: 400),
+                      const SizedBox(height: 16),
+                      CustomColoredText(
+                          text:
+                              "Note: Swipe right to delete the saved reminder",
+                          hexColor: "#969696",
+                          size: 14,
+                          weight: 400),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AddReminder(trigger: triggerType)));
+                              // context.go("/addreminder");
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.add_rounded,
+                                  color: HexColor("#056AD6"),
+                                ),
+                                const SizedBox(width: 5),
+                                CustomColoredText(
+                                    text: "Add Days & Time",
+                                    hexColor: "#056AD6",
+                                    size: 14,
+                                    weight: 500),
+                                // BLUE
+                              ],
                             ),
-                            const SizedBox(width: 5),
-                            CustomColoredText(
-                                text: "Add Days & Time",
-                                hexColor: "#056AD6",
-                                size: 14,
-                                weight: 500),
-                            // BLUE
-                          ],
-                        ),
+                          ),
+                          const SizedBox()
+                        ],
                       ),
-                      const SizedBox()
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   child: CustomColoredText(
-                      //       text: "Edit",
-                      //       hexColor: "#056AD6",
-                      //       size: 14,
-                      //       weight: 500), // BLUE
-                      // ),
+                      const SizedBox(height: 10),
+                      FutureBuilder(
+                        future: db.getReminders(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final reminder = snapshot.data![index];
+                                  developer.log(reminder.toString());
+                                  developer.log(reminder['id'].toString());
+                                  String days = reminder['days'];
+                                  return Dismissible(
+                                      // key: Key(reminder['id']),
+                                      key: UniqueKey(),
+                                      direction: DismissDirection.startToEnd,
+                                      onDismissed: (DismissDirection dd) {
+                                        // deleteAlarmById(reminder['id']);
+
+                                        setState(() {
+                                          db.deleteStopper(reminder['id']).then(
+                                              (value) => developer
+                                                  .log(value.toString()));
+                                          removeStoppers(reminder['uuid']);
+                                        });
+                                      },
+                                      child: ListTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(reminder['trigger']),
+                                            Text(convertTimeFormat(
+                                                reminder['stress_start_time'])),
+                                          ],
+                                        ),
+                                        subtitle: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                "Days: ${abbreviateDays(reminder['days'])}"),
+                                            Text(convertTimeFormat(
+                                                reminder['stress_end_time']))
+                                          ],
+                                        ),
+                                      ));
+                                });
+                          } else {
+                            return Container(
+                              child: Text("No data"),
+                            );
+                          }
+                        },
+                      )
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(
-                    future: db.getReminders(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              final reminder = snapshot.data![index];
-                              developer.log(reminder.toString());
-                              developer.log(reminder['id'].toString());
-                              String days = reminder['days'];
-                              return Dismissible(
-                                  // key: Key(reminder['id']),
-                                  key: UniqueKey(),
-                                  direction: DismissDirection.startToEnd,
-                                  onDismissed: (DismissDirection dd) {
-                                    // deleteAlarmById(reminder['id']);
-
-                                    setState(() {
-                                      db.deleteStopper(reminder['id']).then(
-                                          (value) =>
-                                              developer.log(value.toString()));
-                                      removeStoppers(reminder['uuid']);
-                                    });
-                                  },
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(reminder['trigger']),
-                                        Text(convertTimeFormat(
-                                            reminder['stress_start_time'])),
-                                      ],
-                                    ),
-                                    subtitle: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            "Days: ${abbreviateDays(reminder['days'])}"),
-                                        Text(convertTimeFormat(
-                                            reminder['stress_end_time']))
-                                      ],
-                                    ),
-                                  ));
-                            });
-                      } else {
-                        return Container(
-                          child: Text("No data"),
-                        );
-                      }
-                    },
-                  )
-                ],
+                ),
               );
               break;
             case 3:
@@ -661,6 +661,7 @@ Set-up one PTSD trigger at a time.''',
         }
         body = Resolve(
           step: resolveStep,
+          imgText: widget.extraText,
           onValueChanged: (newValue) {
             developer.log(newValue.toString());
             setState(() {
@@ -866,116 +867,117 @@ Set-up one PTSD trigger at a time.''',
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomText(
-                    text: "Add the date and time to wish to meditate.",
-                    weight: 400,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomColoredText(
-                      text: "Note: Swipe right to delete the saved meditation",
-                      hexColor: "#969696",
-                      size: 14,
-                      weight: 400),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddMeditation()),
-                          );
-                          // context.go("/addmeditation");
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add_rounded,
-                              color: HexColor("#056AD6"),
-                            ),
-                            const SizedBox(width: 5),
-                            CustomColoredText(
-                                text: "Add Days & Time",
-                                hexColor: "#056AD6",
-                                size: 14,
-                                weight: 500), // blue
-                          ],
-                        ),
+                      const CustomText(
+                        text: "Add the date and time to wish to meditate.",
+                        weight: 400,
                       ),
-                      const SizedBox()
-                      // TextButton(
-                      //   onPressed: () {},
-                      //   child: CustomColoredText(
-                      //       text: "Edit",
-                      //       hexColor: "#056AD6",
-                      //       size: 14,
-                      //       weight: 500), //blue
-                      // ),
+                      const SizedBox(height: 16),
+                      CustomColoredText(
+                          text:
+                              "Note: Swipe right to delete the saved meditation",
+                          hexColor: "#969696",
+                          size: 14,
+                          weight: 400),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AddMeditation()),
+                              );
+                              // context.go("/addmeditation");
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.add_rounded,
+                                  color: HexColor("#056AD6"),
+                                ),
+                                const SizedBox(width: 5),
+                                CustomColoredText(
+                                    text: "Add Days & Time",
+                                    hexColor: "#056AD6",
+                                    size: 14,
+                                    weight: 500), // blue
+                              ],
+                            ),
+                          ),
+                          const SizedBox()
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      FutureBuilder(
+                        future: db.getMeditations(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                              // key: UniqueKey(),
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final meditation = snapshot.data![index];
+                                developer.log(meditation.toString());
+                                developer.log(snapshot.data!.length.toString());
+
+                                return Dismissible(
+                                  // key: ValueKey(meditation['id'].toString()),
+                                  key: UniqueKey(),
+                                  direction: DismissDirection.startToEnd,
+                                  onDismissed: (DismissDirection dd) {
+                                    setState(() {
+                                      db
+                                          .deleteMeditation(meditation['id'])
+                                          .then((value) =>
+                                              developer.log(value.toString()));
+                                      removeMeditation(meditation['uuid']);
+                                    });
+                                  },
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            "Mini-Med: ${abbreviateDays(meditation['days'])}"),
+                                        Text(convertTimeFormat(
+                                            meditation['time']))
+                                      ],
+                                    ),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                            "Duration: ${meditation['duration'].toString()} mins"),
+                                        (meditation['reminderbefore'] == 0)
+                                            ? const Text("No Reminder")
+                                            : Text(
+                                                "Remind before: ${meditation['reminderbefore'].toString()} mins")
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(
-                    future: db.getMeditations(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          // key: UniqueKey(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final meditation = snapshot.data![index];
-                            developer.log(meditation.toString());
-                            developer.log(snapshot.data!.length.toString());
-
-                            return Dismissible(
-                              // key: ValueKey(meditation['id'].toString()),
-                              key: UniqueKey(),
-                              direction: DismissDirection.startToEnd,
-                              onDismissed: (DismissDirection dd) {
-                                setState(() {
-                                  db.deleteMeditation(meditation['id']).then(
-                                      (value) =>
-                                          developer.log(value.toString()));
-                                  removeMeditation(meditation['uuid']);
-                                });
-                              },
-                              child: ListTile(
-                                title: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        "Mini-Med: ${abbreviateDays(meditation['days'])}"),
-                                    Text(convertTimeFormat(meditation['time']))
-                                  ],
-                                ),
-                                subtitle: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        "Duration: ${meditation['duration'].toString()} mins"),
-                                    (meditation['reminderbefore'] == 0)
-                                        ? const Text("No Reminder")
-                                        : Text(
-                                            "Remind before: ${meditation['reminderbefore'].toString()} mins")
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
-                ],
+                ),
               ),
               Column(
                 children: [
@@ -1181,7 +1183,9 @@ Set-up one PTSD trigger at a time.''',
                                             weight: 700,
                                           ),
                           )
-                        : (resolveStep > 11 && resolveStep < 15)
+                        : (resolveStep > 11 &&
+                                resolveStep < 15 &&
+                                widget.currentIndex == 1)
                             ? Positioned(
                                 top: MediaQuery.of(context).size.height * 0.11,
                                 // left: MediaQuery.of(context).size.width / 18,

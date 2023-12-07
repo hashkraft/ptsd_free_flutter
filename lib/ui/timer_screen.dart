@@ -160,164 +160,173 @@ class _TimerScreenState extends State<TimerScreen> {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              // context.go("/home", extra: 1);
-              // Navigator.pop(context);
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => HomeScreen(
-              //               currentIndex: 1,
-              //             )));
-            },
-            icon: const Icon(Icons.arrow_back_ios_new_sharp)),
-        title: const Text("Prepare to meditate"),
-      ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            AspectRatio(
-              // aspectRatio: _videoController.value.aspectRatio,
-              aspectRatio: (MediaQuery.of(context).size.width) /
-                  (MediaQuery.of(context).size.height),
-              child: VideoPlayer(_videoController),
-            ),
-            Column(
-              children: [
-                Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    const CustomText(
-                        text: "Total Meditation Time", weight: 500),
-                    CustomColoredText(
-                        text: "${widget.mins} mins",
-                        hexColor: "#2C3351",
-                        size: 26,
-                        weight: 500),
-                  ],
-                ),
-                Center(
-                  child: CircularCountDownTimer(
-                    duration: (widget.mins * 60),
-                    initialDuration: 0,
-                    controller: _controller,
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: MediaQuery.of(context).size.height / 2.5,
-                    ringColor: Colors.white,
-                    ringGradient: null,
-                    fillColor: Colors.greenAccent,
-                    fillGradient: null,
-                    backgroundColor: HexColor("#40B7ED"),
-                    backgroundGradient: null,
-                    strokeWidth: 20.0,
-                    strokeCap: StrokeCap.round,
-                    textStyle: const TextStyle(
-                        fontSize: 33.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                    textFormat: CountdownTextFormat.S,
-                    isReverse: false,
-                    isReverseAnimation: false,
-                    isTimerTextShown: true,
-                    autoStart: false,
-                    onStart: () {
-                      debugPrint('Countdown Started');
-                    },
-                    onComplete: () {
-                      debugPrint('Countdown Ended');
-                    },
-                    onChange: (String timeStamp) {
-                      debugPrint('Countdown Changed $timeStamp');
-                    },
-                    timeFormatterFunction:
-                        (defaultFormatterFunction, duration) {
-                      if (duration.inSeconds == 0) {
-                        return "Start";
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (canpop) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(currentIndex: 0)));
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      currentIndex: 0,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_sharp)),
+          title: const Text("Prepare to meditate"),
+        ),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: [
+              AspectRatio(
+                // aspectRatio: _videoController.value.aspectRatio,
+                aspectRatio: (MediaQuery.of(context).size.width) /
+                    (MediaQuery.of(context).size.height),
+                child: VideoPlayer(_videoController),
+              ),
+              Column(
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      const CustomText(
+                          text: "Total Meditation Time", weight: 500),
+                      CustomColoredText(
+                          text: "${widget.mins} mins",
+                          hexColor: "#2C3351",
+                          size: 26,
+                          weight: 500),
+                    ],
+                  ),
+                  Center(
+                    child: CircularCountDownTimer(
+                      duration: (widget.mins * 60),
+                      initialDuration: 0,
+                      controller: _controller,
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      ringColor: Colors.white,
+                      ringGradient: null,
+                      fillColor: Colors.greenAccent,
+                      fillGradient: null,
+                      backgroundColor: HexColor("#40B7ED"),
+                      backgroundGradient: null,
+                      strokeWidth: 20.0,
+                      strokeCap: StrokeCap.round,
+                      textStyle: const TextStyle(
+                          fontSize: 33.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                      textFormat: CountdownTextFormat.S,
+                      isReverse: false,
+                      isReverseAnimation: false,
+                      isTimerTextShown: true,
+                      autoStart: false,
+                      onStart: () {
+                        debugPrint('Countdown Started');
+                      },
+                      onComplete: () {
+                        debugPrint('Countdown Ended');
+                      },
+                      onChange: (String timeStamp) {
+                        debugPrint('Countdown Changed $timeStamp');
+                      },
+                      timeFormatterFunction:
+                          (defaultFormatterFunction, duration) {
+                        if (duration.inSeconds == 0) {
+                          return "Start";
+                        } else {
+                          int totalDuration = widget.mins * 60;
+                          int timeLeft = totalDuration - duration.inSeconds;
+                          int minArm = (timeLeft / 60).floor();
+                          int secArm = timeLeft % 60;
+                          String minStr = "";
+                          String secStr = "";
+                          if (minArm < 10) {
+                            minStr = "0$minArm";
+                          } else {
+                            minStr = minArm.toString();
+                          }
+                          if (secArm < 10) {
+                            secStr = "0$secArm";
+                          } else {
+                            secStr = secArm.toString();
+                          }
+                          return "$minStr:$secStr";
+                        }
+                      },
+                    ),
+                  ),
+                  bigButton(),
+                  const SizedBox(height: 10),
+                  circularButton(
+                    title: "Done",
+                    onPressed: () {
+                      developer.log(
+                          "Meditation sesson of ${widget.mins} mins completed!");
+                      stopAudio();
+                      if (widget.source == "resolve") {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(
+                                currentIndex: 1,
+                                extraInfo: 12,
+                                extraText: widget.imageText),
+                          ),
+                        );
+                      } else if (widget.source == "step") {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(
+                                currentIndex: 1,
+                                extraInfo: 14,
+                                extraText: widget.imageText),
+                          ),
+                        );
                       } else {
-                        int totalDuration = widget.mins * 60;
-                        int timeLeft = totalDuration - duration.inSeconds;
-                        int minArm = (timeLeft / 60).floor();
-                        int secArm = timeLeft % 60;
-                        String minStr = "";
-                        String secStr = "";
-                        if (minArm < 10) {
-                          minStr = "0$minArm";
-                        } else {
-                          minStr = minArm.toString();
-                        }
-                        if (secArm < 10) {
-                          secStr = "0$secArm";
-                        } else {
-                          secStr = secArm.toString();
-                        }
-                        return "$minStr:$secStr";
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(
+                              currentIndex: 2,
+                            ),
+                          ),
+                        );
                       }
                     },
                   ),
-                ),
-                bigButton(),
-                const SizedBox(height: 10),
-                circularButton(
-                  title: "Done",
-                  onPressed: () {
-                    developer.log(
-                        "Meditation sesson of ${widget.mins} mins completed!");
-                    stopAudio();
-                    if (widget.source == "resolve") {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(
-                            currentIndex: 1,
-                            extraInfo: 12,
-                          ),
-                        ),
-                      );
-                    } else if (widget.source == "step") {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(
-                            currentIndex: 1,
-                            extraInfo: 14,
-                          ),
-                        ),
-                      );
-                    } else {
-                      // context.go("/home", extra: 2);
-                      // Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen(
-                                    currentIndex: 2,
-                                  )));
-                    }
-                  },
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //   children: [
-                //     circularButton(
-                //       title: "Restart",
-                //       onPressed: () =>
-                //           _controller.restart(duration: widget.mins * 60),
-                //     ),
-                //     circularButton(
-                //       title: "Done",
-                //       onPressed: () {
-                //         developer.log(
-                //             "Meditation sesson of ${widget.mins} mins completed!");
-                //         stopAudio();
-                //         context.go("/aftermeditation");
-                //       },
-                //     ),
-                //   ],
-                // ),
-              ],
-            ),
-          ],
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     circularButton(
+                  //       title: "Restart",
+                  //       onPressed: () =>
+                  //           _controller.restart(duration: widget.mins * 60),
+                  //     ),
+                  //     circularButton(
+                  //       title: "Done",
+                  //       onPressed: () {
+                  //         developer.log(
+                  //             "Meditation sesson of ${widget.mins} mins completed!");
+                  //         stopAudio();
+                  //         context.go("/aftermeditation");
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -24,7 +24,7 @@ class _CoachingState extends State<Coaching> {
 
   Future<void> _launchEmailUrl() async {
     final Uri url = Uri.parse(
-        'mailto:coaching@stressisgone.com?subject=News&body=New%20plugin');
+        'mailto:coaching@stressisgone.com?subject=Request%20for%20coaching&body=%20');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }

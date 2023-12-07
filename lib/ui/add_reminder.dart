@@ -181,14 +181,14 @@ class _AddReminderState extends State<AddReminder> {
           case "Both":
             for (int day in days) {
               await scheduleWeeklyPTSDNotification(
-                title: "Reminder",
-                body: 'Meditation starts in 3 mins',
+                title: "Breathe",
+                body: 'Tap here to breathe and let go',
                 notificationId: value[days.indexOf(day)],
                 dayOfWeek: day,
                 hourOfTheDay: selectedTime1.hour,
                 minOfTheHour: selectedTime1.minute,
                 payload: jsonEncode({
-                  "type": "reminder",
+                  "type": "breathe",
                 }),
               );
             }
@@ -199,7 +199,7 @@ class _AddReminderState extends State<AddReminder> {
                 await scheduleWeeklyPTSDNotification(
                   title: "Reminder",
                   body: 'Meditation starts in 3 mins',
-                  notificationId: value[days.indexOf(day)],
+                  notificationId: value[days.length + days.indexOf(day)],
                   dayOfWeek: day,
                   hourOfTheDay: timebefore.hour,
                   minOfTheHour: timebefore.minute,
@@ -217,7 +217,7 @@ class _AddReminderState extends State<AddReminder> {
                   await scheduleWeeklyPTSDNotification(
                     title: "Reminder",
                     body: 'Meditation starts in 3 mins',
-                    notificationId: value[days1.indexOf(day)],
+                    notificationId: value[days.length + days1.indexOf(day)],
                     dayOfWeek: day,
                     hourOfTheDay: timebefore.hour,
                     minOfTheHour: timebefore.minute,
@@ -234,7 +234,7 @@ class _AddReminderState extends State<AddReminder> {
                   await scheduleWeeklyPTSDNotification(
                     title: "Reminder",
                     body: 'Meditation starts in 3 mins',
-                    notificationId: value[days.indexOf(day)],
+                    notificationId: value[days.length + days.indexOf(day)],
                     dayOfWeek: day,
                     hourOfTheDay: timebefore.hour,
                     minOfTheHour: timebefore.minute,
@@ -247,39 +247,22 @@ class _AddReminderState extends State<AddReminder> {
             }
             break;
           default:
-            // await NotificationsService().scheduleAlarm(
-            //   timeofday: selectedTime1,
-            //   days: days,
-            //   idList: value,
-            //   title: "Touch here to breathe and let go.",
-            //   // body: "Please relax yourself",
-            //   meditate: false,
-            //   payload: {
-            //     "torandom": "true",
-            //   },
-            // );
             break;
         }
-        // await NotificationsService().scheduleAlarm(
-        //   timeofday: selectedTime1,
-        //   days: days,
-        //   idList: value,
-        //   title: "Breathe now!",
-        //   body: "Please relax yourself",
-        //   meditate: false,
-        // );
       });
 
       developer.log('Selected Days: $selectedDays');
       developer.log('Reminder when: $selectedReminderWhen');
       developer.log('Time 1: $selectedTime1');
       developer.log('Time 2: $selectedTime2');
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).push(
+        MaterialPageRoute(
           builder: (context) => HomeScreen(
-                currentIndex: 0,
-                extraInfo: 2,
-              )));
-      // context.go("/home");
+            currentIndex: 0,
+            extraInfo: 2,
+          ),
+        ),
+      );
     }
   }
 

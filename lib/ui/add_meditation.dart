@@ -91,12 +91,14 @@ class _AddMeditationState extends State<AddMeditation> {
     return PopScope(
       canPop: false,
       onPopInvoked: (canPop) {
-        // context.go("/home", extra: 2);
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(
+          MaterialPageRoute(
             builder: (context) => HomeScreen(
-                  currentIndex: 2,
-                  extraInfo: 1,
-                )));
+              currentIndex: 2,
+              extraInfo: 1,
+            ),
+          ),
+        );
       },
       child: Scaffold(
         appBar: AppBar(
@@ -105,11 +107,14 @@ class _AddMeditationState extends State<AddMeditation> {
           leadingWidth: 80,
           leading: TextButton(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
+              Navigator.of(context).push(
+                MaterialPageRoute(
                   builder: (context) => HomeScreen(
-                        currentIndex: 2,
-                        extraInfo: 1,
-                      )));
+                    currentIndex: 2,
+                    extraInfo: 1,
+                  ),
+                ),
+              );
             },
             child: CustomColoredText(
                 text: "Cancel", hexColor: "#FFFFFF", size: 14, weight: 400),
@@ -141,7 +146,6 @@ class _AddMeditationState extends State<AddMeditation> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: daysWidget),
-
                 const SizedBox(height: 16),
                 CustomColoredText(
                     text: "Time", hexColor: "#066CD8", size: 16, weight: 400),
@@ -195,7 +199,6 @@ class _AddMeditationState extends State<AddMeditation> {
                     hexColor: "#066CD8",
                     size: 16,
                     weight: 400),
-
                 Slider(
                     divisions: 5,
                     min: 1,
@@ -207,16 +210,7 @@ class _AddMeditationState extends State<AddMeditation> {
                         durationDouble = val;
                       });
                     }),
-                // Wrap(
-                //   children: durations.map((dur) {
-                //     return RadioItem(
-                //         value: dur,
-                //         groupValue: duration,
-                //         label: "$dur mins");
-                //   }).toList(),
-                // ),
                 const SizedBox(height: 10),
-
                 CustomColoredText(
                     text: (reminderBeforeDouble == 0)
                         ? 'Reminder before meditation: None'
@@ -224,7 +218,6 @@ class _AddMeditationState extends State<AddMeditation> {
                     hexColor: "#066CD8",
                     size: 16,
                     weight: 400),
-
                 Slider(
                     divisions: 6,
                     min: 0,
@@ -236,24 +229,6 @@ class _AddMeditationState extends State<AddMeditation> {
                         reminderBeforeDouble = val;
                       });
                     }),
-                // Wrap(
-                //   children: reminderBefores.map((dur) {
-                //     if (dur == "0") {
-                //       return RadioItem(
-                //           value: dur, groupValue: duration, label: "None");
-                //     } else if (dur == "1") {
-                //       return RadioItem(
-                //           value: dur,
-                //           groupValue: duration,
-                //           label: "$dur hour");
-                //     } else {
-                //       return RadioItem(
-                //           value: dur,
-                //           groupValue: duration,
-                //           label: "$dur mins");
-                //     }
-                //   }).toList(),
-                // ),
                 const SizedBox(height: 16),
                 CustomColoredText(
                     text: "Sound", hexColor: "#066CD8", size: 16, weight: 400),
@@ -266,9 +241,7 @@ class _AddMeditationState extends State<AddMeditation> {
                         sound = val!;
                       });
                     }),
-
                 const SizedBox(height: 16),
-
                 CustomColoredText(
                     text: 'Volume:  ${volume.toInt()}%',
                     hexColor: "#066CD8",
@@ -365,7 +338,7 @@ class _AddMeditationState extends State<AddMeditation> {
               await scheduleWeeklyPTSDNotification(
                 title: "Reminder",
                 body: 'Meditation starts in $minutes mins',
-                notificationId: value[days.indexOf(day)],
+                notificationId: value[days.length + days.indexOf(day)],
                 dayOfWeek: day,
                 hourOfTheDay: selectedTime1.hour,
                 minOfTheHour: selectedTime1.minute - minutes,
@@ -376,14 +349,6 @@ class _AddMeditationState extends State<AddMeditation> {
               developer.log(
                   "Notification set on day $day, at ${selectedTime1.hour}:${selectedTime1.minute - minutes}");
             }
-            // NotificationsService().scheduleAlarm(
-            //   timeofday: timebefore,
-            //   days: days,
-            //   idList: value,
-            //   meditate: true,
-            //   title: "Meditation starts in $minutes mins",
-            //   // body: "Start in $minutes mins later",
-            // );
           } else {
             if (selectedTime1.hour == 0) {
               final days1 = functions.daysOneDayBefore(days);
@@ -391,7 +356,7 @@ class _AddMeditationState extends State<AddMeditation> {
                 await scheduleWeeklyPTSDNotification(
                   title: "Reminder",
                   body: 'Meditation starts in $minutes mins',
-                  notificationId: value[days1.indexOf(day)],
+                  notificationId: value[days.length + days1.indexOf(day)],
                   dayOfWeek: day,
                   hourOfTheDay: 23,
                   minOfTheHour: 60 + (selectedTime1.minute - minutes),
@@ -407,7 +372,7 @@ class _AddMeditationState extends State<AddMeditation> {
                 await scheduleWeeklyPTSDNotification(
                   title: "Reminder",
                   body: 'Meditation starts in $minutes mins',
-                  notificationId: value[days.indexOf(day)],
+                  notificationId: value[days.length + days.indexOf(day)],
                   dayOfWeek: day,
                   hourOfTheDay: selectedTime1.hour - 1,
                   minOfTheHour: 60 + (selectedTime1.minute - minutes),
@@ -419,23 +384,16 @@ class _AddMeditationState extends State<AddMeditation> {
                     "Notification set on day $day, at ${selectedTime1.hour - 1}:${60 + (selectedTime1.minute - minutes)}");
               }
             }
-
-            // NotificationsService().scheduleAlarm(
-            //   timeofday: timebefore,
-            //   days: days1,
-            //   meditate: true,
-            //   idList: value,
-            //   title: "Meditation starts in $minutes mins",
-            //   // body: "Start in $minutes mins later",
-            // );
           }
         }
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(
+          MaterialPageRoute(
             builder: (context) => HomeScreen(
-                  currentIndex: 2,
-                  extraInfo: 1,
-                )));
-        // context.go("/home", extra: 2);
+              currentIndex: 2,
+              extraInfo: 1,
+            ),
+          ),
+        );
       });
     }
   }

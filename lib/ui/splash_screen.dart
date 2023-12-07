@@ -6,6 +6,7 @@ import 'package:ptsd_free/models/settings.dart';
 import 'dart:developer';
 
 import 'package:ptsd_free/ui/start_information.dart';
+import 'package:ptsd_free/widgets/custom_colored_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -103,23 +104,10 @@ class _SplashScreenState extends State<SplashScreen>
       onTap: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const StartInfo2()));
-        // SettingVariables().getRandomPTSD().then((val) {
-        //   log(SettingVariables().randomPTSD.toString());
-        //   if (val) {
-        //     // context.go("/startinfo1");
-        //     Navigator.push(context,
-        //         MaterialPageRoute(builder: (context) => const StartInfo1()));
-        //   } else {
-        //     // context.go("/startinfo2");
-        //     Navigator.push(context,
-        //         MaterialPageRoute(builder: (context) => const StartInfo2()));
-        //   }
-        // });
       },
       child: const Image(
-        image: AssetImage('assets/images/splash_bg.jpg'),
+        image: AssetImage('assets/images/splash_bg_new.jpg'),
       ),
     );
-    ;
   }
 }

@@ -50,6 +50,11 @@ class DatabaseHelper {
     for (String day in selectedDays) {
       alarmIds.add(functions.randomUniqueNumber());
     }
+    if (selectedReminderWhen == "Both") {
+      for (String day in selectedDays) {
+        alarmIds.add(functions.randomUniqueNumber());
+      }
+    }
     String alarmIdsInString = functions.convertIntArrayToString(alarmIds);
     developer.log(alarmIdsInString);
     final db = await database;
@@ -161,6 +166,11 @@ class DatabaseHelper {
     List<int> alarmIds = [];
     for (String day in selectedDays) {
       alarmIds.add(functions.randomUniqueNumber());
+    }
+    if (reminderBefore > 0) {
+      for (String day in selectedDays) {
+        alarmIds.add(functions.randomUniqueNumber());
+      }
     }
     String alarmIdsInString = functions.convertIntArrayToString(alarmIds);
     developer.log(alarmIdsInString);
