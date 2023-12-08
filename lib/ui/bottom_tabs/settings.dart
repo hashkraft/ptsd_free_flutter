@@ -1,11 +1,18 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ptsd_free/models/settings.dart';
+import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/ui/settings/hotline.dart';
 import 'package:ptsd_free/ui/settings/privacy_policy.dart';
 import 'package:ptsd_free/ui/settings/zipcode.dart';
+import 'package:ptsd_free/ui/splash_screen.dart';
+import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
+import 'package:ptsd_free/widgets/custom_text.dart';
 import 'package:ptsd_free/widgets/list_tile_settings.dart';
 import 'dart:developer' as developer;
 
@@ -138,6 +145,66 @@ class _SettingsState extends State<SettingsScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const PrivacyPolicy()));
+            },
+          ),
+          const SizedBox(height: 20),
+          CustomColoredText(
+              text: "  Account", hexColor: "#95999C", size: 16, weight: 400),
+          const SizedBox(height: 8),
+          ListTileSettings(
+            text: "Delete Account",
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title:
+                          const CustomText(text: "Confirmation", weight: 400),
+                      content: const CustomText(
+                          text: "Do you want to delete your account?",
+                          weight: 400),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () async {
+                            String deviceId = (await getId()) ?? "";
+                            FirebaseFirestore.instance
+                                .collection("users-data")
+                                .where("deviceId", isEqualTo: deviceId)
+                                .get()
+                                .then((querySnapshot) {
+                              querySnapshot.docs.forEach((doc) {
+                                doc.reference.delete().then((_) {
+                                  developer
+                                      .log('Document successfully deleted!');
+                                  UserAdd.zipcode = "";
+
+                                  // exit(0);
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SplashScreen(),
+                                    ),
+                                  );
+                                }).catchError((error) {
+                                  developer
+                                      .log('Error deleting document: $error');
+                                });
+                              });
+                            });
+
+                            developer.log("Delete account clicked!");
+                          },
+                          child: const CustomText(text: "Yes", weight: 400),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const CustomText(text: "No", weight: 400),
+                        ),
+                      ],
+                    );
+                  });
             },
           ),
           const SizedBox(height: 32),
