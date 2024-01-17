@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer' as developer;
+import 'dart:async';
+import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:video_player/video_player.dart';
@@ -39,6 +39,10 @@ class _TimerScreenState extends State<TimerScreen> {
   final player = AudioPlayer();
   late VideoPlayerController _videoController;
 
+  Future<void> playChime() async {
+    await player.play(AssetSource("chime2.mp3"), volume: 0.5);
+  }
+
   Future<void> playAudio() async {
     switch (widget.sound) {
       case "Silence":
@@ -46,6 +50,7 @@ class _TimerScreenState extends State<TimerScreen> {
       case "I'm Okay":
         await player.play(AssetSource("iamokay.mp3"));
         player.setReleaseMode(ReleaseMode.loop);
+
         break;
       case "sound3":
         break;
@@ -126,7 +131,6 @@ class _TimerScreenState extends State<TimerScreen> {
 
                 pauseAudio();
               } else {
-                developer.log("hit");
                 _controller.resume();
 
                 playAudio();
@@ -172,6 +176,7 @@ class _TimerScreenState extends State<TimerScreen> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
+                stopAudio();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -210,6 +215,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   Center(
                     child: CircularCountDownTimer(
                       duration: (widget.mins * 60),
+                      // duration: 60,
                       initialDuration: 0,
                       controller: _controller,
                       width: MediaQuery.of(context).size.width / 2,
@@ -232,20 +238,26 @@ class _TimerScreenState extends State<TimerScreen> {
                       isTimerTextShown: true,
                       autoStart: false,
                       onStart: () {
-                        debugPrint('Countdown Started');
+                        log('Countdown Started');
                       },
                       onComplete: () {
-                        debugPrint('Countdown Ended');
+                        stopAudio();
+                        log('Countdown Ended');
+                        Timer(const Duration(seconds: 3), () {
+                          playChime();
+                        });
                       },
                       onChange: (String timeStamp) {
-                        debugPrint('Countdown Changed $timeStamp');
+                        log('Countdown Changed $timeStamp');
                       },
+
                       timeFormatterFunction:
                           (defaultFormatterFunction, duration) {
                         if (duration.inSeconds == 0) {
                           return "Start";
                         } else {
                           int totalDuration = widget.mins * 60;
+                          // int totalDuration = 60;
                           int timeLeft = totalDuration - duration.inSeconds;
                           int minArm = (timeLeft / 60).floor();
                           int secArm = timeLeft % 60;
@@ -271,8 +283,7 @@ class _TimerScreenState extends State<TimerScreen> {
                   circularButton(
                     title: "Done",
                     onPressed: () {
-                      developer.log(
-                          "Meditation sesson of ${widget.mins} mins completed!");
+                      log("Meditation sesson of ${widget.mins} mins completed!");
                       stopAudio();
                       if (widget.source == "resolve") {
                         Navigator.of(context).push(
@@ -304,25 +315,6 @@ class _TimerScreenState extends State<TimerScreen> {
                       }
                     },
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     circularButton(
-                  //       title: "Restart",
-                  //       onPressed: () =>
-                  //           _controller.restart(duration: widget.mins * 60),
-                  //     ),
-                  //     circularButton(
-                  //       title: "Done",
-                  //       onPressed: () {
-                  //         developer.log(
-                  //             "Meditation sesson of ${widget.mins} mins completed!");
-                  //         stopAudio();
-                  //         context.go("/aftermeditation");
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ],
