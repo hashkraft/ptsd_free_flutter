@@ -17,7 +17,7 @@ class Membership extends StatelessWidget {
   }
 
   Future<void> _launchFacebookUrl() async {
-    final Uri url = Uri.parse('https://www.facebook.com/StressIsGone');
+    final Uri url = Uri.parse('https://www.facebook.com/groups/144778457510146');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }

@@ -56,6 +56,13 @@ class _SettingsState extends State<SettingsScreen> {
                   MaterialPageRoute(builder: (context) => const ZipCode()));
             },
           ),
+          /* ListTileSettings(
+            text: "Set Zipcode",
+            onPressed: () async {
+              await setPincodeRange(10301, 10314, "+13477673889");
+              developer.log("Zipcodes added");
+            },
+          ), */
           ListTileSettings(
             text: "Hotline Number",
             onPressed: () {
@@ -125,10 +132,24 @@ class _SettingsState extends State<SettingsScreen> {
             text: "Report a Problem",
             onPressed: () async {
               developer.log("Report a Problem - Email clicked!");
-              final Uri url = Uri.parse(
-                  'mailto:info@stressisgone.com?subject=News&body=New%20plugin');
-              if (!await launchUrl(url)) {
-                throw Exception('Could not launch $url');
+              //final Uri url = Uri.parse('mailto:brett@stressisgone.com?subject=Report%20a%20Problem%20from%20PTSD%20Keys');
+              String? encodeQueryParameters(Map<String, String> params) {
+                return params.entries
+                    .map((MapEntry<String, String> e) =>
+                        '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                    .join('&');
+              }
+              
+              final Uri emailLaunchUri = Uri(
+                scheme: 'mailto',
+                path: 'smith@example.com',
+                query: encodeQueryParameters(<String, String>{
+                  'subject': 'Example Subject & Symbols are allowed!',
+                }),
+              );
+
+              if (!await launchUrl(emailLaunchUri)) {
+                throw Exception('Could not launch $emailLaunchUri');
               }
             },
           ),

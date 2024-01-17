@@ -146,7 +146,7 @@ class _ResolveState extends State<Resolve> {
                   ),
                   const SizedBox(width: 10),
                   CustomColoredText(
-                      text: "Identify the memories that fuels stress",
+                      text: "Identify the memories that fuel stress",
                       hexColor: "#000000",
                       size: 16,
                       weight: 400),
@@ -165,7 +165,7 @@ class _ResolveState extends State<Resolve> {
                   ),
                   const SizedBox(width: 10),
                   CustomColoredText(
-                      text: "Heal trauma within those memories",
+                      text: "Resolve emotions in those memories",
                       hexColor: "#000000",
                       size: 16,
                       weight: 400),
@@ -217,7 +217,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return const Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () async {
@@ -229,11 +229,11 @@ class _ResolveState extends State<Resolve> {
                         //   widget.step++;
                         // });
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -310,7 +310,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -320,11 +320,11 @@ class _ResolveState extends State<Resolve> {
                         //   widget.step++;
                         // });
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -366,7 +366,7 @@ class _ResolveState extends State<Resolve> {
               // ),
               // const SizedBox(height: 16),
               CustomColoredText(
-                text: "Which emotion fuels this stress triggered by $trigger ?",
+                text: "Which emotion fuels this stress triggered by $trigger?",
                 hexColor: "#2C3351",
                 size: 16,
                 weight: 400,
@@ -404,7 +404,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -415,11 +415,11 @@ class _ResolveState extends State<Resolve> {
                         //   widget.step++;
                         // });
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -462,7 +462,7 @@ class _ResolveState extends State<Resolve> {
               // const SizedBox(height: 16),
               CustomColoredText(
                 text:
-                    "When $trigger triggers your stress reactions, what thought repeats in the back of your mind?",
+                    "When $trigger triggers your stress, what thought repeats in the back of your mind?",
                 hexColor: "#2C3351",
                 size: 16,
                 weight: 400,
@@ -496,7 +496,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -512,11 +512,11 @@ class _ResolveState extends State<Resolve> {
                         //   widget.step++;
                         // });
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -598,18 +598,18 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -664,7 +664,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -675,11 +675,11 @@ class _ResolveState extends State<Resolve> {
                           widget.onValueChanged(widget.step);
                         }
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -733,7 +733,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -744,11 +744,11 @@ class _ResolveState extends State<Resolve> {
                           widget.onValueChanged(widget.step);
                         }
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -806,18 +806,18 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -875,18 +875,18 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -940,18 +940,18 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
                         widget.step += 1;
                         widget.onValueChanged(widget.step);
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -999,7 +999,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -1008,11 +1008,11 @@ class _ResolveState extends State<Resolve> {
                           widget.onValueChanged(widget.step);
                         });
                       },
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -1033,7 +1033,7 @@ class _ResolveState extends State<Resolve> {
             children: [
               CustomColoredText(
                 text:
-                    '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying "I'm Okay" once per breath. Press continue to start Meditation.''',
+                    '''Imagine yourself inside the past stressful memory silently saying, "I'm Okay", once per breath. Touch the Start Meditation button and follow along with the exercise until you hear the chime.''',
                 hexColor: "#2C3351",
                 size: 16,
                 weight: 400,
@@ -1053,7 +1053,7 @@ class _ResolveState extends State<Resolve> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(),
+                  // const SizedBox(),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: ElevatedButton(
@@ -1080,11 +1080,11 @@ class _ResolveState extends State<Resolve> {
                           ),
                         );
                       },
-                      child: const Text(
-                        "Start Meditation",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                      child: CustomColoredText(
+                              text: "Start Meditation",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -1107,7 +1107,7 @@ class _ResolveState extends State<Resolve> {
                     '''Great job! Now use Stress Stopper Breathwork to reduce present day stress. Think about a recent reaction triggered by ${thoughtTrigger.text}.''',
                 hexColor: "#2C3351",
                 size: 16,
-                weight: 500,
+                weight: 400,
               ),
               const SizedBox(height: 30),
               Center(
@@ -1132,7 +1132,7 @@ class _ResolveState extends State<Resolve> {
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {
@@ -1169,7 +1169,7 @@ class _ResolveState extends State<Resolve> {
                     '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying, \"I\'m okay\" once per breath. Press Start Meditation.''',
                 hexColor: "#2C3351",
                 size: 16,
-                weight: 500,
+                weight: 400,
               ),
               const SizedBox(height: 30),
               Center(
@@ -1184,45 +1184,57 @@ class _ResolveState extends State<Resolve> {
           Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                        return HexColor("#308B06");
-                      }),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TimerScreen(
-                            mins: 10,
-                            sound: "I'm Okay",
-                            source: "step",
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width *0.55,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                          return Colors.green;;
+                        }),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => TimerScreen(
+                              mins: 10,
+                              sound: "I'm Okay",
+                              source: "step",
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: CustomColoredText(
-                        text: "Start Meditation",
-                        hexColor: "#FFFFFF",
-                        size: 18,
-                        weight: 400),
+                        );
+                      },
+                      child: CustomColoredText(
+                          text: "Start Meditation",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.step += 1;
-                        widget.onValueChanged(widget.step);
-                      });
-                    },
-                    child: CustomColoredText(
-                        text: "Continue",
-                        hexColor: "#308B06",
-                        size: 18,
-                        weight: 400),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width *0.35,
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            return Color.fromRGBO(214, 70, 123, 1);
+                          },
+                        )),
+                      onPressed: () {
+                        setState(() {
+                          widget.step += 1;
+                          widget.onValueChanged(widget.step);
+                        });
+                      },
+                      child: CustomColoredText(
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
+                    ),
                   ),
                 ],
               ),
@@ -1250,10 +1262,10 @@ class _ResolveState extends State<Resolve> {
               ),
               CustomColoredText(
                 text: '''
-You faced your stress head on with PTSD Free. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
+You faced your stress head on with PTSD Keys. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
                 hexColor: "#2C3351",
                 size: 16,
-                weight: 500,
+                weight: 400,
               ),
               const SizedBox(height: 30),
               Center(
@@ -1277,7 +1289,7 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                       style: ButtonStyle(backgroundColor:
                           MaterialStateProperty.resolveWith<Color?>(
                         (Set<MaterialState> states) {
-                          return Colors.red;
+                          return Color.fromRGBO(214, 70, 123, 1);
                         },
                       )),
                       onPressed: () {

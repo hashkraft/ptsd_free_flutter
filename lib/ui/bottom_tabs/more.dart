@@ -47,7 +47,7 @@ class _MoreState extends State<More> {
           onPressed: () async {
             developer.log("Feedback clicked!");
             final Uri url = Uri.parse(
-                'http://www.stressisgone.com/new_mobile_feedback.php');
+                'https://www.stressisgone.com/ptsd-keys-feedback');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }
@@ -70,7 +70,7 @@ class _MoreState extends State<More> {
           onPressed: () async {
             developer.log("Free E-Book  clicked!");
             final Uri url = Uri.parse(
-                'http://www.stressisgone.com/wordpress/wp-content/uploads/2015/05/3-Keys-to-Managing-PTSD-The-Warriors-Guide.pdf');
+                'https://firebasestorage.googleapis.com/v0/b/hk-ptsd-free.appspot.com/o/3-Keys-to-Managing-PTSD-The-Warriors-Guide.pdf?alt=media');
             if (!await launchUrl(url)) {
               throw Exception('Could not launch $url');
             }

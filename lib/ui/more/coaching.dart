@@ -20,11 +20,11 @@ class Coaching extends StatefulWidget {
 }
 
 class _CoachingState extends State<Coaching> {
-  String number = "9090909090";
+  String number = "+18338673529";
 
   Future<void> _launchEmailUrl() async {
     final Uri url = Uri.parse(
-        'mailto:coaching@stressisgone.com?subject=Request%20for%20coaching&body=%20');
+        'mailto:brett@stressisgone.com?subject=Request%20for%20coaching&body=%20'); // TODO: Request for Coaching from PTSD Keys App
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
@@ -68,7 +68,7 @@ class _CoachingState extends State<Coaching> {
   }
 
   Future<void> _launchSupportUrl() async {
-    final Uri url = Uri.parse('https://www.stressisgone.com/');
+    final Uri url = Uri.parse('https://www.stressisgone.com/breakthrough-coaching-sessions');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
@@ -114,7 +114,7 @@ class _CoachingState extends State<Coaching> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomColoredText(
-                  text: "PTSD Free",
+                  text: "PTSD Keys",
                   hexColor: "#23C4F1",
                   size: 18,
                   weight: 500,
@@ -176,7 +176,7 @@ class _CoachingState extends State<Coaching> {
                 const SizedBox(height: 16),
                 const TestimonialQuote(
                   quote:
-                      "The PTSD FREE mobile app has helped me manage my PTSD symptoms and reminds me to meditate daily. The app guides me through the techniques that are easy to practice anywhere, at anytime. My overall stress level is much less and I am able to handle high stress situations more clearly. I recommend the app and the coaching program to anyone suffering from PTSD.",
+                      "The PTSD Keys mobile app has helped me manage my PTSD symptoms and reminds me to meditate daily. The app guides me through the techniques that are easy to practice anywhere, at anytime. My overall stress level is much less and I am able to handle high stress situations more clearly. I recommend the app and the coaching program to anyone suffering from PTSD.",
                   name:
                       "Kyle\nVeteran Operation Enduring Freedom\nIT professional\nSouthbury Connecticut",
                 ),
@@ -209,7 +209,7 @@ class _CoachingState extends State<Coaching> {
                 ),
                 const TestimonialQuote(
                   quote:
-                      "Stress Is Gone uses easy steps to help readers work through Post Traumatic Stress (PTS) with a proven technique and user friendly program. If you’re trying to learn how to manage your stress, the PTSD FREE mobile app is a great addition to your relaxation and meditation program. I would absolutely recommend using Stress Is Gone to help manage your PTS symptoms.",
+                      "Stress Is Gone uses easy steps to help readers work through Post Traumatic Stress (PTS) with a proven technique and user friendly program. If you’re trying to learn how to manage your stress, the PTSD Keys mobile app is a great addition to your relaxation and meditation program. I would absolutely recommend using Stress Is Gone to help manage your PTS symptoms.",
                   name:
                       "Juliet Madsen, US Army Retired \n Founder, www.strokeofluckquilting.com",
                 ),

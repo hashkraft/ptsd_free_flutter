@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "767551108049",
-    "project_id": "ptsd-free1",
-    "storage_bucket": "ptsd-free1.appspot.com"
+    "project_number": "496902466828",
+    "project_id": "hk-ptsd-free",
+    "storage_bucket": "hk-ptsd-free.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:767551108049:android:bc65aedbd64e86a54ce6f0",
+        "mobilesdk_app_id": "1:496902466828:android:38fac49a1756f0d0da2d29",
         "android_client_info": {
-          "package_name": "com.example.ptsd_free"
+          "package_name": "com.stressisgone.android.ptsdfree"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyALtul8zes_M5Etwy5j8OhWcOSDeZk1YXo"
+          "current_key": "AIzaSyAiaS0tKmFHZ9EQITvDIcGonYmNvBWZHF4"
         }
       ],
       "services": {

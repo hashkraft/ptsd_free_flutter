@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/middleware/MiddlewareCheck.dart';
 import 'package:ptsd_free/models/settings.dart';
@@ -43,7 +44,7 @@ import 'package:ptsd_free/widgets/custom_colored_text.dart';
 //         title: CustomColoredText(
 //           text: (SettingVariables().randomPTSD)
 //               ? "Stress Stopper Breathwork"
-//               : " 3 Keys to Live PTSD Free",
+//               : " 3 Keys to Live PTSD Keys",
 //           hexColor: "#FFFFFF",
 //           size: 22,
 //           weight: 400,
@@ -356,9 +357,9 @@ class _StartInfo1State extends State<StartInfo1> {
             const SizedBox(height: 16),
             CustomColoredText(
               text: "Take Action During Your Reaction",
-              hexColor: "#F73C00",
+              hexColor: "#d6467b",
               size: 18,
-              weight: 500,
+              weight: 700,
             ),
             const SizedBox(height: 16),
             Row(
@@ -397,15 +398,26 @@ class _StartInfo1State extends State<StartInfo1> {
               weight: 500,
             ),
             const SizedBox(height: 16),
+            Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: const Divider(thickness: 0.4),
+                  ),
+                ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: CustomColoredText(
-                text:
+              child: Text(
                     "Stress Stopper Breathwork quickly activates your body's relaxation response",
-                hexColor: "#2C3351",
-                size: 16,
-                weight: 500,
-              ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: GoogleFonts.dmSans(
+                      textStyle: TextStyle(
+                        color: HexColor("#2C3351"),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -438,7 +450,7 @@ class _StartInfo1State extends State<StartInfo1> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
-                        return Colors.red;
+                        return const Color.fromRGBO(214, 70, 123, 1);
                       },
                     ),
                   ),
@@ -509,7 +521,7 @@ class _StartInfo2State extends State<StartInfo2> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: CustomColoredText(
-            text: " 3 Keys to Live PTSD Free",
+            text: "3 Keys to Manage PTSD",
             hexColor: "#FFFFFF",
             size: 22,
             weight: 400,
@@ -594,7 +606,7 @@ class _StartInfo2State extends State<StartInfo2> {
                         width: 16,
                       ),
                       CustomColoredText(
-                        text: "3. Meditate",
+                        text: "3. Meditate Tab",
                         hexColor: "#036EB0",
                         size: 16,
                         weight: 500,

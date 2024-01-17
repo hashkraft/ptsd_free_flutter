@@ -122,10 +122,10 @@ class _AfterMeditationState extends State<AfterMeditation> {
                             : (screen == 2)
                                 ? '''Imagine yourself inside the recent memory, breathing deep and slow, silently saying, \"I\'m okay\" once per breath. Press Start Meditation.'''
                                 : '''
-You faced your stress head on with PTSD Free. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
+You faced your stress head on with PTSD Keys. For further assistance, touch the More tab at the bottom right hand side of your screen. Great job!''',
                         hexColor: "#2C3351",
                         size: 16,
-                        weight: 500,
+                        weight: 400,
                       ),
                       const SizedBox(height: 30),
                       (screen == 3)
@@ -159,7 +159,7 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                     children: [
                       (screen == 2)
                           ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ElevatedButton(
                                   style: ButtonStyle(
@@ -212,7 +212,7 @@ You faced your stress head on with PTSD Free. For further assistance, touch the 
                                         MaterialStateProperty.resolveWith<
                                             Color?>(
                                       (Set<MaterialState> states) {
-                                        return Colors.red;
+                                        return Color.fromRGBO(214, 70, 123, 1);
                                       },
                                     )),
                                     onPressed: () {

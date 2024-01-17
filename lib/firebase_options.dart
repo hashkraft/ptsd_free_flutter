@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,38 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBlmlGd4WUmYAn09HkKIsWKsrx1H2Hg44k',
-    appId: '1:767551108049:web:d4c5dbbc9cdfbcba4ce6f0',
-    messagingSenderId: '767551108049',
-    projectId: 'ptsd-free1',
-    authDomain: 'ptsd-free1.firebaseapp.com',
-    storageBucket: 'ptsd-free1.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyALtul8zes_M5Etwy5j8OhWcOSDeZk1YXo',
-    appId: '1:767551108049:android:bc65aedbd64e86a54ce6f0',
-    messagingSenderId: '767551108049',
-    projectId: 'ptsd-free1',
-    storageBucket: 'ptsd-free1.appspot.com',
+    apiKey: 'AIzaSyAiaS0tKmFHZ9EQITvDIcGonYmNvBWZHF4',
+    appId: '1:496902466828:android:3553cac9ecac64b8da2d29',
+    messagingSenderId: '496902466828',
+    projectId: 'hk-ptsd-free',
+    storageBucket: 'hk-ptsd-free.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyATIIT5jU2Bbr48MiS6GyMcz0AHDmhf278',
-    appId: '1:767551108049:ios:bd209fba499908b74ce6f0',
-    messagingSenderId: '767551108049',
-    projectId: 'ptsd-free1',
-    storageBucket: 'ptsd-free1.appspot.com',
-    iosBundleId: 'com.example.ptsdFree',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyATIIT5jU2Bbr48MiS6GyMcz0AHDmhf278',
-    appId: '1:767551108049:ios:1d1debd774d103224ce6f0',
-    messagingSenderId: '767551108049',
-    projectId: 'ptsd-free1',
-    storageBucket: 'ptsd-free1.appspot.com',
-    iosBundleId: 'com.example.ptsdFree.RunnerTests',
+    apiKey: 'AIzaSyCDLcdC9oawuwxobbDAo34ZAUXFM1IbKZI',
+    appId: '1:496902466828:ios:7e07fb4c07309c87da2d29',
+    messagingSenderId: '496902466828',
+    projectId: 'hk-ptsd-free',
+    storageBucket: 'hk-ptsd-free.appspot.com',
+    iosBundleId: 'com.stressisgone.ptsdfree',
   );
 }

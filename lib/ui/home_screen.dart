@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -191,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 text:
                     '''Answer a few questions to identify when your stress is most likely triggered. \n
 The app helps stop the stress by automatically sending you mini-meditations when your reactions are frequent.
-The more thought you'll put into your answers the more stress you'll stop. \n
+The more thought you put into your answers the more stress you'll stop. \n
 Set-up one PTSD trigger at a time.''',
                 hexColor: "#2C3351",
                 size: 16,
@@ -372,7 +373,7 @@ Set-up one PTSD trigger at a time.''',
                     style: ButtonStyle(backgroundColor:
                         MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
-                        return Colors.red;
+                        return Color.fromRGBO(214, 70, 123, 1);
                       },
                     )),
                     onPressed: () {
@@ -422,7 +423,7 @@ Set-up one PTSD trigger at a time.''',
                     const SizedBox(height: 10),
                     CustomColoredText(
                       text:
-                          "One-touch instant stress relief on your Android Screen. Touch the PTSD Free icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
+                          "One-touch instant stress relief on your Android Screen. Touch the PTSD Keys icon every time you feel stressed. Follow along with the breathing exercise to manage your stress in a minute.",
                       hexColor: "#2C3351",
                       size: 16,
                       weight: 400,
@@ -464,7 +465,7 @@ Set-up one PTSD trigger at a time.''',
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
                             (Set<MaterialState> states) {
-                              return Colors.red;
+                              return Color.fromRGBO(214, 70, 123, 1);
                             },
                           )),
                           onPressed: () {
@@ -585,7 +586,7 @@ Set-up one PTSD trigger at a time.''',
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
                             (Set<MaterialState> states) {
-                              return Colors.red;
+                              return Color.fromRGBO(214, 70, 123, 1);
                             },
                           )),
                           onPressed: () {
@@ -595,12 +596,11 @@ Set-up one PTSD trigger at a time.''',
                               question = false;
                             });
                           },
-                          child: const Text(
-                            "Routine PTSD",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: CustomColoredText(
+                              text: "Routine PTSD",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500)
                         ),
                       ),
                       SizedBox(
@@ -609,7 +609,7 @@ Set-up one PTSD trigger at a time.''',
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
                             (Set<MaterialState> states) {
-                              return Colors.red;
+                              return Color.fromRGBO(214, 70, 123, 1);
                             },
                           )),
                           onPressed: () {
@@ -621,12 +621,11 @@ Set-up one PTSD trigger at a time.''',
                             developer.log(">>>>" +
                                 SettingVariables().randomPTSD.toString());
                           },
-                          child: const Text(
-                            "Random PTSD",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: CustomColoredText(
+                              text: "Random PTSD",
+                              hexColor: "#FFFFFF",
+                              size: 16,
+                              weight: 500),
                         ),
                       ),
                     ],
@@ -686,7 +685,7 @@ Set-up one PTSD trigger at a time.''',
                 children: [
                   const SizedBox(height: 10),
                   CustomColoredText(
-                      text: "Meditate helps people:",
+                      text: "This tab helps people:",
                       hexColor: "#005CB8",
                       size: 18,
                       weight: 400),
@@ -769,7 +768,7 @@ Set-up one PTSD trigger at a time.''',
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
                             (Set<MaterialState> states) {
-                              return Colors.red;
+                              return Color.fromRGBO(214, 70, 123, 1);
                             },
                           )),
                           onPressed: () {
@@ -787,12 +786,11 @@ Set-up one PTSD trigger at a time.''',
                               }
                             });
                           },
-                          child: const Text(
-                            "My Practice",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: CustomColoredText(
+                                      text: "My Practice",
+                                      hexColor: "#FFFFFF",
+                                      size: 16,
+                                      weight: 500),
                         ),
                       ),
                       const SizedBox(),
@@ -809,7 +807,7 @@ Set-up one PTSD trigger at a time.''',
                           style: ButtonStyle(backgroundColor:
                               MaterialStateProperty.resolveWith<Color?>(
                             (Set<MaterialState> states) {
-                              return Colors.red;
+                              return const Color.fromRGBO(214, 70, 123, 1);
                             },
                           )),
                           onPressed: () async {
@@ -819,12 +817,11 @@ Set-up one PTSD trigger at a time.''',
                               throw Exception('Could not launch $url');
                             }
                           },
-                          child: const Text(
-                            "YouTube Meditations",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: CustomColoredText(
+                                      text: "Youtube Meditations",
+                                      hexColor: "#FFFFFF",
+                                      size: 16,
+                                      weight: 500),
                         ),
                       ),
                       const SizedBox(),
@@ -849,7 +846,7 @@ Set-up one PTSD trigger at a time.''',
                               text: "Join Meditation Group",
                               size: 16,
                               weight: 500,
-                              hexColor: "#F03608",
+                              hexColor: "#d6467b",
                             )),
                       ),
                       const SizedBox(),
@@ -989,7 +986,7 @@ Set-up one PTSD trigger at a time.''',
                         style: ButtonStyle(backgroundColor:
                             MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
-                            return Colors.red;
+                            return const Color.fromRGBO(214, 70, 123, 1);
                           },
                         )),
                         onPressed: () {
@@ -999,17 +996,17 @@ Set-up one PTSD trigger at a time.''',
                               MaterialPageRoute(
                                   builder: (context) => const AddMeditation()));
                         },
-                        child: const Text(
-                          "Setup Another Meditation",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                        child: CustomColoredText(
+                                      text: "Setup Another Meditation",
+                                      hexColor: "#FFFFFF",
+                                      size: 16,
+                                      weight: 500),
                       ),
                       ElevatedButton(
                         style: ButtonStyle(backgroundColor:
                             MaterialStateProperty.resolveWith<Color?>(
                           (Set<MaterialState> states) {
-                            return Colors.red;
+                            return const Color.fromRGBO(214, 70, 123, 1);
                           },
                         )),
                         onPressed: () {
@@ -1017,11 +1014,11 @@ Set-up one PTSD trigger at a time.''',
                             myMedsInfo = true;
                           });
                         },
-                        child: const Text(
-                          "Done",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
+                        child: CustomColoredText(
+                                      text: "Done",
+                                      hexColor: "#FFFFFF",
+                                      size: 16,
+                                      weight: 500),
                       ),
                       const SizedBox(),
                     ],
@@ -1139,7 +1136,7 @@ Set-up one PTSD trigger at a time.''',
                   )
                 : (widget.currentIndex == 2 && myMedsInfo == false)
                     ? Positioned(
-                        top: MediaQuery.of(context).size.height * 0.11,
+                        top: Platform.isIOS ? 115 : 75,
                         left: 20,
                         child: CustomColoredText(
                           text: "Meditation Times",
@@ -1152,7 +1149,7 @@ Set-up one PTSD trigger at a time.''',
                             resolveStep <= 11 &&
                             widget.currentIndex == 1)
                         ? Positioned(
-                            top: MediaQuery.of(context).size.height * 0.11,
+                            top: (Platform.isIOS) ? 115 : 75,
                             // left: MediaQuery.of(context).size.width / 18,
                             left: 20,
                             child: (resolveStep == 9)
@@ -1187,7 +1184,7 @@ Set-up one PTSD trigger at a time.''',
                                 resolveStep < 15 &&
                                 widget.currentIndex == 1)
                             ? Positioned(
-                                top: MediaQuery.of(context).size.height * 0.11,
+                                top: Platform.isIOS ? 115 : 75,
                                 // left: MediaQuery.of(context).size.width / 18,
                                 left: 20,
                                 child: (resolveStep == 12)
@@ -1223,8 +1220,7 @@ Set-up one PTSD trigger at a time.''',
                                     currentStep <= 3 &&
                                     routine)
                                 ? Positioned(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.11,
+                                    top: (Platform.isIOS ? 115 : 75),
                                     left: 20,
                                     child: CustomColoredText(
                                       text: (currentStep == 0)

@@ -123,6 +123,8 @@ class _ZipcodeState extends State<ZipCode> {
                                 )),
                                 onPressed: () {
                                   print(tec.text);
+                                  showSnackbarWithColor(
+                                      context, "Zipcode successfully updated", Colors.green);
                                   changeZipCode(tec.text);
                                 },
                                 child: CustomColoredText(

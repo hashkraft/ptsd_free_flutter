@@ -80,7 +80,7 @@ class _RegistrationState extends State<Registration> {
         backgroundColor: HexColor("#23C4F1"),
         automaticallyImplyLeading: false,
         title: CustomColoredText(
-            text: "Register to PTSD Free App",
+            text: "Register to PTSD Keys App",
             hexColor: "#FFFFFF",
             size: 22,
             weight: 500),
@@ -98,17 +98,17 @@ class _RegistrationState extends State<Registration> {
                       children: [
                         CustomColoredText(
                           text:
-                              "To ensure you receive prompt and personalized assistance, please share your email and ZIP code with us. This information is vital for us to connect you with immediate help and resources in your area.",
+                              "To ensure you receive prompt and personalized assistance, please fill in the information below to see which free local support services we have in your area.",
                           hexColor: "#2C3351",
-                          size: 16,
+                          size: 18,
                           weight: 500,
                         ),
                         const SizedBox(height: 8),
                         CustomColoredText(
                           text:
-                              "Your privacy is our priority. We respect and protect your information.",
+                              "Your privacy is our priority. We respect and protect all your information.",
                           hexColor: "#2C3351",
-                          size: 16,
+                          size: 18,
                           weight: 500,
                         ),
                         const SizedBox(height: 32),

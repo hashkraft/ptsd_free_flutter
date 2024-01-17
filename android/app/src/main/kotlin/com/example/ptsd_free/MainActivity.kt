@@ -1,4 +1,4 @@
-package com.example.ptsd_free
+package com.stressisgone.android.ptsdfree
 
 import io.flutter.embedding.android.FlutterActivity
 
