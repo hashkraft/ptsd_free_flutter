@@ -7,6 +7,7 @@ import 'package:ptsd_free/models/user.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
+import 'package:ptsd_free/widgets/custom_dropdown.dart';
 import 'package:ptsd_free/widgets/text_form_field.dart';
 import 'dart:developer' as developer;
 
@@ -22,6 +23,14 @@ class _RegistrationState extends State<Registration> {
   // TextEditingController passwordController = TextEditingController();
   // TextEditingController cPasswordController = TextEditingController();
   TextEditingController zipcodeController = TextEditingController();
+  String profession = "Military Veteran";
+  List<String> professions = [
+    "Military Veteran",
+    "Active-Duty Military",
+    "First Responder",
+    "Healthcare Worker",
+    "Caregiver",
+  ];
 
   Future<void> createAccount() async {
     String deviceId = (await getId()) ?? "";
@@ -137,6 +146,22 @@ class _RegistrationState extends State<Registration> {
                           hintText: "Zip Code",
                           obscureText: false,
                         ),
+                        const SizedBox(height: 16),
+                        CustomColoredText(
+                          text: "Profession: ",
+                          hexColor: "#2C3351",
+                          size: 16,
+                          weight: 500,
+                        ),
+                        const SizedBox(height: 8),
+                        CustomDropDown(
+                            items: professions,
+                            value: profession,
+                            onChanged: (value) {
+                              setState(() {
+                                profession = value!;
+                              });
+                            }),
                       ],
                     ),
                   ),
@@ -190,6 +215,7 @@ class _RegistrationState extends State<Registration> {
                                     "username": username,
                                     // "password": password,
                                     "zipcode": zipcode,
+                                    "profession": profession,
                                     "deviceId": deviceId,
                                   }).whenComplete(() {
                                     showSnackbarWithColor(

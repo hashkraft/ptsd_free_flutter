@@ -144,6 +144,8 @@ Future<void> initializationPTSDNotifications() async {
           payload: payload,
         ),
       );
+      navigatorKey.currentState!.pushNamed('/timer',
+          arguments: {"duration": "5", "sound": "Silence"});
     },
     notificationCategories: darwinNotificationCategories,
   );

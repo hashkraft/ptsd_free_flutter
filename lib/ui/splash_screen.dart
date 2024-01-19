@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
               AndroidFlutterLocalNotificationsPlugin>();
 
       final bool? grantedNotificationPermission =
-          await androidImplementation?.requestPermission();
+          await androidImplementation?.requestNotificationsPermission();
 
       setState(() {
         notificationsEnabled = grantedNotificationPermission ?? false;

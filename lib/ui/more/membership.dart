@@ -17,14 +17,31 @@ class Membership extends StatelessWidget {
   }
 
   Future<void> _launchFacebookUrl() async {
-    final Uri url = Uri.parse('https://www.facebook.com/groups/144778457510146');
+    final Uri url =
+        Uri.parse('https://www.facebook.com/groups/144778457510146');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
   }
 
-  Future<void> _launchXUrl() async {
-    final Uri url = Uri.parse('https://x.com/stressisgone');
+  Future<void> _launchYoutubeUrl() async {
+    final Uri url =
+        Uri.parse('https://www.youtube.com/@stressisgone1537/playlists');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  Future<void> _launchInstagramUrl() async {
+    final Uri url = Uri.parse('https://www.instagram.com/stressisgone/reels/');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  Future<void> _launchLinkedInUrl() async {
+    final Uri url =
+        Uri.parse('https://www.linkedin.com/in/brett-cotter-6513693/');
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
@@ -96,15 +113,31 @@ class Membership extends StatelessWidget {
                       GestureDetector(
                         onTap: _launchFacebookUrl,
                         child: Image.asset(
-                          "assets/images/facebook.png",
+                          "assets/images/facebook_new.png",
                           width: MediaQuery.of(context).size.width * 0.8,
                         ),
                       ),
                       const SizedBox(height: 8),
                       GestureDetector(
-                        onTap: _launchXUrl,
+                        onTap: _launchYoutubeUrl,
                         child: Image.asset(
-                          "assets/images/twitter.png",
+                          "assets/images/youtube.png",
+                          width: MediaQuery.of(context).size.width * 0.8,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: _launchInstagramUrl,
+                        child: Image.asset(
+                          "assets/images/instagram.png",
+                          width: MediaQuery.of(context).size.width * 0.8,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: _launchLinkedInUrl,
+                        child: Image.asset(
+                          "assets/images/linkedin.png",
                           width: MediaQuery.of(context).size.width * 0.8,
                         ),
                       ),
