@@ -4,6 +4,7 @@ import 'dart:developer';
 class SettingVariables {
   bool push = false;
   bool randomPTSD = false;
+  bool conflict = false;
   String last = "none";
 
   Future<void> setPush(bool val) async {
@@ -18,6 +19,12 @@ class SettingVariables {
     randomPTSD = val;
   }
 
+  Future<void> setConflict(bool val) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('conflict', val);
+    conflict = val;
+  }
+
   Future<void> setAllowRandom(String val) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('last', val);
@@ -28,6 +35,13 @@ class SettingVariables {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool val = prefs.getBool('push') ?? false;
     push = val;
+    return val;
+  }
+
+  Future<bool> getConflict() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool val = prefs.getBool('conflict') ?? false;
+    conflict = val;
     return val;
   }
 

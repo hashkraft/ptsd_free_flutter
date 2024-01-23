@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/firebase_options.dart';
+import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/notifications/ptsdNotificationFunctions.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/ui/splash_screen.dart';
@@ -84,7 +85,7 @@ Future<void> main() async {
 
     if (payloadAfterRelaunch != null) {
       payloadJson = jsonDecode(payloadAfterRelaunch ?? "{}");
-
+      // set conflict value
       if (payloadJson['type'] == "meditate") {
         initialRoute = TimerScreen.route;
       } else if (payloadJson['type'] == "breathe") {

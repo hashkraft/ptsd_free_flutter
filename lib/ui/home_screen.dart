@@ -185,12 +185,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       });
 
       if (state == AppLifecycleState.resumed) {
-        SettingVariables().getAllowRandom().then((value) {
-          log("permission String: $value");
-          if (randomPTSDflag == true && value == "background") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const StartInfo1()));
-          }
+        SettingVariables().getAllowRandom().then((perm) {
+          log("permission String: $perm");
+          SettingVariables().getConflict().then((conflict) {
+            if (randomPTSDflag == true && perm == "background" && !conflict) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const StartInfo1(),
+                ),
+              );
+            } else {}
+          });
         });
 
         log("randomPTSDflag: $randomPTSDflag");
