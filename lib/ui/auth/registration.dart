@@ -229,11 +229,13 @@ class _RegistrationState extends State<Registration> {
                                     zipcodeController.clear();
                                     Future.delayed(const Duration(seconds: 1),
                                         () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (context) => HomeScreen(
-                                                    currentIndex: 0,
-                                                  )));
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => HomeScreen(
+                                            currentIndex: 0,
+                                          ),
+                                        ),
+                                      );
                                     });
                                   });
                                 }

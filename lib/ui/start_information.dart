@@ -399,25 +399,25 @@ class _StartInfo1State extends State<StartInfo1> {
             ),
             const SizedBox(height: 16),
             Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: const Divider(thickness: 0.4),
-                  ),
-                ),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: const Divider(thickness: 0.4),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                    "Stress Stopper Breathwork quickly activates your body's relaxation response",
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    style: GoogleFonts.dmSans(
-                      textStyle: TextStyle(
-                        color: HexColor("#2C3351"),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                "Stress Stopper Breathwork quickly activates your body's relaxation response",
+                textAlign: TextAlign.center,
+                softWrap: true,
+                style: GoogleFonts.dmSans(
+                  textStyle: TextStyle(
+                    color: HexColor("#2C3351"),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
