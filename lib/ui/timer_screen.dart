@@ -7,6 +7,7 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
+import 'package:ptsd_free/ui/start_information.dart';
 import 'package:video_player/video_player.dart';
 
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
@@ -41,6 +42,9 @@ class _TimerScreenState extends State<TimerScreen> {
 
   Future<void> playChime() async {
     await player.play(AssetSource("chime2.mp3"), volume: 0.5);
+    Future.delayed(const Duration(seconds: 5), () {
+      player.stop();
+    });
   }
 
   Future<void> playAudio() async {
@@ -48,7 +52,7 @@ class _TimerScreenState extends State<TimerScreen> {
       case "Silence":
         break;
       case "I'm Okay":
-        await player.play(AssetSource("iamokay.mp3"));
+        await player.play(AssetSource("iamokay.mp3"), volume: 1);
         player.setReleaseMode(ReleaseMode.loop);
 
         break;
@@ -100,6 +104,19 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
+  void startFadeOut() async {
+    const fadeDuration = Duration(seconds: 10);
+    const fadeSteps = 100;
+
+    double initialVolume = player.volume;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double newVolume = initialVolume * (1 - i / fadeSteps);
+      await player.setVolume(newVolume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -122,28 +139,29 @@ class _TimerScreenState extends State<TimerScreen> {
   Widget bigButton() {
     return SizedBox(
       child: IconButton(
-          onPressed: () {
-            setState(() {
-              paused = !paused;
+        onPressed: () {
+          setState(() {
+            paused = !paused;
 
-              if (paused) {
-                _controller.pause();
+            if (paused) {
+              _controller.pause();
 
-                pauseAudio();
-              } else {
-                _controller.resume();
+              pauseAudio();
+            } else {
+              _controller.resume();
 
-                playAudio();
-              }
-            });
-          },
-          icon: Icon(
-            (paused)
-                ? Icons.play_circle_fill_outlined
-                : Icons.pause_circle_filled_outlined,
-            color: Colors.white,
-            size: 100,
-          )),
+              playAudio();
+            }
+          });
+        },
+        icon: Icon(
+          (paused)
+              ? Icons.play_circle_fill_outlined
+              : Icons.pause_circle_filled_outlined,
+          color: Colors.white,
+          size: 100,
+        ),
+      ),
     );
   }
 
@@ -214,8 +232,8 @@ class _TimerScreenState extends State<TimerScreen> {
                   ),
                   Center(
                     child: CircularCountDownTimer(
-                      duration: (widget.mins * 60),
-                      // duration: 60,
+                      // duration: (widget.mins * 60),
+                      duration: 60,
                       initialDuration: 0,
                       controller: _controller,
                       width: MediaQuery.of(context).size.width / 2,
@@ -244,11 +262,21 @@ class _TimerScreenState extends State<TimerScreen> {
                         stopAudio();
                         log('Countdown Ended');
                         Timer(const Duration(seconds: 3), () {
-                          playChime();
+                          playChime().then((value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const StartInfo2(),
+                              ),
+                            );
+                          });
                         });
                       },
                       onChange: (String timeStamp) {
                         log('Countdown Changed $timeStamp');
+                        // if (timeStamp == "00:05") {
+                        //   startFadeOut();
+                        // }
                       },
 
                       timeFormatterFunction:
@@ -256,8 +284,8 @@ class _TimerScreenState extends State<TimerScreen> {
                         if (duration.inSeconds == 0) {
                           return "Start";
                         } else {
-                          int totalDuration = widget.mins * 60;
-                          // int totalDuration = 60;
+                          // int totalDuration = widget.mins * 60;
+                          int totalDuration = 60;
                           int timeLeft = totalDuration - duration.inSeconds;
                           int minArm = (timeLeft / 60).floor();
                           int secArm = timeLeft % 60;
@@ -272,6 +300,9 @@ class _TimerScreenState extends State<TimerScreen> {
                             secStr = "0$secArm";
                           } else {
                             secStr = secArm.toString();
+                          }
+                          if (timeLeft == 10) {
+                            startFadeOut();
                           }
                           return "$minStr:$secStr";
                         }

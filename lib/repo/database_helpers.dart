@@ -29,7 +29,7 @@ class DatabaseHelper {
          CREATE TABLE ${values.stopperMapperTableName} (id INTEGER PRIMARY KEY, uuid TEXT, alarmIDs TEXT)
         ''');
         db.execute('''
-          CREATE TABLE ${values.myMedsTableName} (id INTEGER PRIMARY KEY, days TEXT,time TEXT, duration INTEGER, reminderbefore INTEGER, sound TEXT, volume INTEGER, uuid TEXT)
+          CREATE TABLE ${values.myMedsTableName} (id INTEGER PRIMARY KEY, days TEXT,time TEXT, duration INTEGER, reminderbefore INTEGER, sound TEXT, volume TEXT, uuid TEXT)
         ''');
         db.execute('''
          CREATE TABLE ${values.myMedsMapperTableName} (id INTEGER PRIMARY KEY, uuid TEXT, alarmIDs TEXT)
@@ -160,7 +160,7 @@ class DatabaseHelper {
     required int duration,
     required int reminderBefore,
     required String sound,
-    required int volume,
+    required String volume,
     required String uuid,
   }) async {
     List<int> alarmIds = [];

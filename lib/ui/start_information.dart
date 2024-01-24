@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/middleware/MiddlewareCheck.dart';
-import 'package:ptsd_free/models/settings.dart';
 import 'package:ptsd_free/ui/auth/registration.dart';
 import 'package:ptsd_free/ui/home_screen.dart';
 import 'package:ptsd_free/ui/more/coaching.dart';

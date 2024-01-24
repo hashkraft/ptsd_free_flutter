@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,7 +17,9 @@ import 'package:ptsd_free/ui/add_reminder.dart';
 import 'package:ptsd_free/ui/bottom_tabs/more.dart';
 import 'package:ptsd_free/ui/bottom_tabs/resolve.dart';
 import 'package:ptsd_free/ui/bottom_tabs/settings.dart';
+import 'package:ptsd_free/ui/more/coaching.dart';
 import 'package:ptsd_free/ui/start_information.dart';
+import 'package:ptsd_free/ui/timer_screen.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
@@ -188,19 +191,48 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         SettingVariables().getAllowRandom().then((perm) {
           log("permission String: $perm");
           SettingVariables().getConflict().then((conflict) {
-            if (randomPTSDflag == true && perm == "background" && !conflict) {
+            log("Permission: $perm || Conflict: $conflict");
+            if (randomPTSDflag == true &&
+                perm == "background" &&
+                conflict == false) {
+              AudioPlayer().stop();
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StartInfo1(),
+                  builder: (context) => const StartInfo1(), //RANDOM PTSD
                 ),
               );
-            } else {}
+            } else {
+              SettingVariables().getTimerString().then((value) {
+                final params = separateStrings(value);
+                log(">>>>" + params.toString());
+                if (params[0] == "breathe") {
+                  AudioPlayer().stop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const StartInfo1(), //RANDOM PTSD
+                    ),
+                  );
+                } else if (params[0] == "meditate") {
+                  AudioPlayer().stop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TimerScreen(
+                        mins: int.tryParse(params[1]) ?? 10,
+                        sound: (params[2].isNotEmpty) ? params[2] : "Silence",
+                      ), //RANDOM PTSD
+                    ),
+                  );
+                }
+              });
+            }
           });
         });
 
         log("randomPTSDflag: $randomPTSDflag");
-
+        SettingVariables().setConflict(false).then((x) {});
         SettingVariables()
             .setAllowRandom("foreground")
             .then((value) => log("foreground"));

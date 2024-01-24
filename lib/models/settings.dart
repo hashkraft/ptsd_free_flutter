@@ -5,12 +5,19 @@ class SettingVariables {
   bool push = false;
   bool randomPTSD = false;
   bool conflict = false;
+  String timerObjString = "";
   String last = "none";
 
   Future<void> setPush(bool val) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('push', val);
     push = val;
+  }
+
+  Future<void> setTimerString(String val) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('timer', val);
+    timerObjString = val;
   }
 
   Future<void> setRandomPTSD(bool val) async {
@@ -35,6 +42,13 @@ class SettingVariables {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool val = prefs.getBool('push') ?? false;
     push = val;
+    return val;
+  }
+
+  Future<String> getTimerString() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String val = prefs.getString('timer') ?? "";
+    timerObjString = val;
     return val;
   }
 

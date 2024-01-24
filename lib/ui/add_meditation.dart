@@ -309,7 +309,7 @@ class _AddMeditationState extends State<AddMeditation> {
         duration: (durationDouble.toInt() * 5),
         reminderBefore: (reminderBeforeDouble.toInt() * 5),
         sound: sound,
-        volume: volume.toInt(),
+        volume: volume.toString(),
         uuid: const Uuid().v4(),
       )
           .then((value) async {

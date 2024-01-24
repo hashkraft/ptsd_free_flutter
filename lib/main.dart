@@ -86,6 +86,17 @@ Future<void> main() async {
     if (payloadAfterRelaunch != null) {
       payloadJson = jsonDecode(payloadAfterRelaunch ?? "{}");
       // set conflict value
+      SettingVariables().getRandomPTSD().then((value) {
+        if (value == true) {
+          SettingVariables().setConflict(true).then((x) {});
+        } else {
+          SettingVariables().setConflict(false).then((x) {});
+        }
+      });
+      // String toSend =
+      //     "${payloadJson['type']},${payloadJson['duration']},${payloadJson['sound']}";
+      String toSend = "meditate,5,Silence";
+      SettingVariables().setTimerString(toSend);
       if (payloadJson['type'] == "meditate") {
         initialRoute = TimerScreen.route;
       } else if (payloadJson['type'] == "breathe") {

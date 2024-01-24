@@ -35,6 +35,12 @@ Future<String?> getId() async {
   }
 }
 
+List<String> separateStrings(String input) {
+  List<String> separatedList = input.split(',');
+  separatedList = separatedList.map((str) => str.trim()).toList();
+  return separatedList;
+}
+
 String abbreviateDays(String input) {
   // Define a map of day abbreviations
   final dayAbbreviations = {
