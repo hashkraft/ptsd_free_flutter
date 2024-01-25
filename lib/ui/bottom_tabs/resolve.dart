@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ptsd_free/ui/timer_screen.dart';
+import 'package:ptsd_free/ui/timer_screen2.dart';
+import 'package:ptsd_free/ui/timer_screen3.dart';
 import 'package:ptsd_free/utils/functions.dart';
 import 'package:ptsd_free/widgets/custom_colored_text.dart';
 import 'package:ptsd_free/widgets/custom_dropdown.dart';
@@ -230,10 +232,10 @@ class _ResolveState extends State<Resolve> {
                         // });
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -321,10 +323,10 @@ class _ResolveState extends State<Resolve> {
                         // });
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -416,10 +418,10 @@ class _ResolveState extends State<Resolve> {
                         // });
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -513,10 +515,10 @@ class _ResolveState extends State<Resolve> {
                         // });
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -606,10 +608,10 @@ class _ResolveState extends State<Resolve> {
                         widget.onValueChanged(widget.step);
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -676,10 +678,10 @@ class _ResolveState extends State<Resolve> {
                         }
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -745,10 +747,10 @@ class _ResolveState extends State<Resolve> {
                         }
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -814,10 +816,10 @@ class _ResolveState extends State<Resolve> {
                         widget.onValueChanged(widget.step);
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -883,10 +885,10 @@ class _ResolveState extends State<Resolve> {
                         widget.onValueChanged(widget.step);
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -948,10 +950,10 @@ class _ResolveState extends State<Resolve> {
                         widget.onValueChanged(widget.step);
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -1009,10 +1011,10 @@ class _ResolveState extends State<Resolve> {
                         });
                       },
                       child: CustomColoredText(
-                              text: "Continue",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Continue",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -1064,27 +1066,19 @@ class _ResolveState extends State<Resolve> {
                         },
                       )),
                       onPressed: () {
-                        // setState(() {
-                        //   widget.step += 1;
-                        //   widget.onValueChanged(widget.step);
-                        // });
-                        // context.go("/timer", extra: [10, "I'm Okay"]);
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => TimerScreen(
-                              mins: 10,
-                              sound: "I'm Okay",
-                              source: "resolve",
+                            builder: (context) => TimerScreen2(
                               imageText: thoughtTrigger.text,
                             ),
                           ),
                         );
                       },
                       child: CustomColoredText(
-                              text: "Start Meditation",
-                              hexColor: "#FFFFFF",
-                              size: 16,
-                              weight: 500),
+                          text: "Start Meditation",
+                          hexColor: "#FFFFFF",
+                          size: 16,
+                          weight: 500),
                     ),
                   ),
                   const SizedBox(),
@@ -1187,23 +1181,20 @@ class _ResolveState extends State<Resolve> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width *0.55,
+                    width: MediaQuery.of(context).size.width * 0.55,
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.resolveWith<Color?>(
                                 (Set<MaterialState> states) {
-                          return Colors.green;;
+                          return Colors.green;
+                          ;
                         }),
                       ),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => TimerScreen(
-                              mins: 10,
-                              sound: "I'm Okay",
-                              source: "step",
-                            ),
+                            builder: (context) => const TimerScreen3(),
                           ),
                         );
                       },
@@ -1215,14 +1206,14 @@ class _ResolveState extends State<Resolve> {
                     ),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width *0.35,
+                    width: MediaQuery.of(context).size.width * 0.35,
                     child: ElevatedButton(
                       style: ButtonStyle(backgroundColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            return Color.fromRGBO(214, 70, 123, 1);
-                          },
-                        )),
+                          MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                          return Color.fromRGBO(214, 70, 123, 1);
+                        },
+                      )),
                       onPressed: () {
                         setState(() {
                           widget.step += 1;

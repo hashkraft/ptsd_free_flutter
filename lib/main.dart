@@ -85,8 +85,10 @@ Future<void> main() async {
 
     if (payloadAfterRelaunch != null) {
       payloadJson = jsonDecode(payloadAfterRelaunch ?? "{}");
+      log("-1");
       // set conflict value
       SettingVariables().getRandomPTSD().then((value) {
+        log("-2");
         if (value == true) {
           SettingVariables().setConflict(true).then((x) {});
         } else {
@@ -96,10 +98,13 @@ Future<void> main() async {
       // String toSend =
       //     "${payloadJson['type']},${payloadJson['duration']},${payloadJson['sound']}";
       String toSend = "meditate,5,Silence";
+      log("-3");
       SettingVariables().setTimerString(toSend);
       if (payloadJson['type'] == "meditate") {
+        log("-4");
         initialRoute = TimerScreen.route;
       } else if (payloadJson['type'] == "breathe") {
+        log("-5");
         initialRoute = StartInfo1.route;
       } else {
         initialRoute = SplashScreen.route;

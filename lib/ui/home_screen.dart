@@ -93,11 +93,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    // AwesomeNotifications().getAppLifeCycle().then((value) {
-    //   if (value == NotificationLifeCycle.Foreground) {
-    //     context.go("/");
-    //   }
-    // });
     WidgetsBinding.instance?.addObserver(this);
     if (widget.extraInfo != 0 && widget.currentIndex == 2) {
       setState(() {
@@ -127,74 +122,35 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     SettingVariables().getRandomPTSD().then((value) {
       randomPTSD = value;
     });
-    // if (UserAdd.zipcode.isEmpty) {
-    //   Future.delayed(const Duration(milliseconds: 5), () async {
-    //     String deviceId = (await getId()) ?? "";
-    //     developer.log(deviceId);
-    //     FirebaseFirestore.instance
-    //         .collection("users-data")
-    //         .where("deviceId", isEqualTo: deviceId)
-    //         .get()
-    //         .then((value) {
-    //       if (value.docs.isEm
-    //         context.go("/registration");
-    //         Fluttertoast.showToast(
-    //           msg: "Please register first!",
-    //           toastLength: Toast.LENGTH_SHORT,
-    //           gravity: ToastGravity.CENTER,
-    //           timeInSecForIosWeb: 1,
-    //           backgroundColor: Colors.black,
-    //           textColor: Colors.white,
-    //           fontSize: 16.0,
-    //         );
-    //       } else {
-    //         for (var docSnapshot in value.docs) {
-    //           developer.log(
-    //               'Data found : ${docSnapshot.id} => ${docSnapshot.data()}');
-    //           UserAdd.setValues(
-    //             user: docSnapshot.data()['username'],
-    //             pass: docSnapshot.data()['password'],
-    //             zip: docSnapshot.data()['zipcode'],
-    //             deviceId: deviceId,
-    //           );
-
-    //           developer.log("Logged in!");
-    //           Fluttertoast.showToast(
-    //             msg: "Logged in!",
-    //             toastLength: Toast.LENGTH_SHORT,
-    //             gravity: ToastGravity.CENTER,
-    //             timeInSecForIosWeb: 1,
-    //             backgroundColor: Colors.black,
-    //             textColor: Colors.white,
-    //             fontSize: 16.0,
-    //           );
-    //         }
-    //       }
-    //     });
-    //   });
-    // }
     super.initState();
+  }
+
+  bool _isCurrentRoute() {
+    return ModalRoute.of(context)?.isCurrent == true;
   }
 
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     bool randomPTSDflag = false;
-
+    log("1");
     SettingVariables().getRandomPTSD().then((value) {
       randomPTSDflag = value;
       log("checking shared pref val: $value");
       SettingVariables().getAllowRandom().then((perm) {
         log(perm.toString());
       });
-
+      log("2");
       if (state == AppLifecycleState.resumed) {
+        log("3");
         SettingVariables().getAllowRandom().then((perm) {
           log("permission String: $perm");
           SettingVariables().getConflict().then((conflict) {
             log("Permission: $perm || Conflict: $conflict");
-            if (randomPTSDflag == true &&
-                perm == "background" &&
-                conflict == false) {
+            log("3");
+            if (randomPTSDflag == true && perm == "background"
+                // && conflict == false
+                ) {
+              log("4");
               AudioPlayer().stop();
               Navigator.push(
                 context,
@@ -203,30 +159,73 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               );
             } else {
-              SettingVariables().getTimerString().then((value) {
-                final params = separateStrings(value);
-                log(">>>>" + params.toString());
-                if (params[0] == "breathe") {
-                  AudioPlayer().stop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const StartInfo1(), //RANDOM PTSD
-                    ),
-                  );
-                } else if (params[0] == "meditate") {
-                  AudioPlayer().stop();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TimerScreen(
-                        mins: int.tryParse(params[1]) ?? 10,
-                        sound: (params[2].isNotEmpty) ? params[2] : "Silence",
-                      ), //RANDOM PTSD
-                    ),
-                  );
-                }
-              });
+              log("5");
+              SettingVariables().getRandomPTSD().then(
+                (random) {
+                  if (random == true) {
+                    SettingVariables().getTimerString().then((value) {
+                      final params = separateStrings(value);
+                      log(">>>>$params");
+                      if (params[0] == "breathe") {
+                        log("6");
+                        AudioPlayer().stop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const StartInfo1(), //RANDOM PTSD
+                          ),
+                        );
+                      } else if (params[0] == "meditate") {
+                        log("7");
+                        AudioPlayer().stop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TimerScreen(
+                              mins: int.tryParse(params[1]) ?? 10,
+                              sound: (params[2].isNotEmpty)
+                                  ? params[2]
+                                  : "Silence",
+                            ), //RANDOM PTSD
+                          ),
+                        );
+                      }
+                    });
+                  } else {
+                    log("8");
+                    SettingVariables().getTimerString().then((value) {
+                      final params = separateStrings(value);
+                      log(">>>>$params");
+                      if (params[0] == "breathe") {
+                        log("6");
+                        AudioPlayer().stop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const StartInfo1(), //RANDOM PTSD
+                          ),
+                        );
+                      } else if (params[0] == "meditate") {
+                        log("7");
+                        AudioPlayer().stop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TimerScreen(
+                              mins: int.tryParse(params[1]) ?? 10,
+                              sound: (params[2].isNotEmpty)
+                                  ? params[2]
+                                  : "Silence",
+                            ), //RANDOM PTSD
+                          ),
+                        );
+                      }
+                    });
+                  }
+                },
+              );
             }
           });
         });
@@ -236,7 +235,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         SettingVariables()
             .setAllowRandom("foreground")
             .then((value) => log("foreground"));
-      } else if (state == AppLifecycleState.inactive) {
+      } else if (state == AppLifecycleState.inactive &&
+          _isCurrentRoute() &&
+          random) {
         SettingVariables().getAllowRandom().then((value) {
           if (value != 'background') {
             SettingVariables()
@@ -509,71 +510,74 @@ Set-up one PTSD trigger at a time.''',
                       size: 16,
                       weight: 400,
                     ),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Switch(
+                          activeColor: Colors.blue,
+                          value: randomPTSD,
+                          onChanged: (value) {
+                            setState(() {
+                              log("Toggled to: $value");
+                              randomPTSD = value;
+                              SettingVariables()
+                                  .setRandomPTSD(value)
+                                  .then((value) => null);
+                              SettingVariables().getRandomPTSD().then((value1) {
+                                log("Toggled settings variable to: $value1");
+                              });
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 15),
+                        const CustomText(
+                          text: "Switch on to activate",
+                          weight: 500,
+                        )
+                      ],
+                    ),
                   ],
                 ),
-
-                // const SizedBox(height: 10),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Switch(
-                //       activeColor: Colors.blue,
-                //       value: randomPTSD,
-                //       onChanged: (bool value) async {
-                //         setState(() {
-                //           developer.log("{{{{{}}}}}" + value.toString());
-                //           randomPTSD = value;
-                //           SettingVariables().setRandomPTSD(value).then((value) {
-                //             developer.log("{{{{{}}}}}2" +
-                //                 SettingVariables().randomPTSD.toString());
-                //           });
-                //         });
-                //       },
-                //     ),
-                //     const SizedBox(width: 15),
-                //     const CustomText(
-                //       text: "Switch on to activate",
-                //       weight: 500,
-                //     )
-                //   ],
-                // ),
-
                 Column(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      // child: ElevatedButton(
-                      //     style: ButtonStyle(backgroundColor:
-                      //         MaterialStateProperty.resolveWith<Color?>(
-                      //       (Set<MaterialState> states) {
-                      //         return Color.fromRGBO(214, 70, 123, 1);
-                      //       },
-                      //     )),
-                      //     onPressed: () {
-                      //       // context.go("/startinfo1");
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) => const StartInfo1()));
-                      //     },
-                      //     child: CustomColoredText(
-                      //         text: "Start Meditation",
-                      //         hexColor: "#FFFFFF",
-                      //         size: 18,
-                      //         weight: 500)),
-                      child: Switch(
-                        activeColor: Colors.blue,
-                        value: randomPTSD,
-                        onChanged: (value) {
-                          setState(() {
-                            log("Toggled to: " + value.toString());
-                            randomPTSD = value;
-                            SettingVariables()
-                                .setRandomPTSD(value)
-                                .then((value) => null);
-                          });
-                        },
-                      ),
+                      child: ElevatedButton(
+                          style: ButtonStyle(backgroundColor:
+                              MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              return Color.fromRGBO(214, 70, 123, 1);
+                            },
+                          )),
+                          onPressed: () {
+                            setState(() {
+                              random = false;
+                              routine = false;
+                              question = true;
+                            });
+                          },
+                          child: CustomColoredText(
+                              text: "Continue",
+                              hexColor: "#FFFFFF",
+                              size: 18,
+                              weight: 500)),
+                      // child: Switch(
+                      //   activeColor: Colors.blue,
+                      //   value: randomPTSD,
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       log("Toggled to: $value");
+                      //       randomPTSD = value;
+                      //       SettingVariables()
+                      //           .setRandomPTSD(value)
+                      //           .then((value) => null);
+                      //       SettingVariables().getRandomPTSD().then((value1) {
+                      //         log("Toggled settings variable to: $value1");
+                      //       });
+                      //     });
+                      //   },
+                      // ),
                     ),
                     const SizedBox(height: 8),
                   ],

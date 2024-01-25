@@ -289,7 +289,7 @@ class StartInfo1 extends StatefulWidget {
   State<StartInfo1> createState() => _StartInfo1State();
 }
 
-class _StartInfo1State extends State<StartInfo1> {
+class _StartInfo1State extends State<StartInfo1> with WidgetsBindingObserver {
   final player = AudioPlayer();
   Future<void> playAudio() async {
     await player.play(AssetSource("iamokay.mp3"));
@@ -302,6 +302,10 @@ class _StartInfo1State extends State<StartInfo1> {
 
   Future<void> stopAudio() async {
     await player.stop();
+  }
+
+  bool _isCurrentRoute() {
+    return ModalRoute.of(context)?.isCurrent == true;
   }
 
   Future<bool> onWillPop(bool canpop) async {
@@ -327,10 +331,24 @@ class _StartInfo1State extends State<StartInfo1> {
 
   @override
   void initState() {
+    WidgetsBinding.instance?.addObserver(this);
     Future.delayed(const Duration(milliseconds: 50), () {
       playAudio();
     });
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused && _isCurrentRoute()) {
+      player.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
   }
 
   @override
